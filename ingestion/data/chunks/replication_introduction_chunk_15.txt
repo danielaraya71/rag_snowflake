@@ -1,0 +1,30 @@
+ than the role that performs replication.
+On this page
+Region support for replication and failover/failback
+Replication groups and failover groups
+Replication feature / edition matrix
+Replicated objects
+Database replication
+External volume replication
+Integration replication
+Network policy replication
+Parameter replication
+Resource monitor replication
+Role replication
+Share replication
+Backup replication for database, schema, and table backups
+User replication
+Warehouse replication
+Workspace replication
+Dataset replication
+Cortex Search Service replication
+Replication of roles and grants
+User who refreshes objects in a target account
+Replication schedule
+Suspend and resume scheduled replication
+Replication to accounts on lower editions
+Current limitations of replication
+Related content
+Replication considerations
+Replicating databases and account objects across multiple accounts
+Failing over account objects

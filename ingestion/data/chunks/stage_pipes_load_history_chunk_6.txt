@@ -1,0 +1,130 @@
+
+.
+my_account_1
+.
+my_stage_failover_group
+;
+ALTER
+FAILOVER
+GROUP
+my_stage_failover_group
+REFRESH
+;
+ALTER
+FAILOVER
+GROUP
+my_stage_failover_group
+PRIMARY
+;
+Copy
+Next, refresh the directory table on the replicated stage and copy all of the
+files tracked by the directory table on
+my_stage
+into a table named
+my_table
+.
+Note
+The COPY INTO statement loads
+file1
+and
+file2
+into the table, but not
+file3
+.
+This is because the directory table was not refreshed after adding
+file3
+in the source account.
+ALTER
+STAGE
+my_stage
+REFRESH
+;
+COPY
+INTO
+my_table
+FROM
+@
+my_stage
+;
+Copy
+Example 2: Replicate an external stage and storage integration
+¶
+This example provides a sample workflow for replicating an external stage and storage integration to a target account.
+The example assumes that you have already completed the following:
+Configured secure access to your Amazon S3 bucket
+.
+The first part of the example completes the following tasks in a
+source
+account.
+Create a storage integration for an Amazon S3 bucket in database
+my_database_2
+.
+CREATE
+STORAGE
+INTEGRATION
+my_storage_int
+TYPE
+=
+external_stage
+STORAGE_PROVIDER
+=
+'s3'
+STORAGE_ALLOWED_LOCATIONS
+=
+(
+'s3://mybucket/path'
+)
+STORAGE_BLOCKED_LOCATIONS
+=
+(
+'s3://mybucket/blockedpath'
+)
+ENABLED
+=
+true
+;
+Copy
+Create an external stage in database
+my_database_2
+using storage integration
+my_storage_int
+.
+CREATE
+STAGE
+my_ext_stage
+URL
+=
+'s3://mybucket/path'
+STORAGE_INTEGRATION
+=
+my_storage_int
+Copy
+Create a failover group and include database
+my_database_2
+and storage integration objects.
+CREATE
+FAILOVER
+GROUP
+my_external_stage_fg
+OBJECT_TYPES
+=
+databases
+,
+integrations
+ALLOWED_INTEGRATION_TYPES
+=
+storage integrations
+ALLOWED_DATABASES
+=
+my_database_2
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+my_account_2
+;
+Copy
+The second part of the example completes the replication and failover process in a
+target
+account:
+Create a failover group as a replica of the fail

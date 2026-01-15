@@ -1,0 +1,51 @@
++-------------------------------------------+-------------------+-------------------+
+Copy
+Note that the output of this command in the CONNECTION_URL column should match the
+privatelink-connection-urls
+list when calling
+the
+SYSTEM$GET_PRIVATELINK_CONFIG
+function in either
+myaccount1
+or
+myaccount2
+. This list already
+contains the connection URL formatted with the
+privatelink
+segment (as shown in the next step). You can optionally run the command
+in this step or call the function. If calling the function, use the URLs as is without any further modification.
+Record the CONNECTION_URL column value, and create two URLs to support private connectivity and
+OCSP
+.
+Add a
+privatelink
+segment to the URL just before
+snowflakecomputing.com
+(
+myorg-myconnection.privatelink.snowflakecomputing.com
+, in this example).
+Add an
+ocsp
+segment to the beginning of the URL (
+ocsp.myorg-myconnection.privatelink.snowflakecomputing.com
+, in this example).
+Using a tool provided by your DNS provider, create a CNAME record for the connection URL and the OCSP URL:
+Set the domain (or alias) using the modified CONNECTION_URL column value.
+Configure the record to have the connection URL resolve to the primary Snowflake account URL. Be sure to include all URL segments for
+the cloud region and AWS PrivateLink based on the URL format that you choose. This is the primary account URL and it is where client
+connections to the connection URL will redirect.
+Configure the record to have the OCSP URL resolve to either the private endpoint IP address for an account on Azure or the private
+endpoint ID value for an account on AWS.
+In the case of failover, you must manually update the DNS setting to have the connection URL point to the secondary account URL as
+shown in
+Modifying the DNS settings for private connectivity to the Snowflake service
+. Similarly, you must update your OCSP settings to point to the private endpoint IP
+address or private endpoint ID value.
+For example:
+myaccount1.us-west-2.privatelink.snowflakecomputing.com.
+ocsp.myaccount1.us-west-2.privatelink.snowflakecomputing.com.
+Copy
+Alternatively, use the organization and account name URL.
+For example:
+myorg-myaccount1.privatelink.snowflakecomputing.com.
+ocsp.myorg-myaccount1.privatelink.s

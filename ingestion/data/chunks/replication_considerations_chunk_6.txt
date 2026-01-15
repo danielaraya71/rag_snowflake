@@ -1,0 +1,61 @@
+ occurs in
+the target account. In this case, a dangling reference means that Snowflake cannot locate the policy in the target account because the
+fully-qualified name of the policy points to the database in the source account. Consequently, the target account or users in the target
+account are not required to comply with the security policy.
+To successfully replicate a security policy, verify the replication or failover group includes the object types and databases required
+to prevent a dangling reference.
+Privacy policies
+¶
+Consider the following when replicating privacy policies and privacy-protected tables and views associated with
+differential privacy
+:
+If a privacy policy is assigned to a table or view in the source account, the policy needs to be replicated in the target account.
+Cumulative privacy loss for a privacy budget is not replicated.
+Cumulative privacy loss in the target and source accounts are tracked separately.
+Administrators in the target account cannot adjust the replicated privacy budget. The privacy budget is synced with the one in the source
+account.
+If an analyst has access to the privacy-protected table or view in both the source account and the target account, they can incur twice
+the amount of privacy loss before reaching the privacy budget’s limit.
+Privacy domains set on the columns are also replicated.
+Session policies with secondary roles
+¶
+If you are using session policies with secondary roles, you must specify the policy database
+in the same replication group that contains the roles. For example:
+CREATE
+REPLICATION
+GROUP
+myrg
+OBJECT_TYPES
+=
+DATABASES
+,
+ROLES
+,
+USERS
+ALLOWED_DATABASES
+=
+session_policy_db
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+myaccount
+REPLICATION_SCHEDULE
+=
+'10 MINUTE'
+;
+Copy
+If you specify the session policy database that references secondary roles in a different replication or failover group (
+rg2
+) than the
+replication or failover group that contains account-level objects (
+myrg
+) and you replicate or fail over
+rg2
+first, a
+dangling reference
+occurs. An error message tells you to place the session policy
+database in the replication or failover group that contains the roles. This behavior occurs when the session policy is set on the account
+or users.
+If the session policy and account level objects are in different replication groups, and the session policy is not set on the account or
+users, you can replicate and refresh the target account. Be sure to refresh for the

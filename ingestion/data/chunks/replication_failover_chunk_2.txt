@@ -1,0 +1,70 @@
+ case, you might need to clean up any inconsistencies on the secondary system from the interrupted refreshes.
+If the failover operation didn’t complete for all failover groups, you can perform another bulk failover. Or you can fail over
+the remaining failover groups one at a time, using the procedure in
+Promote a single failover group to serve as the primary using Snowsight
+.
+Promote a single failover group to serve as the primary using Snowsight
+¶
+Note
+Only account administrators can edit a replication or failover group using Snowsight (see
+Limitations of using Snowsight for replication configuration
+).
+To promote a single failover group to be the primary using Snowsight, follow these steps:
+Sign in to
+Snowsight
+.
+Make sure to sign in using the target account
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Replication
+, then select
+Groups
+.
+Locate the failover group that you want to promote, and select the
+More
+menu (
+…
+) in the last column of the row.
+Select
+Fail over
+, then select
+Fail over
+in the confirmation window.
+Tip
+You typically use this procedure if you encounter a problem failing over one group, and you need to retry the
+failover only for that group. To promote an entire account to be the primary, select multiple failover groups and connections and
+perform a bulk failover. For more information, see
+Promote a target account to serve as the source account using Snowsight
+.
+Promote a target account to serve as the source account using SQL
+¶
+To promote a target account to serve as the source account using SQL, you sign in to the target account
+and execute the
+ALTER FAILOVER GROUP … PRIMARY
+command.
+Promote a secondary failover group to primary failover group
+¶
+Note
+The example in this section must be executed by a role with the FAILOVER privilege.
+The following example promotes
+myaccount2
+in the current
+myorg
+organization to serve as the source account.
+Sign in to target account
+myaccount2
+.
+List failover groups in the account:
+SHOW FAILOVER GROUPS
+;
+Copy
+Execute the following statement for each secondary failover group you want to promote to serve as the primary failover group:
+ALTER
+FAILOVER
+GROUP
+my

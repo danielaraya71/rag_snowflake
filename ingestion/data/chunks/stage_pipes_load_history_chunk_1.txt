@@ -1,0 +1,59 @@
+ATIONS
+,
+STORAGE INTEGRATIONS
+;
+Copy
+Note
+Your cloud storage provider might limit replication of data pipeline objects between commercial and government cloud regions. To avoid
+government cloud data replication limitations, configure your failover resources in any region accessible to your government cloud region.
+For more information about government cloud limitations, review your cloud storage provider’s documentation.
+Replication and stages
+¶
+This section describes the current level of replication functionality that Snowflake supports for different types of stages.
+Replication of internal stages
+¶
+The following table describes how replication works for each type of internal stage.
+Type
+Description of Replication Support
+Table stage
+Empty table stages are created for tables in a replicated database. Files on table stages are not replicated.
+User stage
+User and user stage replication requires Business Critical Edition (or higher).
+Empty user stages are created for replicated users. Files on user stages are not replicated.
+Named stage
+Named internal stages are replicated when you replicate a database.
+The stage must have a directory table enabled on it in order to replicate the files on the stage.
+Replication of external stages
+¶
+Note
+Snowflake does not replicate files on an external stage.
+The cloud storage URL points to the same location for external stages in primary and secondary databases.
+The following table describes how replication works for each type of external stage.
+Type
+Description of Replication Support
+Named stage with no credentials (public storage location)
+Named external stages are replicated when you replicate a database. The files on an external stage are not replicated.
+Named stage with credentials (private storage location)
+Replicated stages include the cloud provider credentials, such as secret keys or access tokens.
+Named stage with storage integration (private storage location)
+Storage integration replication requires Business Critical Edition (or higher).
+The replication or failover group must include
+STORAGE
+INTEGRATIONS
+in the
+ALLOWED_INTEGRATION_TYPES
+list.
+For more information, see
+CREATE FAILOVER GROUP
+.
+You must also take action to configure the trust relationships for your cloud storage in the target accounts.
+For more information, see
+Configure cloud storage access for secondary storage integrations
+.
+Note
+To associate a secondary stage or pipe with a different cloud storage location than the one associated with the primary object,
+contact the support team. For example, you might choose a location in another region.
+Considerations
+¶
+The following constraints apply to stage objects:
+Snowflake currently supports stage replication as part of group-based

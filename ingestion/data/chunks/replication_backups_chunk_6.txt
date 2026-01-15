@@ -1,0 +1,44 @@
+-level objects such as users or roles.
+Some kinds of tables and other database-level objects aren’t included in schema and database backups.
+For more information, see
+backup objects
+.
+Backup-related objects are stored in the same cloud service provider (CSP) region as the associated database, schema, or
+table. For business continuity and disaster recovery scenarios, you typically combine backups with Snowflake account
+replication. That way, all the backup sets and backup policies can be replicated to a different region or
+a different CSP and recovered even if there’s an outage affecting the original region or CSP.
+Backup sets and backup policies can’t be cloned. If you clone a schema or database that contains such objects,
+they aren’t included in the cloned schema or database.
+Backup objects
+¶
+You can create backup sets for tables, schemas, and databases.
+References from tables to other objects
+¶
+Objects, such as views or functions, can refer to objects outside the schema or database in the backup. To ensure that
+such references continue functioning after you restore from a backup, use one of the following strategies:
+If the tables and the other objects that they refer to are all in the same schema or the same database, create a
+backup set for the entire schema or database. That way, Snowflake restores all the interconnected objects at once
+when you restore from the backup.
+If objects in a backup set refer to objects that aren’t included in the backup set, be aware that when a backup
+is restored, the references from the restored objects point to the original objects from the other database or schema.
+If you dropped those other objects or changed their properties after taking the backup, you might encounter errors
+when you access the restored objects.
+For account-level objects, any references from restored objects
+always
+point to the original account-level object.
+That’s because the account-level objects aren’t part of any backup. For example, a schema backup might contain
+a secret that refers to a security integration. The security integration is an account-level object and can’t be
+included in any backup.
+Types of objects in database and schema backups
+¶
+The following table lists the objects that are included in a database or schema backup:
+Object
+Included in backup
+Notes
+Permanent tables
+Yes
+Time Travel information for tables isn’t stored as part of a backup.
+Transient tables
+Yes
+Such tables continue to be transient tables after you restore them.
+Transient schemas and transient databases also retain the

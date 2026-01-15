@@ -1,0 +1,73 @@
+ in the source and target accounts:
+The channel
+getLatestCommittedOffsetToken
+API
+SHOW CHANNELS
+command
+Snowflake Streaming write operations are only available in the source account:
+The client
+openChannel
+API
+The channel
+insertRow
+API
+The channel
+insertRows
+API
+Avoiding data loss
+¶
+To avoid data loss in the case of failover, the data retention time for successfully inserted rows in your upstream data source must be
+greater than the configured
+replication schedule
+. If data is inserted into a table in a primary database, and failover occurs before the data can
+be replicated to the secondary database, the same data will need to be inserted into the table in the newly promoted primary database.
+The following is an example scenario:
+Table
+t1
+in primary database
+repl_db
+is populated with data with Snowpipe Streaming and the Kafka connector.
+The
+offsetToken
+is 100 for channel 1 and 100 for channel 2 for
+t1
+in the
+primary
+database.
+A refresh operation completes successfully in the target account.
+The
+offsetToken
+is 100 for channel 1 and 100 for channel 2 for the
+t1
+in the
+secondary
+database.
+More rows are inserted into
+t1
+in the primary database.
+The
+offsetToken
+is now 200 for channel 1 and 200 for channel 2 for the
+t1
+in the
+primary
+database.
+A failover occurs before the additional rows and new channel offsets can be replicated to the secondary database.
+In this case, there are 100 missing offsets in each channel for table
+t1
+in the newly promoted primary database. To insert the missing data, see
+Reopen active channels for Snowpipe Streaming in newly promoted source account
+.
+Requirements
+¶
+Snowpipe Streaming replication support requires the following minimum versions:
+Snowflake Ingest SDK version 1.1.1 and later
+If you are using the Kafka connector: Kafka connector version 1.9.3 and later
+The data retention time for successfully inserted rows in your upstream data source must be
+greater than the configured replication schedule. If you are using the Kafka connector, ensure your
+log.retention
+configuration is set with a sufficient buffer.
+Replication and stages
+¶
+The following constraints apply to stage objects:
+Snowflake currently supports stage replication as part of group-based replication (replication

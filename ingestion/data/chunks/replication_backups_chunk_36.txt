@@ -1,0 +1,53 @@
+ in Account Usage, Organization Usage, and Information Schema
+APPLY BACKUP POLICY, APPLY BACKUP RETENTION LOCK privileges
+The former SNAPSHOT/SNAPSHOTS names are still present but deprecated in favor of their BACKUP/BACKUPS equivalents.
+For example:
+CREATE SNAPSHOT POLICY is deprecated; use CREATE BACKUP POLICY instead.
+SNAPSHOTS view is deprecated; use BACKUPS view instead.
+APPLY SNAPSHOT POLICY privilege is deprecated; use APPLY BACKUP POLICY privilege instead.
+The deprecated commands, views, and privileges continue to work, but Snowflake intends to remove them in a future release.
+On this page
+Use cases for Snowflake backups
+Key concepts
+Backup
+Backup set
+Backup policy
+Retention lock
+Legal hold
+Overview of the backup lifecycle
+How backups work
+Restrictions for backups
+Limitations of backups
+Comparison of backups with other disaster recovery and business continuity features
+Backup objects
+References from tables to other objects
+Types of objects in database and schema backups
+How Snowflake associates objects with their backup sets
+Backups and encryption
+Backups and data lineage
+Cost for backups
+Access control privileges
+Grant privileges required to create backup policies and sets
+Grant the APPLY privilege on a backup policy to a role
+Grant the APPLY BACKUP RETENTION LOCK privilege to a role
+Create and configure backups
+Create scheduled backups with retention lock
+Create backups manually
+Suspend a backup policy on a backup set
+Resume a backup policy on a backup set
+Restore a backup
+Delete a backup from a backup set
+Delete a backup set
+Find all the backup sets that contain backups of a specific table
+Create a backup for a table with dependencies
+Create a backup for a dynamic table
+Add and remove legal holds
+Replicate backup-related objects
+Monitor backups and backup operations
+SQL reference topics
+Backup policy
+Backup set
+Backups
+Restoring objects from backups
+Views
+Terminology change

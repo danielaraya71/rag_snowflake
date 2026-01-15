@@ -1,0 +1,20 @@
+Stored Procedures and UDFs and External Network Access
+Replication and storage lifecycle policies
+Replication and streams
+Supported Source Objects for Streams
+Avoiding Data Duplication
+Stream References in Task WHEN Clause
+Stream Staleness
+Stream Replication and Time Travel
+Avoiding Data Loss
+Replication and tasks
+Replication Scenarios
+Resumed or Suspended State of Replicated Tasks
+Replicated Tasks and Privilege Grants
+Task Runs After a Failover
+Replication and tags
+Replication and instances of Snowflake classes
+Historical usage data
+Related content
+Introduction to replication and failover across multiple accounts
+Replicating databases and account objects across multiple accounts

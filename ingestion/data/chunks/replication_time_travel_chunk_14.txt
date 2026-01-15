@@ -1,0 +1,28 @@
+ | PUBLIC | 1              | [NULL]                          |
+| Fri, 13 May 2016 19:05:32 -0700 | LOADDATA1 | MYTESTDB      | PUBLIC      | TABLE |         |            | 4    | 4096  | PUBLIC | 1              | Fri, 13 May 2016 19:05:51 -0700 |
+| Tue, 17 Mar 2016 17:41:55 -0700 | LOADDATA1 | MYTESTDB      | PUBLIC      | TABLE |         |            | 48   | 16248 | PUBLIC | 1              | Fri, 13 May 2016 19:04:46 -0700 |
++
+---------------------------------+-----------+---------------+-------------+-------+---------+------------+------+-------+--------+----------------+---------------------------------+
+ALTER
+TABLE
+loaddata1
+RENAME
+TO
+loaddata3
+;
+UNDROP
+TABLE
+loaddata1
+;
+SHOW
+TABLES
+HISTORY
+;
++
+---------------------------------+-----------+---------------+-------------+-------+---------+------------+------+-------+--------+----------------+---------------------------------+
+| created_on                      | name      | database_name | schema_name | kind  | comment | cluster_by | rows | bytes | owner  | retention_time | dropped_on                      |
+|---------------------------------+-----------+---------------+-------------+-------+---------+------------+------+-------+--------+----------------+---------------------------------|
+| Fri, 13 May 2016 19:05:32 -0700 | LOADDATA1 | MYTESTDB      | PUBLIC      | TABLE |         |            | 4    | 4096  | PUBLIC | 1              | [NULL]                          |
+| Fri, 13 May 2016 19:06:01 -0700 | LOADDATA3 | MYTESTDB      | PUBLIC      | TABLE |         |            | 0    | 0     | PUBLIC | 1              | [NULL]                          |
+| Tue, 17 Mar 2016 17:51:30 -0700 | PRODDATA1 | MYTESTDB      | PUBLIC      | TABLE |         |            | 12   | 4096  | PUBLIC | 1              | [NULL]                          |
+| Tue, 17 Mar 2016 17:41:55 -0700 | LOADDATA1

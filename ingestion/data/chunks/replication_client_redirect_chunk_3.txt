@@ -1,0 +1,68 @@
+back
+¶
+Once the outage is resolved, promote the original primary connection to serve as the primary connection again.
+Executed on the target account that previously served as the source account
+¶
+Sign in to the target account that served as the source account prior to the outage.
+Promote the secondary connection back to primary connection:
+ALTER
+CONNECTION
+myconnection
+PRIMARY
+;
+Copy
+If private connectivity to the Snowflake service is enabled for your Snowflake account, you must create
+or update a DNS CNAME record for your connection URL. For more details, see
+Modifying the DNS settings for private connectivity to the Snowflake service
+.
+Configuring Client Redirect
+¶
+This section describes how to create a primary connection and one or more secondary connections in a connection group.
+Prerequisite
+¶
+To enable the Client Redirect feature for your accounts, an
+organization administrator
+must enable
+replication for two or more accounts. To enable replication, see
+Prerequisite: Enable replication for accounts in the organization
+for detailed instructions.
+Create a primary connection
+¶
+Important
+Snowflake assigned your organization a unique, generated name when it was created in the system. The organization name is a part of the
+connection URL defined in a connection object and submitted by Snowflake clients to access an account. Before you create any connection
+objects, verify that your organization name in Snowflake is satisfactory. To change your organization name in the system, contact
+Snowflake Support
+.
+You can create a primary connection in the source account using Snowsight or
+SQL
+.
+Create a primary and secondary connection using Snowsight
+¶
+To create a connection using Snowsight, complete the following steps:
+Note
+Only a user with the ACCOUNTADMIN role can create a connection using Snowsight.
+You must be signed in to the target account as a user with the ACCOUNTADMIN role. If not, you will be prompted to sign in.
+Currently, if your account uses private connectivity, you can’t use Snowsight to create a primary and secondary
+connection.
+Sign in to
+Snowsight
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Client Redirect
+.
+Select
++ Connection
+.
+Select
+Target Account
+.
+In the
+Connection Name
+box, enter a connection name that meets the following requirements:
+Must start with an alphabetic character and may only contain letters, decimal digits (0-9), and underscores

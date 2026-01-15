@@ -1,0 +1,68 @@
+_fg
+SET
+ERROR_INTEGRATION
+=
+my_notification_int
+;
+Copy
+To create a replication/failover group and enable error notifications, use the
+CREATE REPLICATION GROUP
+or
+CREATE FAILOVER GROUP
+command and set the ERROR_INTEGRATION parameter.
+For example, to create failover group
+my_fg
+to enable replication and failover of databases
+db1
+,
+db2
+to accounts
+myaccount2
+and
+myaccount2
+in organization
+myorg
+, execute the following statement in the
+source
+account to
+create a primary failover group:
+CREATE
+FAILOVER
+GROUP
+my_fg
+OBJECT_TYPES
+=
+DATABASES
+ALLOWED_DATABASES
+=
+db1
+,
+db2
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+myaccount2
+,
+myorg
+.
+myaccount3
+REPLICATION_SCHEDULE
+=
+'10 MINUTE'
+ERROR_INTEGRATION
+=
+my_notification_int
+;
+Copy
+Note
+If the replication schedule for a replication or failover group is set to a high frequency, for example one minute,
+error notifications for the same issue are sent for every scheduled refresh operation.
+On this page
+Error notifications for refresh operation failures
+Error notifications and failover
+Prerequisite: Notification integration for error notifications
+Add an error notification for a replication or failover group
+Related content
+Introduction to replication and failover across multiple accounts
+Replication considerations

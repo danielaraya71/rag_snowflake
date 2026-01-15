@@ -1,0 +1,95 @@
+CREATE
+TABLE
+restored_table
+CLONE
+my_table
+AT
+(
+TIMESTAMP
+=>
+'Wed, 26 Jun 2024 01:01:00 +0300'
+::timestamp_tz
+);
+Copy
+The following
+CREATE SCHEMA
+statement creates a clone of a schema and all its objects as they existed 1 hour
+before the current time:
+CREATE
+SCHEMA
+restored_schema
+CLONE
+my_schema
+AT
+(
+OFFSET
+=>
+-
+3600
+);
+Copy
+The following
+CREATE DATABASE
+statement creates a clone of a database and all its objects as they existed prior
+to the completion of the specified statement:
+CREATE
+DATABASE
+restored_db
+CLONE
+my_db
+BEFORE
+(
+STATEMENT
+=>
+'8e5d0ca9-005e-44e6-b858-a8f5b37c5726'
+);
+Copy
+Note
+The cloning operation for a database or schema fails:
+If the specified Time Travel time is beyond the retention time of
+any current child
+(for example, a table) of the entity.
+As a workaround for child objects that have been purged from Time Travel, use the
+IGNORE TABLES WITH INSUFFICIENT DATA RETENTION
+parameter of the
+CREATE <object> … CLONE command. For more information, see
+Child objects and data retention time
+.
+If the specified Time Travel time is at or before the point in time when the object was created.
+The following
+CREATE DATABASE
+statement creates a clone of a database and all its objects as they existed
+four days ago, skipping any tables that have a data retention period of less than four days:
+CREATE
+DATABASE
+restored_db
+CLONE
+my_db
+AT
+(
+TIMESTAMP
+=>
+DATEADD
+(
+days
+,
+-
+4
+,
+current_timestamp
+)
+::timestamp_tz
+)
+IGNORE TABLES WITH INSUFFICIENT DATA RETENTION
+;
+Copy
+Dropping and restoring objects
+¶
+The following sections explain the Time Travel considerations for the DROP, SHOW, and UNDROP commands.
+Dropping objects
+¶
+When a table, schema, or database is dropped, it is not immediately overwritten or removed from the system. Instead, it is retained for the
+data retention period for the object, during which time the object can be restored. Once dropped objects are moved to
+Fail-safe
+, you cannot restore them.
+To drop

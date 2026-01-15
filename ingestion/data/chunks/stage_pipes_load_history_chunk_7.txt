@@ -1,0 +1,113 @@
+ integration objects.
+CREATE
+FAILOVER
+GROUP
+my_external_stage_fg
+OBJECT_TYPES
+=
+databases
+,
+integrations
+ALLOWED_INTEGRATION_TYPES
+=
+storage integrations
+ALLOWED_DATABASES
+=
+my_database_2
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+my_account_2
+;
+Copy
+The second part of the example completes the replication and failover process in a
+target
+account:
+Create a failover group as a replica of the failover group in the source account and refresh.
+CREATE
+FAILOVER
+GROUP
+my_external_stage_fg
+AS
+REPLICA
+OF
+myorg
+.
+my_account_1
+.
+my_external_stage_fg
+;
+ALTER
+FAILOVER
+GROUP
+my_external_stage_fg
+REFRESH
+;
+Copy
+After you replicate the storage integration to the target account, you must take additional steps to update your cloud
+provider permissions to grant the replication integration access to your cloud storage. For more information, see
+Configure cloud storage access for secondary storage integrations
+.
+Example 3: Replicate an auto-ingest pipe
+¶
+This example provides a sample workflow for replicating a pipe that uses
+an
+Amazon Simple Notification Service (SNS) topic with Amazon Simple Queue Service (SQS) to automate Snowpipe
+.
+The example assumes that you have already completed the following tasks:
+Created and configured a storage integration for Amazon S3
+. For example
+purposes, we use a storage integration named
+my_s3_storage_int
+.
+Created an Amazon SNS topic and subscription, and subscribed the Snowflake SQS queue to your SNS topic
+.
+Created an external stage that references your storage integration. For example
+purposes, we use a stage named
+my_s3_stage
+. For instructions, see
+CREATE STAGE
+.
+Start with the following tasks in a
+source
+account.
+Use the
+CREATE PIPE
+command to create a pipe with auto-ingest enabled that loads data from the external stage into a table named
+mytable
+.
+CREATE
+PIPE
+snowpipe_db
+.
+public
+.
+mypipe
+AUTO_INGEST
+=
+TRUE
+AWS_SNS_TOPIC
+=
+'<topic_arn>'
+AS
+COPY
+INTO
+snowpipe_db
+.
+public
+.
+mytable
+FROM
+@
+snowpipe_db
+.
+public
+.
+my_s3_stage
+FILE_FORMAT
+=
+(
+TYPE
+=
+'JSON'

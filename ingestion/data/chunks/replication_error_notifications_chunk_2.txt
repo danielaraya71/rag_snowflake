@@ -1,0 +1,106 @@
+uty secret
+and
+PagerDuty notification integration
+Important
+The webhook notification integration must specify the WEBHOOK_BODY_TEMPLATE parameter with
+SNOWFLAKE_WEBHOOK_MESSAGE
+as a placeholder value. When the notification is sent, the placeholder is replaced with the contents of the replication
+error notification, as described in
+Error notifications for refresh operation failures
+.
+The format for specifying WEBHOOK_BODY_TEMPLATE depends on the external system:
+For Slack or Microsoft Teams, WEBHOOK_BODY_TEMPLATE utilizes the following single-value JSON object
+format as its value:
+WEBHOOK_BODY_TEMPLATE='
+{
+"text":
+"SNOWFLAKE_WEBHOOK_MESSAGE"
+}
+'
+Copy
+For PagerDuty, WEBHOOK_BODY_TEMPLATE utilizes a multi-value JSON object as its value, but with the following differences
+from a standard PagerDuty notification integration:
+Within the
+payload
+key, the
+summary
+key is
+not
+used to specify
+SNOWFLAKE_WEBHOOK_MESSAGE
+.
+Instead, an additional
+custom_details
+key is used to specify
+SNOWFLAKE_WEBHOOK_MESSAGE
+.
+For example:
+WEBHOOK_BODY_TEMPLATE='
+{
+"routing_key":
+"SNOWFLAKE_WEBHOOK_SECRET"
+,
+"event_action":
+"trigger"
+,
+"payload":
+{
+"summary":
+"Snowflake replication failure"
+,
+"source":
+"Snowflake monitoring"
+,
+"severity":
+"INFO"
+,
+"custom_details":
+{
+"message":
+"SNOWFLAKE_WEBHOOK_MESSAGE"
+}
+}
+}
+'
+Copy
+Add an error notification for a replication or failover group
+¶
+To enable error notifications for an existing replication/failover group, use the
+ALTER REPLICATION GROUP
+or
+ALTER FAILOVER GROUP
+command to set the ERROR_INTEGRATION parameter.
+For example, add notification integration
+my_notification_int
+to failover group
+my_fg
+. The following statement must
+be executed from the
+source
+account:
+ALTER
+FAILOVER
+GROUP
+my_fg
+SET
+ERROR_INTEGRATION
+=
+my_notification_int
+;
+Copy
+To create a replication/failover group and enable error notifications, use the
+CREATE REPLICATION GROUP
+or
+CREATE FAILOVER GROUP
+command and set the ERROR_INTEGRATION parameter.
+For example, to create failover group
+my_fg
+to enable replication and failover of databases
+db1
+,
+db2
+to accounts
+myaccount2
+and
+myaccount2
+in organization

@@ -1,0 +1,70 @@
+ the group (that is, secondary replication or failover
+groups) have been dropped. Alternatively, you can promote a secondary failover group to serve as the primary failover group,
+then drop the former primary failover group.
+Note that only the group owner can drop the group.
+Drop a replication or failover group using Snowsight
+¶
+Note
+Only account administrators can delete a replication or failover group using Snowsight (refer to
+Limitations of using Snowsight for replication configuration
+).
+You can delete a primary replication or failover group and any linked secondary groups.
+Sign in to
+Snowsight
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Replication
+, select
+Groups
+.
+Locate the replication or failover group you want to delete. Select the
+More
+menu (
+…
+) in the last column of the row.
+Select
+Drop
+, then select
+Drop group
+.
+Troubleshoot issues with creating and editing replication groups using Snowsight
+¶
+The following scenarios can help you troubleshoot common issues that can occur when creating or editing replication or
+failover group using Snowsight.
+You cannot add a database to a group
+You cannot add a share to a group
+You cannot add a database to a group
+¶
+Error
+Database '<database_name>' is already configured to replicate to
+account '<account_name>' by replication group '<group_name>'.
+Cause
+A database can only be in one replication or failover group. One of the databases you selected for the group is already
+included in another replication or failover group.
+Solution
+Choose
+Select Databases
+and unselect any database(s) that are already included in another group.
+Error
+Cannot directly add previously replicated object '<database_name>' to a
+replication group. Please use the provided system functions to convert
+this object first.
+Cause
+The database you want to add to a replication or failover group was previously configured for database replication.
+Solution
+Disable database replication for the database. See
+Transitioning from database replication to group-based replication
+.
+You cannot add a share to a group
+¶
+Error
+Share '<share_name>' is already configured to replicate to
+account '<account_name>' by replication group '<group_name>'.
+Cause
+A share can only be in one replication or failover group. One of the shares you selected for the group is already included
+in another replication or

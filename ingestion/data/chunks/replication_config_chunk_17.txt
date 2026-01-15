@@ -1,0 +1,47 @@
+ process is similar to granting access in the source account.
+See the following pages for more information:
+Configuring a Snowflake storage integration to access Amazon S3
+Configuring an integration for Google Cloud Storage
+Configuring a Snowflake storage integration for Azure
+Configure automated refresh for directory tables on secondary stages
+¶
+If you replicate an external stage with a directory table, and you have configured automated refresh for the source directory table,
+you must take steps to configure
+automated refresh
+for the secondary directory table.
+The process is similar to setting up automated refresh in your source account. See the following for more information:
+Amazon S3: The configuration process depends on how you set up event notifications.
+If you use Amazon S3 Event Notifications with Amazon Simple Queue Service (SQS),
+follow the instructions in
+Step 2: Configure event notifications
+.
+You can also migrate from SQS to SNS. For more information, see
+Migrate to Amazon Simple Notification Service (SNS)
+.
+If you use Amazon Simple Notification Service (SNS), see
+Subscribing the Snowflake SQS Queue to your SNS topic
+.
+Google Cloud Storage: Create a new subscription to your Pub/Sub topic and a new notification integration in your target account.
+Then, grant Snowflake access to the Pub/Sub subscription. For instructions,
+see
+Configuring Automation Using GCS Pub/Sub
+.
+Azure Blob Storage: Create a new Event Grid subscription and storage queue. Then, create a new notification integration in the
+target account and grant Snowflake access to your storage queue. For instructions,
+see
+Configuring Automation With Azure Event Grid
+.
+Important
+After you complete these configuration steps in your target account,
+you should perform a full refresh of your directory table to ensure that it has not missed any notifications.
+For Google Cloud Storage and Azure Blob Storage, the name of the notification integration in each target account must match the name of
+the notification integration in the source account.
+Configure notifications for secondary auto-ingest pipes
+¶
+You must take additional steps to configure cloud notifications for secondary auto-ingest pipes before failover.
+This section covers why this additional configuration is required, and how to complete it for each supported cloud provider.
+Amazon S3
+¶
+The configuration process depends on how you set up event notifications. For example,
+suppose you have an auto-ingest pipe that relies on an Amazon Simple Notification Service (SNS) topic
+to publish messages about the Snowflake stage location.

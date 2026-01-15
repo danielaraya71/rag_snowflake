@@ -1,0 +1,62 @@
+ policy.
+ALTER
+FAILOVER
+GROUP
+fg
+REFRESH
+;
+Copy
+Verify the network policy object exists by executing a SHOW NETWORK POLICIES command, and verify the Snowflake OAuth security
+integration specifies the replicated network policy by executing a DESCRIBE SECURITY INTEGRATION command on the security integration.
+Verify the network policy activation as shown in
+Identify an activated network policy
+.
+Verify connecting to each Snowflake account using the Snowflake OAuth client of your choice.
+Optionally promote the secondary failover group and the secondary connection in the target account to primary. This will promote the
+target account to serve as the new source account.
+Failover group:
+ALTER
+FAILOVER
+GROUP
+fg
+PRIMARY
+;
+Copy
+Connection:
+ALTER
+CONNECTION
+global
+PRIMARY
+;
+Copy
+If you completed the previous step, reverify that you can connect to each Snowflake account using the Snowflake OAuth client of your
+choice.
+Replicating integrations and objects for the Snowflake Connector for ServiceNow
+¶
+The
+Snowflake Connector for ServiceNow
+allows Snowflake to ingest data from ServiceNow. The connector requires the following objects in
+your Snowflake account:
+Secret.
+Security integration of
+type
+=
+api_authentication
+.
+API integration.
+Database to store the ingested data.
+Warehouse for the connector to use.
+Account roles to manage the access to these objects.
+You create these objects prior to installing the connector and you can replicate these objects to the target account. After replicating
+these objects, you can install the connector in the target account. The connector must be installed in the target account because the
+installation depends on a share that Snowflake provides. You need to create a database from the share during the connector installation and
+you cannot replicate a database that is created from a share.
+Depending on how you want to manage the replication of account objects, you can have one or more replication or failover groups. A single
+replication group centralizes the replication management of the objects and avoids scenarios where some objects are replicated and other
+objects are not replicated. Otherwise, you must coordinate the replication operation carefully to ensure that all objects are replicated to
+the target account.
+For example, you can have a replication group for databases. This replication group (e.g.
+rg1
+) specifies the database that contains the
+secret and the database to store the ServiceNow data. The other replication group (e.g.
+rg

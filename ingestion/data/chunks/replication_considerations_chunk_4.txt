@@ -1,0 +1,53 @@
+ are read-only. Changes to replicated objects or object types
+cannot be made locally in a target account. For example, if the
+USERS
+object type is replicated from a source
+account to a target account, new users cannot be created or modified in the target account.
+New, local databases and shares
+can
+be created and modified in a target account. If
+ROLES
+are also replicated
+to the target account, new roles cannot be created or modified in that target account. Therefore, privileges cannot be granted to (or revoked from)
+a
+role on a secondary object in the target account. However, privileges
+can
+be granted to (or revoked from) a secondary role on local
+objects (for example, databases, shares, or replication or failover groups) created in the target account.
+Replication and objects in target accounts
+¶
+If you created account objects, for example, users and roles, in your target account by
+any means other than via replication
+(for example,
+using scripts), these users and roles have no global identifier by default. When a target account is refreshed from the source account, the
+refresh operation
+drops
+any account objects of the types in the
+OBJECT_TYPES
+list in the target account that have no
+global identifier.
+Note
+The initial refresh operation to replicate USERS or ROLES might result in an error. This is to help prevent accidental deletion of
+data and metadata associated with users and roles. For more information about the circumstances that determine whether these
+object types are dropped or the refresh operation fails, see
+Initial replication of users and roles
+.
+To avoid dropping these objects, see
+Apply global IDs to objects created by scripts in target accounts
+.
+Objects recreated in target accounts
+¶
+If an existing object in the source account is replaced using a CREATE OR REPLACE statement, the existing object is dropped, and then
+a new object with the same name is created in a single transaction. For example, if you execute a CREATE OR REPLACE statement for an
+existing table
+t1
+, table
+t1
+is dropped, and then a new table
+t1
+is created. For more information, see the
+usage notes for CREATE TABLE
+.
+When objects are replaced on the target account, the DROP and CREATE statements do not execute atomically during a refresh operation.
+This means the object might disappear briefly from the target account while it is being recreated as a new object.
+Replication and

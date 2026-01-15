@@ -1,0 +1,72 @@
+-20 20:12:45.446 -0700 |
+| 2024-08-19 21:12:55.305 -0700 | 28e12b8a-aab8-40a8-ae39-9a5a5f654d66 | 2024-08-20 21:12:55.305 -0700 |
++-------------------------------+--------------------------------------+-------------------------------+
+Delete the
+d1_backups
+backup created on 2024-08-19 17:12:28 using the
+backup_id
+:
+ALTER
+BACKUP
+SET
+d1_backups
+DELETE
+BACKUP
+IDENTIFIER
+'d3a77432-c98d-4969-91a9-fffae5dd655c'
+;
+Copy
+Attempt to delete a more recent
+d1_backups
+backup created on 2024-08-19 21:12:55. Notice how Snowflake
+prevents you from deleting a backup other than the oldest one in the backup set.
+ALTER
+BACKUP
+SET
+d1_backups
+DELETE
+BACKUP
+IDENTIFIER
+'28e12b8a-aab8-40a8-ae39-9a5a5f654d66'
+;
+Copy
+Backup '28e12b8a-aab8-40a8-ae39-9a5a5f654d66' cannot be deleted as it is not the oldest active backup in the backup set D1_BACKUPS.
+Delete a backup set
+¶
+You can delete a backup set using the
+DROP BACKUP SET
+command.
+Note
+You can’t delete a backup set that has a retention lock and contains unexpired backups.
+You also can’t delete a backup set if any of its backups has a legal hold.
+Delete the
+t1_backups
+backup set:
+DROP
+BACKUP
+SET
+t1_backups
+;
+Copy
+Delete the
+s1_backups
+backup set:
+DROP
+BACKUP
+SET
+s1_backups
+;
+Copy
+Delete the
+d1_backups
+backup set:
+DROP
+BACKUP
+SET
+d1_backups
+;
+Copy
+Find all the backup sets that contain backups of a specific table
+¶
+The following example shows how to find all the backup sets that contain a specific table inside a specific schema and database.
+The SHOW TABLES

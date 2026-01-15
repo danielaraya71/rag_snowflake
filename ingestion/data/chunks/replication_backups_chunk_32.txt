@@ -1,0 +1,58 @@
+<
+backup_set_name
+>
+->>
+SELECT
+*
+FROM
+$
+1
+WHERE
+"is_under_legal_hold"
+=
+'Y'
+;
+ALTER
+BACKUP
+SET
+<
+backup_set_name
+>
+MODIFY
+BACKUP
+IDENTIFIER
+'<backup_identifier>'
+REMOVE
+LEGAL HOLD
+;
+Copy
+Tip
+You can also check for the existence of legal holds by querying the
+"is_under_legal_hold"
+column in the
+INFORMATION_SCHEMA.BACKUPS or ACCOUNT_USAGE.BACKUPS views.
+Replicate backup-related objects
+¶
+When you use replication in combination with database, schema, and table backups, you specify the databases that contain the
+backup sets and backup policies in your replication groups and failover groups. You can control how your backup-related
+objects are replicated by organizing your replication groups and failover groups, and choosing which databases and schemas
+contain your backup sets and backup policies. For more information, see
+Backup replication for database, schema, and table backups
+.
+The backup sets and backup policies are database objects. Snowflake replicates the backup sets and backup
+policies along with the databases and schemas that contain them.
+Snowflake minimizes the time and storage usage for backups by using a mechanism similar to cloning, so that each backup doesn’t
+require a complete new copy of all the table data. If the backup set is part of a different failover group than the database,
+schema, or table that the backup set applies to, there’s a one-time full transfer of the data for the first refresh of that
+replication group or failover group.
+When a replication group or failover group includes a backup set, the increase in refresh latency is proportional to the number of
+backups created since the last refresh.
+If you define an expiry period for older backups, the automatic deletion happens on the primary account.
+Those expired backups are removed from the secondary account when you perform a refresh operation.
+Important
+If you replicate a backup set, make sure to perform a refresh immediately after placing a legal hold on a backup
+in that backup set. If you perform a failover before replicating the backup set that contains the legal hold, the original
+backup set can be overwritten when you fail back to the original primary account, potentially erasing the legal hold.
+Therefore, you can fine-tune the replication for backup-related objects by following these practices:
+To minimize the chance of refresh failures, put the backup set and the optional
+backup policy within the same database

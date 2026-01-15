@@ -1,0 +1,84 @@
+
+displays a sign in message instead of the refresh status.
+Sign in to
+Snowsight
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Replication
+, then select
+Groups
+.
+Locate the replication or failover group you want to edit, and select the
+More
+menu (
+…
+) in the last column of the row.
+Select
+Edit
+.
+To change the group name, enter a new name in the
+Group name
+box that meets the following requirements:
+Must start with an alphabetic character and cannot contain spaces or special characters unless the identifier string is
+enclosed in double quotes (for example, “My object”). Identifiers enclosed in double quotes are also case-sensitive.
+For more information, see
+Identifier requirements
+.
+Names for failover groups and replication groups in an account must be unique.
+Choose
+Edit objects
+to add or remove share and account objects.
+Note
+Account objects can only be added to one replication or failover group. If a replication or failover group with any account
+objects already exists in your account, you can’t select those objects.
+Choose
+Select databases
+to add or remove database objects.
+Select the
+Replication frequency
+to change the replication schedule for a group.
+Select
+Save
+to update the group.
+If saving the changes to the group is unsuccessful, refer to
+Troubleshoot issues with creating and editing replication groups using Snowsight
+for common errors
+and how to resolve them.
+Modify a replication or failover group in a source account using SQL
+¶
+You can modify a replication or failover group properties using the
+ALTER REPLICATION GROUP
+or
+ALTER FAILOVER GROUP
+command.
+Pause or resume a replication schedule in a target account
+¶
+You can pause (suspend) or resume a replication schedule in a target account using Snowsight or
+SQL
+.
+Pause or resume a replication schedule in a target account using Snowsight
+¶
+Note
+Only account administrators can edit a replication or failover group using Snowsight (refer to
+Limitations of using Snowsight for replication configuration
+).
+To pause or resume a replication schedule, you must be signed in to the target account.
+Sign in to
+Snowsight
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Replication
+, then select
+Groups
+.
+Locate the replication or failover group you

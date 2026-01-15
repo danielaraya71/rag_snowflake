@@ -1,0 +1,23 @@
+ reverify that you can connect to each Snowflake account.
+At this point, the target account contains the replicated objects and users can login. However, there are additional steps in the target
+account to use the connector.
+Update the remote service associated with the API integration in the cloud platform that hosts your Snowflake account.
+For details, refer to
+Updating the remote service for API integrations
+.
+Install the connector manually or with Snowsight. For details, refer to:
+Install the connector manually
+Install the connector with Snowsight
+Access the ServiceNow Data in Snowflake
+.
+On this page
+Overview
+Replicating SAML2 security integrations
+Replicating SCIM security integrations
+Replicating OAuth security integrations
+Replicating network policies
+Replicating integrations and objects for the Snowflake Connector for ServiceNow
+Related content
+Introduction to replication and failover across multiple accounts
+Replicating databases across multiple accounts
+Controlling network traffic with network policies

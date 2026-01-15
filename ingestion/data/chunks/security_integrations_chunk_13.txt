@@ -1,0 +1,122 @@
+ object types.
+show
+secrets
+in
+database
+secretsdb
+;
+show security integrations
+;
+show api integrations
+;
+show
+tables
+in
+database
+destdb
+;
+show warehouses
+;
+show roles
+;
+Copy
+Note that
+secretsdb
+is the name of the database that contains the secret and
+destdb
+is the name of the database that contains
+the ingested data from ServiceNow.
+Update the failover group to include API integrations and the databases containing the secret and ingested data using an ALTER FAILOVER
+GROUP command.
+ALTER
+FAILOVER
+GROUP
+fg
+SET
+OBJECT_TYPES
+=
+databases
+,
+users
+,
+roles
+,
+warehouses
+,
+resource monitors
+,
+integrations
+,
+network policies
+,
+account
+parameters
+ALLOWED_DATABASES
+=
+secretsdb
+,
+destdb
+ALLOWED_INTEGRATION_TYPES
+=
+security
+integrations
+,
+api integrations
+;
+Copy
+Target account steps:
+Refresh the secondary failover group to replicate the integrations and databases to the target account.
+ALTER
+FAILOVER
+GROUP
+fg
+REFRESH
+;
+Copy
+Verify the replicated objects exist using the following SHOW commands.
+show
+secrets
+;
+show security integrations
+;
+show api integrations
+;
+show
+database
+;
+show
+tables
+in
+database
+destdb
+;
+show roles
+;
+Copy
+Verify connecting to each Snowflake account using the method of your choice (such as Snowflake CLI, a browser, or SnowSQL).
+Optionally promote the secondary failover group and the secondary connection in the target account to primary. This will promote the
+target account to serve as the new source account.
+Failover group:
+ALTER
+FAILOVER
+GROUP
+fg
+PRIMARY
+;
+Copy
+Connection:
+ALTER
+CONNECTION
+global
+PRIMARY
+;
+Copy
+If you completed the previous step, reverify that you can connect to each Snowflake account.
+At this point, the target account contains the replicated objects and users can login. However, there are additional steps in the target
+account to use the connector.
+Update the remote service associated with the API integration in the cloud platform that hosts your Snowflake account.
+For details, refer to
+Updating the remote service for API integrations
+.
+Install the connector manually or with Snowsight. For details, refer to:
+Install the connector manually

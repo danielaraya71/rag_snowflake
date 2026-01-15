@@ -1,0 +1,77 @@
+
+:
+ALTER
+BACKUP
+SET
+t1_backups
+RESUME
+BACKUP
+POLICY
+;
+Copy
+You can also selectively resume just the creation or just the expiration processes of the backup set.
+The following example resumes the creation of new backups in the backup set
+t3_backups
+, and
+resumes expiration of old backups from the backup set
+t4_backups
+:
+ALTER
+BACKUP
+SET
+t3_backups
+SUSPEND
+BACKUP
+CREATION
+POLICY
+;
+ALTER
+BACKUP
+SET
+t4_backups
+SUSPEND
+BACKUP
+EXPIRATION
+POLICY
+;
+Copy
+For more information about the ALTER BACKUP SET command, see
+ALTER BACKUP SET
+.
+Restore a backup
+¶
+You can restore an object from a backup set by using the ID of the specific backup.
+For example, to restore table
+t1
+from backup set
+t1_backups
+in the current schema,
+execute the following statements:
+Find the ID of the table backup to restore in the
+backup_id
+column:
+SHOW
+BACKUPS
+IN
+BACKUP
+SET
+t1_backups
+->>
+SELECT
+"created_on"
+,
+"backup_id"
+,
+"expire_on"
+FROM
+$
+1
+;
+Copy
++-------------------------------+--------------------------------------+-------------------------------+
+| created_on                    | backup_id                            | expire_on                     |
+|-------------------------------+------------------------------------------+---------------------------|
+| 2024-08-19 17:12:28.991 -0700 | 983e0b66-91eb-41cb-8a0b-037abfec1914 | 2024-08-20 17:12:28.991 -0700 |
+| 2024-08-19 18:12:33.824 -0700 | b5624ef0-1f35-452f-b132-09d8f0592e52 | 2024-08-20 18:12:33.824 -0700 |
+| 2024-08-19 19:12:43.830 -0700 | eca1a94a-fd40-46db-a2bc-4afba6a38c0a | 2024-08-20 19:12:43.830 -0700 |
+| 2024-08-

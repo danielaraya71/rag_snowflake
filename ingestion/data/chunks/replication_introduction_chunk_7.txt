@@ -1,0 +1,80 @@
+.
+External access integrations.
+For more information about external access integrations, see
+External network access overview
+.
+Network policy replication
+¶
+Business Critical Feature
+Requires Business Critical Edition (or higher).
+The feature supports replicating network policies.
+For more information, see
+Replication of security integrations & network policies across multiple accounts
+.
+Parameter replication
+¶
+Business Critical Feature
+Requires Business Critical Edition (or higher).
+This feature supports replicating account-level parameters and object parameters. Object parameters are replicated when the object is
+included in the replication group. For example, if
+WAREHOUSES
+are replicated, warehouse-specific parameters
+(e.g.
+STATEMENT_TIMEOUT_IN_SECONDS
+) are replicated. For a full list, see
+Object parameters
+.
+Account-level parameter replication includes all
+Account parameters
+and
+parameters set on the account
+.
+Account-level parameters (e.g.
+DATA_RETENTION_TIME_IN_DAYS
+) are replicated when
+ACCOUNT
+PARAMETERS
+is included in
+the list of object types for a replication group.
+Resource monitor replication
+¶
+Business Critical Feature
+Requires Business Critical Edition (or higher).
+This feature supports replicating resource monitors and privileges granted on resource monitors to roles. A secondary resource monitor
+follows the same quota reset schedule as its primary. For example, if the quota on the primary resource monitor resets on the first of the
+month, and the secondary is first replicated on the 15th of the month, its quota will reset on the first of the next month along with the
+primary.
+Replication of resource monitor email notification settings
+¶
+Email notification settings for resource monitors are not included with resource monitor replication. Email notifications for
+non-administrator users can be replicated with resource monitors. However, account administrator notification settings are
+currently not replicated:
+If
+users
+and
+resource
+monitors
+are included in the
+object_types
+list for the replication or failover group,
+notification settings for non-administrator users are replicated:
+The
+notify_users
+list for a warehouse-level resource monitor is replicated to target accounts.
+Email notifications for non-administrator users
+are sent
+on the target account.
+If
+resource
+monitors
+is included in the
+object_types
+list for the replication or failover group, but
+users
+is not included, the
+notify_users
+list for a secondary warehouse-level resource monitor is empty.
+Account administrator notification settings are
+not
+replicated:
+An account administrator must

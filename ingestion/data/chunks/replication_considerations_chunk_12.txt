@@ -1,0 +1,48 @@
+ costs apply for this feature. For more information, see
+Understanding replication cost
+.
+For considerations about the account objects for replication and failover groups, see
+Account objects
+.
+Replication and dynamic tables
+¶
+Dynamic table replication behavior varies based on whether the primary database containing the dynamic table is part
+of a replication group or a failover group.
+Dynamic tables and replication groups
+¶
+A database that contains a dynamic table can be replicated using a replication group. The source object(s) it depends
+on are not required to be in the same replication group.
+Replicated objects in each target account are referred to as
+secondary
+objects and are replicas of the
+primary
+objects in the source account. Secondary objects are
+read-only
+in
+the target account. If a secondary replication group is dropped in a target account, the databases that were
+included in the group become read/write. However, any dynamic tables included in a replication group
+remain
+read-only even after the secondary group is dropped in the target account. No DML or dynamic table refreshes can
+happen on these read-only dynamic tables.
+Dynamic tables and failover groups
+¶
+A database that contains a dynamic table can be replicated using a failover group. If a dynamic table references
+source objects outside the failover group or database replication, it can still be replicated. After a failover, the
+dynamic table resolves source objects using name resolution during refresh. The refresh might succeed or fail,
+depending on the state of the source objects. If successful, the dynamic table is reinitialized with the latest data
+from the source objects.
+Secondary dynamic tables are read-only and do not get refreshed. After a failover occurs and a secondary dynamic
+table is promoted to primary dynamic table, the first refresh is a reinitialization followed by incremental
+refreshes if the dynamic table is configured for incremental refresh of data.
+Note
+The reinitialized dynamic table might differ from the original replica because the source objects and dynamic table
+are not guaranteed to share the same replication snapshot.
+Example: Refresh failure due to missing source objects
+If a dynamic table depends on a source table outside the failover group, it cannot refresh after a failover. In the
+above diagram, the dynamic table
+dt
+in the primary account is replicated to the secondary account.
+dt
+depends on
+source_table
+, which is not included in the same failover group as the primary account. After failover,

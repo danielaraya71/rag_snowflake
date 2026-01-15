@@ -1,0 +1,83 @@
+ it, then select
+Next
+.
+On the
+Create a group
+page, in the
+Group name
+box, enter a name for the group that meets the
+following requirements:
+Must start with an alphabetic character and cannot contain spaces or special characters unless the identifier string is
+enclosed in double quotes (for example, “My object”). Identifiers enclosed in double quotes are also case-sensitive.
+For more information, see
+Identifier requirements
+.
+Must be unique across failover and replication groups in an account.
+Choose
+Edit objects
+to add share and account objects to your group.
+Note
+Account objects can only be added to one replication or failover group. If a replication or failover group with any account
+objects already exists in your account, you cannot select those objects.
+Choose
+Select databases
+to add database objects to your group.
+Select the
+Replication frequency
+.
+If the account is Business Critical Edition or higher, a failover group is created by default. You can choose to create a replication group
+instead. To create a replication group, select
+Advanced options
+, then unselect
+Enable failover
+.
+Complete one of the following actions:
+For Business Critical Edition (or higher) accounts, select
+Next
+.
+For Standard Edition and Enterprise Edition accounts, select
+Start replication
+to create the replication group.
+For Business Critical Edition (or higher) accounts, on the
+Create connection
+page, enter a connection name in
+the
+Connection name
+box, then select
+Start replication
+.
+If creating the replication group is unsuccessful, refer to
+Troubleshoot issues with creating and editing replication groups using Snowsight
+for common errors
+and how to resolve them.
+Create a failover group using SQL
+¶
+Create a failover group of specified account and database objects in the source account and enable replication and failover to a list of
+target accounts. See
+CREATE FAILOVER GROUP
+for syntax.
+For example, enable replication of users, roles, warehouses, resources monitors, and databases
+db1
+and
+db2
+from the source account
+to the
+myaccount2
+account in the same organization. Set the replication schedule to automatically refresh
+myaccount2
+every 10
+minutes.
+Execute the following statement on the source account:
+USE
+ROLE
+myrole
+;
+CREATE
+FAILOVER
+GROUP
+myfg
+OBJECT_TYPES
+=
+USERS
+,
+ROLES

@@ -1,0 +1,91 @@
+ private connectivity, you can’t use Snowsight to create a primary and secondary
+connection.
+Sign in to
+Snowsight
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Client Redirect
+.
+Select
++ Connection
+.
+Select
+Target Account
+.
+In the
+Connection Name
+box, enter a connection name that meets the following requirements:
+Must start with an alphabetic character and may only contain letters, decimal digits (0-9), and underscores (_).
+Must be unique across connection names and account names in the organization.
+Select
+Create Connection
+.
+Create a primary connection using SQL
+¶
+Note
+Only a user with the ACCOUNTADMIN role can execute the SQL commands in this section.
+Create a new primary connection using the
+CREATE CONNECTION
+command. The name of each primary
+connection must be unique across all connection and account names in the organization.
+The connection name is included as part of the connection URL used to connect to Snowflake accounts.
+For example, to create a connection named
+myconnection
+:
+CREATE
+CONNECTION
+myconnection
+;
+Copy
+Modify this primary connection using an
+ALTER CONNECTION … ENABLE FAILOVER TO ACCOUNTS
+statement. Provide a comma-separated list of accounts in your organization that can store a failover option for this connection (i.e. a
+secondary connection).
+Any account that stores a secondary connection must be hosted in a region different from the account that stores the primary connection.
+Client Redirect only operates successfully across regions. For example, if you try to redirect client connections from
+account1
+to
+account2
+in the same region, client redirect does not work.
+To see the complete list of accounts in your organization that are enabled for replication, execute
+SHOW REPLICATION ACCOUNTS
+.
+For example, allow accounts
+myaccount2
+and
+myaccount3
+in the
+myorg
+organization to each store a secondary connection for the
+myconnection
+connection:
+ALTER
+CONNECTION
+myconnection
+ENABLE
+FAILOVER
+TO
+ACCOUNTS
+myorg
+.
+myaccount2
+,
+myorg
+.
+myaccount3
+;
+Copy
+Execute the
+SHOW CONNECTIONS
+command to view the details for the connection.
+SHOW
+CONNECTIONS
+;
++
+--------------------+-------------------------------+---------------------+-------------------+-----------------+---------------+-------------------------------+-------------------------------------+-------------------------------------------+-------------------+-------------------+
+| snowflake_region   |

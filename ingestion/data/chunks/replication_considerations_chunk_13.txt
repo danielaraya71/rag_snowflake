@@ -1,0 +1,75 @@
+ source objects and dynamic table
+are not guaranteed to share the same replication snapshot.
+Example: Refresh failure due to missing source objects
+If a dynamic table depends on a source table outside the failover group, it cannot refresh after a failover. In the
+above diagram, the dynamic table
+dt
+in the primary account is replicated to the secondary account.
+dt
+depends on
+source_table
+, which is not included in the same failover group as the primary account. After failover,
+the refresh in the secondary account fails because
+source_table
+cannot be resolved.
+Example: Successful refresh when source objects exist in secondary account via separate replication
+In the above diagram, the dynamic table
+dt
+depends on
+source_table
+. Both
+dt
+and
+source_table
+in the
+primary account are replicated to the secondary account through independent failover groups. After replication and
+failover, when
+dt
+is refreshed in the secondary account, the refresh succeeds because
+source_table
+can be
+found through name resolution.
+Example: Successful refresh when source objects exist in secondary account locally
+In the above diagram, the dynamic table
+dt
+depends on
+source_table
+and is replicated through a failover group
+from the primary account to the secondary account. A
+source_table
+is created locally in the secondary account.
+After failover, when
+dt1
+is refreshed in the secondary account, the refresh can succeed because
+source_table
+can be found through name resolution.
+Replication and Snowpipe Streaming
+¶
+A table populated by
+Snowpipe Streaming
+in a primary database is replicated to the secondary database in a target account.
+In the primary database, tables are created and rows are inserted through
+channels
+.
+Offset tokens
+track the ingestion progress. A refresh operation replicates the table object, table data, and the channel offsets associated with the table from the primary database to the secondary database.
+Snowflake Streaming read-only operations to retrieve offsets are available in the source and target accounts:
+The channel
+getLatestCommittedOffsetToken
+API
+SHOW CHANNELS
+command
+Snowflake Streaming write operations are only available in the source account:
+The client
+openChannel
+API
+The channel
+insertRow
+API
+The channel
+insertRows
+API
+Avoiding data loss
+¶
+To avoid data loss in the case of failover, the data retention time for successfully inserted rows in your upstream data source must be
+greater than the configured

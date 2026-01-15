@@ -1,0 +1,50 @@
+Error notifications for replication and failover groups
+¶
+Standard & Business Critical Feature
+Database and share replication are available to all accounts.
+Replication of other account objects & failover/failback require Business Critical Edition (or higher).
+To inquire about upgrading, please contact
+Snowflake Support
+.
+You can receive error notifications for refresh operation failures by setting a notification integration for a primary replication
+or failover group.
+Error notifications for refresh operation failures
+¶
+When you enable error notifications for a replication or failover group, a notification is sent via the designated email, cloud messaging
+service, or the webhook when a refresh operation fails.
+Notifications includes the following information:
+Source and target account names.
+Source and target regions (and region group, if applicable).
+Primary and secondary replication or failover group name.
+Timestamp when the error occurred.
+Error code and message.
+Source and target login URL.
+Error notifications and failover
+¶
+Notifications are enabled on the primary replication or failover group and sent using a notification integration. The
+notification integration is not required to be replicated to the target account. In the case of failover, if the notification
+integration has been replicated, or there is an existing notification integration with the same name, in the newly promoted
+source account, error notifications continue to be sent.
+If the notification integration is not available, error notifications are not sent for refresh operation failures.
+Prerequisite: Notification integration for error notifications
+¶
+A notification integration is required to send error notifications. The notification integration must be one of the
+following types to send email notifications on refresh operation failures:
+TYPE = EMAIL
+:
+The email notification integration must have at least one verified email address in the DEFAULT_RECIPIENTS list.
+For more information about creating an email notification with a default list of recipients, see
+Specify a default list of recipients and a default subject line
+.
+TYPE = QUEUE
+:
+You can use a notification integration that is configured to push notifications to a messaging service for any of the
+cloud providers supported by Snowflake. You must set the notification integration TYPE parameter to QUEUE and the DIRECTION
+parameter to OUTBOUND.
+For more information, see
+Sending notifications to cloud provider queues (Amazon SNS, Google Cloud PubSub, and Azure Event Grid)
+.
+TYPE = WEBHOOK
+:
+You can use a notification integration that is configured to push notifications to a webhook for any of the external systems
+supported by Snowflake. Set the notification integration TYPE parameter to

@@ -1,0 +1,56 @@
+Load any data that has not yet been loaded.
+This includes any data that is new since the newly promoted primary database was last refreshed.
+Continue to receive notifications when the stage has new files to load, and loads data from those files.
+Note
+To receive notifications, you must configure a secondary auto-ingest pipe in a target account
+prior to failover
+.
+For more information, see
+Configure notifications for secondary auto-ingest pipes
+.
+Replication of REST endpoint pipes
+¶
+For pipes that use the
+Snowpipe REST API
+to load data,
+Snowflake replicates the pipes and their load history metadata to each target account that you specify.
+There are no additional configuration steps you need to take on the target accounts.
+For a detailed list of load history metadata, see
+Load metadata
+.
+To continue data loading in the event of a failover, call the REST API from the newly-promoted source account.
+Considerations
+¶
+The following constraints apply to pipe objects:
+Snowflake currently supports pipe replication as part of group-based replication (replication and failover groups).
+Pipe replication is not supported for database replication.
+Snowflake replicates the copy history of a pipe only when the pipe belongs to the same replication group as its target table.
+Replication of notification integrations is not supported.
+Snowflake only replicates load history after the latest table truncate.
+To receive notifications, you must configure a secondary auto-ingest pipe in a target account
+prior to failover
+.
+For more information, see
+Configure notifications for secondary auto-ingest pipes
+.
+Use the
+SYSTEM$PIPE_STATUS
+function to resolve any pipes not in their expected execution state after failover.
+Snowflake doesn’t support replication and failover for Snowpipe with the Kafka connector, but Snowflake does support replication and failover for Snowpipe Streaming with the Kafka connector. For more information, see
+Snowpipe Streaming and the Kafka connector
+.
+Example 1: Replicate a named internal stage
+¶
+This example demonstrates how replication works for internal stages. In particular, the example shows how the directory table
+is the single source of truth for stage metadata before and after replication.
+The first part of the example completes the following tasks in a
+source
+account.
+Create an internal stage named
+my_int_stage
+with a directory table enabled to replicate the files on the stage. Then copy data
+from a table named
+my_table
+into files on the stage.
+Note
+The example refresh

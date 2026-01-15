@@ -1,0 +1,60 @@
+>
+REFRESH
+FORCE
+;
+Copy
+Link the account objects by name. The
+SYSTEM$LINK_ACCOUNT_OBJECTS_BY_NAME
+function links
+users with the same name in both the target account and the source account. Users in the target account that are linked are
+not deleted.
+To link account objects by name, execute the following command:
+SELECT
+SYSTEM$LINK_ACCOUNT_OBJECTS_BY_NAME
+(
+'<rg_name>'
+);
+Copy
+Note
+Any user in the target account that
+does not
+have a matching user in the source account with the same name is
+dropped
+.
+If there are
+no
+users in the target account with names matching users in the source account, the initial refresh operation in
+the target account drops all users. This can result in the following data and metadata loss:
+If USERS are included in the OBJECT_TYPES list for a replication or failover group:
+Worksheets are lost.
+Query history is lost.
+If USERS are included in the OBJECT_TYPES list, but ROLES is not:
+Privilege grants to users are lost.
+If ROLES are included in the OBJECT_TYPES list:
+Privilege grants to share objects are lost.
+To avoid dropping users or roles in the target account:
+In the source account, manually recreate any users or roles that exist
+only
+in the target account before the initial replication.
+In the target account, link matching objects with the same name in both accounts using the
+SYSTEM$LINK_ACCOUNT_OBJECTS_BY_NAME
+function.
+Configure cloud storage access for secondary storage integrations
+¶
+If you enable storage integration replication, you must take additional steps after the
+storage integration is replicated to target accounts.
+The replicated integration has its own identity and access management (IAM) entity that is different from the identity
+and IAM entity of the primary integration. Therefore, you must update your cloud provider permissions
+to grant the replicated integration access to your cloud storage.
+You only need to configure this trust relationship on target accounts one time.
+The process is similar to granting access in the source account.
+See the following pages for more information:
+Configuring a Snowflake storage integration to access Amazon S3
+Configuring an integration for Google Cloud Storage
+Configuring a Snowflake storage integration for Azure
+Configure automated refresh for directory tables on secondary stages
+¶
+If you replicate an external stage with a directory table, and you have configured automated refresh for the source directory table,
+you must take steps to configure
+automated refresh
+for the secondary

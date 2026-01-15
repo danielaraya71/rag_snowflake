@@ -1,0 +1,82 @@
+my_big_important_database
+.
+other_schema
+.
+my_dimension_table
+(
+id
+)
+);
+SELECT
+GET_DDL
+(
+'TABLE'
+,
+'dependent_table'
+);
+Copy
+The GET_DDL() output shows the references that point to the other schema:
++-------------------------------------------+
+| GET_DDL('TABLE','DEPENDENT_TABLE')        |
+|-------------------------------------------|
+| create or replace TABLE DEPENDENT_TABLE ( |
+|     ID NUMBER(38,0) NOT NULL DEFAULT MY_BIG_IMPORTANT_DATABASE.OTHER_SCHEMA.MY_SEQUENCE.NEXTVAL,
+|     FOREIGN_ID NUMBER(38,0),                |
+|     primary key (ID),                       |
+|     foreign key (FOREIGN_ID) references MY_BIG_IMPORTANT_DATABASE.OTHER_SCHEMA.MY_DIMENSION_TABLE(ID)
+| );                                        |
++-------------------------------------------+
+Next, we create the backup set for the table and add a backup to it:
+CREATE
+BACKUP
+SET
+dependency_experiments
+FOR
+TABLE
+dependent_table
+;
+ALTER
+BACKUP
+SET
+dependency_experiments
+ADD
+BACKUP
+;
+SHOW
+BACKUPS
+IN
+BACKUP
+SET
+dependency_experiments
+;
+Copy
+The SHOW BACKUPS output contains the
+backup_id
+value to use for the restore operation:
++-------------------------------+--------------------------------------+------------------------+---------------------------+--------------+-----------+
+| created_on                    | backup_id                            | backup_set_name        | database_name             | schema_name  | expire_on |
+|-------------------------------+--------------------------------------+------------------------+---------------------------+--------------+-----------|
+| 2025-07-01 11:53:27.860 -0700 | 0fd44138-b571-449b-be0a-72779501f80e | DEPENDENCY_EXPERIMENTS | MY_BIG_IMPORTANT_DATABASE | OTHER_SCHEMA | NULL      |
++-------------------------------+--------------------------------------+------------------------+---------------------------+--------------+-----------+
+We restore that table under a new name, and confirm that the restored table refers to
+the objects in the other schema:
+CREATE
+TABLE
+restored_dependent_table
+FROM
+BACKUP
+SET
+dependency_experiments
+IDENTIFIER
+'0fd44138-b571-449b-be0a-72779501f80e'
+;
+SELECT
+GET_DDL
+(
+'TABLE'
+,
+'restored_dependent_table'
+);
+Copy
++----------------------------------------------------+
+| GET_DDL('TABLE','RESTORED_DEPENDENT_TABLE

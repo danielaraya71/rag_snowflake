@@ -1,0 +1,56 @@
+ information, see
+Configure cloud storage access for secondary storage integrations
+.
+If you replicate an external stage with a directory table, and you have configured
+automated refresh
+for the source
+directory table, you must configure automated refresh for the
+secondary
+directory table before failover. For more information,
+see
+Configure automated refresh for directory tables on secondary stages
+.
+A copy command might take longer than expected if the directory table on a replicated stage is not consistent with the
+replicated files on the stage. To make a directory table consistent, refresh it with an
+ALTER STAGE … REFRESH
+statement.
+To check the consistency status of a directory table, use the
+SYSTEM$GET_DIRECTORY_TABLE_STATUS
+function.
+Replication and pipes
+¶
+The following constraints apply to pipe objects:
+Snowflake currently supports pipe replication as part of group-based replication (replication and failover groups).
+Pipe replication is not supported for database replication.
+Snowflake replicates the copy history of a pipe only when the pipe belongs to the same replication group as its target table.
+Replication of notification integrations is not supported.
+Snowflake only replicates load history after the latest table truncate.
+To receive notifications, you must configure a secondary auto-ingest pipe in a target account
+prior to failover
+.
+For more information, see
+Configure notifications for secondary auto-ingest pipes
+.
+Use the
+SYSTEM$PIPE_STATUS
+function to resolve any pipes not in their expected execution state after failover.
+Snowflake doesn’t support replication and failover for Snowpipe with the Kafka connector, but Snowflake does support replication and failover for Snowpipe Streaming with the Kafka connector. For more information, see
+Snowpipe Streaming and the Kafka connector
+.
+Replication of data metric functions (DMFs)
+¶
+The following behaviors apply to
+DMF
+replication:
+Event tables
+The event table that stores the results of manually calling or scheduling a DMF to run is not replicated because the event table is local
+to your Snowflake account, and Snowflake does not support replicating event tables.
+Replication groups
+When you add the database(s) that contain your DMFs to a replication group, the following occurs in the target account:
+DMFs are replicated from the source account.
+Tables or views that the
+DMF definition
+specifies, such as with a
+foreign key reference
+are replicated from the source account, unless the table
+or view is associated with

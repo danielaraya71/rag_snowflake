@@ -1,0 +1,68 @@
+ account URL after authentication is complete. The CONNECTION column for this login event is NULL. See
+Authentication and Client Redirect
+(in this topic).
+For example, retrieve up to 100 login events of every user your current role is allowed to monitor in the last 72 hours:
+SELECT
+event_timestamp
+,
+user_name
+,
+client_ip
+,
+reported_client_type
+,
+is_success
+,
+connection
+FROM
+TABLE
+(
+INFORMATION_SCHEMA
+.
+LOGIN_HISTORY
+(
+DATEADD
+(
+'HOURS'
+,-
+72
+,
+CURRENT_TIMESTAMP
+()),
+CURRENT_TIMESTAMP
+()))
+ORDER
+BY
+EVENT_TIMESTAMP
+;
+Copy
+Current limitations of Client Redirect
+¶
+Client connections using a connection URL and OAuth integration require re-authentication when the connection URL is updated to point to a
+different account if the OAuth security integration is not replicated to that account. For more information, refer to
+OAuth redirect behavior
+.
+Web browsers may take several minutes to redirect due to browser cache.
+If you need to verify that the redirect works, you can connect to Snowflake with a
+different client
+.
+Alternatively, open a new private browser window (e.g. incognito mode in Google Chrome) to avoid browser caching issues. Note that some web
+browsers in private or incognito mode might still cache data. To avoid using the browser cache, close any open private browsers windows and
+tabs before you open a new private browser window.
+You can only add one target account using Snowsight. To add more than one target account to the list of allowed failover
+accounts, use the
+ALTER CONNECTION … ENABLE FAILOVER TO ACCOUNTS
+command.
+On this page
+Introduction to Client Redirect
+Client Redirect flow
+Configuring Client Redirect
+Configuring the DNS settings for private connectivity to the Snowflake service
+Configuring Client Redirect and reader accounts
+Using a connection URL
+Authentication and Client Redirect
+Redirecting client connections
+Modifying a connection
+Dropping a connection
+Monitoring Client Redirect
+Current limitations of Client Redirect

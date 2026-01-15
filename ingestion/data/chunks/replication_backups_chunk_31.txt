@@ -1,0 +1,98 @@
+, and which backup sets contain the associated objects.
+You put a legal hold on a backup from the applicable timeframe within a backup set. Doing so disables any automatic expiration for that backup.
+You can put a legal hold on a backup that Snowflake created automatically based on a schedule, or that you created manually. The
+legal hold applies whether or not the backup set has an associated backup policy, or an expiration period, or a retention lock.
+You perform refresh operations for any secondary accounts where the database containing the backup set is replicated.
+That way, the legal hold and associated backup are preserved across any failover and failback operations.
+You use the Snowflake access controls and logs to audit access to the data that’s under the legal hold.
+Once the legal case concludes and the legal team approves removing the legal hold, a user with the APPLY LEGAL HOLD privilege
+releases the legal hold. Then the normal automation for expiry resumes.
+This example shows the sequence of SQL commands you might use during the lifecycle of a legal hold for
+a backup within a particular backup set. You find the identifier of the relevant backup by using the
+SHOW BACKUPS IN BACKUP SET command, and checking the
+"is_under_legal_hold"
+column to see if a legal hold is
+already in place. Then you add or remove the legal hold from the specific backup.
+USE
+ROLE
+<
+role_name
+>;
+-- use a role that has the APPLY LEGAL HOLD privilege
+SHOW
+BACKUPS
+IN
+BACKUP
+SET
+<
+backup_set_name
+>
+->>
+SELECT
+*
+FROM
+$
+1
+WHERE
+"is_under_legal_hold"
+=
+'N'
+;
+ALTER
+BACKUP
+SET
+<
+backup_set_name
+>
+MODIFY
+BACKUP
+IDENTIFIER
+'<backup_identifier>'
+ADD
+LEGAL HOLD
+;
+USE
+ROLE
+<
+role_name
+>;
+-- use a role that has the APPLY LEGAL HOLD privilege
+SHOW
+BACKUPS
+IN
+BACKUP
+SET
+<
+backup_set_name
+>
+->>
+SELECT
+*
+FROM
+$
+1
+WHERE
+"is_under_legal_hold"
+=
+'Y'
+;
+ALTER
+BACKUP
+SET
+<
+backup_set_name
+>
+MODIFY
+BACKUP
+IDENTIFIER
+'<backup_identifier>'
+REMOVE
+LEGAL HOLD
+;
+Copy
+Tip
+You can also check for the existence of legal holds by querying the
+"is_under_legal_hold"
+column in the
+INFORMATION_SCHEMA.BACKUPS or ACCOUNT_USAGE.BACKUPS views.
+Rep

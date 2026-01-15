@@ -1,0 +1,61 @@
+ data is moved into Fail-safe (for permanent tables)
+or deleted (for transient tables) by a background process. This may take a short time to complete. During that time, the
+TIME_TRAVEL_BYTES in table storage metrics might contain a non-zero value even when the Time Travel retention period is 0 days.
+Specifying the data retention period for an object
+¶
+Enterprise Edition Feature
+Specifying a retention period greater than 1 day requires Enterprise Edition (or higher). To inquire about upgrading, please contact
+Snowflake Support
+.
+By default, the maximum retention period is 1 day (one 24-hour period). With Snowflake Enterprise Edition (and higher), the default
+for your account can be set to any value up to 90 days:
+When creating a table, schema, or database, the account default can be overridden using the
+DATA_RETENTION_TIME_IN_DAYS
+parameter in the command.
+If a retention period is specified for a database or schema, the period is inherited by default for all objects created in the
+database/schema.
+A minimum retention period can be set on the account using the
+MIN_DATA_RETENTION_TIME_IN_DAYS
+parameter. If this parameter is
+set at the account level, the data retention period for an object is determined by
+MAX(DATA_RETENTION_TIME_IN_DAYS, MIN_DATA_RETENTION_TIME_IN_DAYS).
+Checking the data retention period for an object
+¶
+To check the current retention period for a table, schema, or database, you can check the value of the
+retention_time
+column in the output of the corresponding SHOW command, such as
+SHOW TABLES
+,
+SHOW SCHEMAS
+, or
+SHOW DATABASES
+.
+For objects that are derived from tables, schemas, or databases, such as materialized views, you can examine the
+retention periods of the parent objects.
+For streams, you can check the value of the
+stale_after
+column in the output from the
+SHOW STREAMS
+command.
+To include information about objects that have already been dropped, include the HISTORY clause with the
+SHOW command.
+The following example shows how you might check the retention periods of certain objects by filtering the output of
+the SHOW commands.
+The following example checks the retention period for specific named tables:
+SHOW
+TABLES
+->>
+SELECT
+"name"
+,
+"retention_time"
+FROM
+$
+1
+WHERE
+"name"
+IN
+(
+'MY_TABLE1'
+,
+'MY_TABLE2

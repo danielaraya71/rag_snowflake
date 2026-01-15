@@ -1,0 +1,51 @@
+ the source account. For instructions, see the appropriate topic:
+Snowflake OAuth
+External OAuth
+To retrieve security integration properties, query the
+DESCRIBE INTEGRATION
+command for each security integration
+in the source account. Then recreate each security integration in a target account by executing the
+CREATE INTEGRATION
+command.
+OAuth redirect behavior
+¶
+If you are using Snowflake OAuth for authenticating a client connection and are connecting to Snowflake using a connection URL, you
+are prompted to re-authenticate if the connection URL is redirected to another account (e.g. in case of failover). Snowflake OAuth
+tokens are valid for use in a specific account. When a connection URL is updated to point to an account in a different region, the
+existing OAuth token becomes invalid.
+In the case of a failover, when the connection URL is updated to the new account, the client will disconnect with an
+invalid
+OAuth
+access
+token
+error. You must re-authenticate and consent to permissions to re-establish the connection.
+Note
+You will
+not
+be prompted for re-authentication when the connection URL is updated to a new account if the
+OAuth security integration is replicated
+to that account. For more
+information, refer to
+Replicating OAuth security integrations
+.
+Redirecting client connections
+¶
+In the event of a service outage in the region where the primary connection is located, redirect the client connection to an account that
+stores a secondary connection.
+Promoting a secondary connection to serve as the primary connection
+¶
+Initiating the redirect involves promoting a secondary connection in an available region to serve as the primary connection using
+ALTER CONNECTION
+. Concurrently, the former primary connection becomes a secondary connection.
+Sign in to the target account in an available region that contains the secondary connection to be promoted to serve
+as the primary connection.
+Execute the SQL statements in this section:
+View all connections in the account:
+SHOW
+CONNECTIONS
+;
+Copy
+The statement returns the following output:
++--------------------+-------------------------------+---------------------+-------------------+-----------------+---------------+-------------------------------+-------------------------------------+-------------------------------------------+-------------------+-------------------+
+| snowflake_region   | created_on                    | account_name        | name              | comment         | is_primary    | primary                       | failover_allowed_to_accounts        | connection_url                            | organization_name | account_locator   |
+|--------------------+-------------------------------+---------------------+-------------------+

@@ -1,0 +1,47 @@
+Replication of security integrations & network policies across multiple accounts
+¶
+Business Critical Feature
+Account object replication and failover/failback require Business Critical Edition (or higher). To inquire about upgrading, please
+contact
+Snowflake Support
+.
+This topic provides information on how to replicate security integrations, along with using failover/failback with
+each of these objects, and assumes familiarity with replication and failover/failback with other account-level objects
+(e.g. users, roles, warehouses).
+For details, see
+Introduction to replication and failover across multiple accounts
+.
+These objects and services are supported across
+regions
+and across
+cloud platforms
+.
+Overview
+¶
+Snowflake supports replicating network policies and security integrations for federated SSO (i.e. SAML2), OAuth, and SCIM along with
+enabling failover/failback for each network policy and integration.
+The general approach to test replication and failover/failback with each network policy and security integration is as follows:
+Identify the source account and target account for replication, and identify the connection URL.
+Complete steps in the source account.
+Complete steps in the target account.
+Test failover/failback.
+Note that because network policies and security integrations have different use cases, the exact steps for the source account and target
+account with respect to each object differ slightly.
+For details, see:
+Replicating SAML2 security integrations
+Replicating SCIM security integrations
+Replicating OAuth security integrations
+Replicating network policies
+Replicating integrations and objects for the Snowflake Connector for ServiceNow
+Replicating SAML2 security integrations
+¶
+Replicating a SAML2 security integration links the source account and the target account to the identity provider by specifying the
+connection URL
+in the SAML2 security integration definition.
+It is important to update the identity provider to specify the connection URL and that users exist in the source account. Without these
+updates, user verification cannot occur, which will result in the inability of the user to access the target account.
+Current Limitation
+:
+For SAML SSO to Snowflake, replicating a SAML2 security integration that specifies the connection URL is only supported on the current
+primary connection and not supported on the secondary connection. Note that for failover, the result is promoting a secondary connection
+to serve as the primary connection. After failover, S

@@ -1,0 +1,37 @@
+ role, including the ACCOUNTADMIN role.
+You can’t decrease the backup expiration period, although you can increase the expiration period.
+You can’t drop a backup set if there are any unexpired backups in the set.
+You can’t drop a schema that contains a backup set with any unexpired backups.
+You can’t drop a database that contains a backup set with any unexpired backups.
+You can’t drop an account that contains a database with a backup set that has any unexpired backups.
+Important
+Applying a backup policy with a retention lock to a backup set is
+irreversible
+.
+Due to the strong guarantees that are needed for regulatory compliance, after you put a retention lock on a backup set,
+you can’t revoke the lock. Snowflake support also can’t revoke such a retention lock. Plan carefully before
+you set a retention lock on a backup set with a long expiration period, to avoid unexpected storage charges
+for undeletable backup sets, and the schemas and databases that contain them.
+If a Snowflake organization is deleted, the organization is no longer a Snowflake customer. In this case,
+Snowflake deletes all backups, including those with retention locks. Deleting a Snowflake organization
+requires the involvement of Snowflake support. It isn’t something that an administrator can do by accident.
+Legal hold
+¶
+The
+legal hold
+feature of Snowflake backups prevents backups from being overwritten or deleted.
+That way, you can preserve Snowflake databases, schemas, or tables based on your own legal requirements.
+Snowflake lets you place a legal hold on specific backups.
+When a Snowflake backup is under legal hold, the following conditions apply:
+Nobody can modify the backup.
+Nobody can delete the backup. That’s true even if the backup has passed its EXPIRE_AFTER_DAYS period.
+Access to the backup is logged and auditable.
+The legal hold can be removed by a privileged user, unlike a retention lock.
+Important
+If you replicate a backup set, make sure to perform a refresh immediately after placing a legal hold on a backup
+in that backup set. If you perform a failover before you replicate the backup set that contains the legal hold, the original
+backup set can be overwritten when you fail back to the original primary account, potentially erasing the legal hold.
+Overview of the backup lifecycle
+¶
+The following diagram shows how the Snowflake objects, backups, backup sets, and backup policies relate to each other.
+The diagram involves the simplest kind of

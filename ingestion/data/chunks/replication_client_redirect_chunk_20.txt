@@ -1,0 +1,67 @@
+ hosted and the support for AWS PrivateLink, Azure
+Private Link, or Google Cloud Private Service Connect. This is the account name where client connections to the connection URL will now
+redirect. Be sure to include the private connectivity OCSP URL when updating the DNS settings.
+For example:
+myaccount1.us-east-1.privatelink.snowflakecomputing.com.
+ocsp.myaccount1.us-east-1.privatelink.snowflakecomputing.com.
+Copy
+(Note the trailing period, which must be included.)
+Note
+You can configure private connectivity and client redirect to work with Snowsight. Ensure your DNS updates include the Snowsight
+values from the output of the SYSTEM$GET_PRIVATELINK_CONFIG function. For details, refer to
+private connectivity and Snowsight
+.
+Verifying the connection URL is updated
+¶
+To verify the connection URL has been updated, you can confirm the region of your current connection. Use the connection URL to connect to
+Snowflake and execute the
+CURRENT_REGION
+function.
+SELECT
+CURRENT_REGION
+();
+Copy
+Modifying a connection
+¶
+You can edit the target accounts for a connection after creating it using Snowsight or SQL.
+Modify target accounts for a connection using Snowsight
+¶
+You can modify the target account for a connection after creating it, but you cannot change the connection name.
+Note
+To edit a connection, you must be signed in as a user with the ACCOUNTADMIN role to the following accounts:
+The source account with the primary connection.
+The current target account with the secondary connection.
+The new target account you want to add for the primary connection.
+You can only add one target account for a primary connection using Snowsight. To add additional
+target accounts,
+use the ALTER CONNECTION command
+.
+Currently, if your account uses private connectivity, you can’t use Snowsight to modify target
+accounts for a connection.
+Sign in to
+Snowsight
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Client Redirect
+.
+Locate the connection you want to edit. Select the
+More
+menu (
+…
+) in the last column of the row.
+Modify target accounts for a connection using SQL
+¶
+You can add more than one target account for a primary connection using the
+ALTER CONNECTION
+command.
+For an example, see
+Examples
+.
+Dropping a connection
+¶
+You can drop a connection using Snowsight or SQL.

@@ -1,0 +1,107 @@
+PRIMARY_UPLOADING_METADATA
+phase. This is the timestamp for the latest refresh of that database on the primary account.
+SELECT
+PARSE_JSON
+(
+details
+)[
+'primarySnapshotTimestamp'
+]
+FROM
+TABLE
+(
+information_schema
+.
+replication_group_refresh_progress
+(
+'myfg'
+))
+WHERE
+PHASE_NAME
+=
+'PRIMARY_UPLOADING_METADATA'
+;
+Copy
+Query the HASH_AGG function for a specified table in the secondary account. The following query returns a hash value for all rows
+in the
+myschema.mytable
+table:
+SELECT
+HASH_AGG
+(
+*
+)
+FROM
+mydb
+.
+myschema
+.
+mytable
+;
+Copy
+Commands to run on source account
+¶
+Query the HASH_AGG function for the same table in the primary account. Using Time Travel, specify the timestamp when the latest
+refresh was performed for the secondary database:
+SELECT
+HASH_AGG
+(
+*
+)
+FROM
+mydb
+.
+myschema
+.
+mytable
+AT
+(
+TIMESTAMP
+=>
+'<primarySnapshotTimestamp>'
+::TIMESTAMP
+);
+Copy
+Compare the results from the two queries. The output should be identical.
+Modifying a replication or failover group in a source account
+¶
+You can edit the name, included objects, and replication schedule of a replication or failover group in a source
+account using Snowsight or
+SQL
+.
+Note
+Replication groups can’t be changed to failover groups or vice versa. To enable or disable failover, delete
+the group and recreate it with the correct failover setting.
+Modify a replication or failover group in a source account using Snowsight
+¶
+Note
+Only account administrators can edit a replication or failover group using Snowsight (refer to
+Limitations of using Snowsight for replication configuration
+).
+To perform these actions, you must be signed in to the source account. If you are not signed in, the
+Status
+column
+displays a sign in message instead of the refresh status.
+Sign in to
+Snowsight
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Replication
+, then select
+Groups
+.
+Locate the replication or failover group you want to edit, and select the
+More
+menu (
+…
+) in the last column of the row.
+Select
+Edit
+.
+To change the group name, enter a new name in the
+Group name

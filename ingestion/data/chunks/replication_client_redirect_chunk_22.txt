@@ -1,0 +1,62 @@
+
+Snowsight
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Replication
+and then select
+Client Redirect
+.
+If there is no active warehouse for the session, you will be prompted to select a warehouse.
+Monitor a specific connection using search and filters.
+You can search by connection name. In the
+(search) box, enter the connection name to filter results.
+Choose
+Redirecting
+to filter the results by primary (
+To
+) or secondary (
+From
+) connection.
+Choose the
+(accounts) menu to filter the results by account name.
+You can review the following information about each connection:
+Column
+Description
+Name
+Connection name.
+Redirecting
+Indicates if the connection is
+To
+a target account or
+From
+a source account and the account name.
+If this column contains
+destinations available
+, there are no secondary connections.
+The number of destinations available indicates the number of target accounts the primary connection can be replicated to.
+If there is more than one secondary connection, each connection is detailed in a separate row.
+Usage
+Displays the number of times the connection has been used in the last 7 days. You must sign in to the target account to view
+usage data for that account.
+Connection URL
+The connection URL to use with Snowflake clients. Select the connection URL in the column to copy the URL.
+Monitor Client Redirect using SQL
+¶
+You can view connection details and monitor usage using the SHOW CONNECTIONS command and LOGIN_HISTORY function.
+View connection details
+¶
+You can retrieve connection names and details using the SHOW CONNECTIONS command:
+SHOW
+CONNECTIONS
+;
+Copy
+Returns:
++--------------------+-------------------------------+---------------------+-------------------+-----------------+---------------+-------------------------------+-------------------------------------+-------------------------------------------+-------------------+-------------------+
+| snowflake_region   | created_on                    | account_name        | name              | comment         | is_primary    | primary                       | failover_allowed_to_accounts        | connection_url                            | organization_name | account_locator   |
+|--------------------+-------------------------------+---------------------+-------------------+-----------------+---------------+-------------------------------+-------------------------------------+-------------------------------------------+-------------------+-------------------|
+| AWS_US_WEST_2      | 2023-07-05 08:57:11.143 -0700 | MYORG.MYACCOUNT1    | MYCONNECTION      | NULL            | true          | MYORG.MYACCOUNT1

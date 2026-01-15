@@ -1,0 +1,95 @@
+ instructions for referencing a connection URL in the configuration for various Snowflake clients.
+Supported Snowflake clients
+¶
+Client Redirect is supported by
+Snowsight
+and
+Classic Console
+.
+In addition, the following Snowflake client versions (and higher) support Client Redirect:
+Snowflake Client
+Minimum Supported Version
+Snowflake CLI
+3.0.0
+SnowSQL
+1.1.82
+Snowflake Connector for Python
+1.8.3
+Snowflake Connector for Spark
+All versions
+Node.js Driver
+1.2.0
+Go Snowflake Driver
+1.2.0
+.NET Driver
+1.0.0
+JDBC Driver
+3.8.4
+ODBC Driver
+2.19.4
+Snowpark
+All versions
+Configure Snowflake clients
+¶
+Use the following host name for the connection URL when connecting to Snowflake:
+Host name:
+organization_name
+-
+connection_name
+.snowflakecomputing.com
+Where:
+organization_name
+Name of your Snowflake organization. The Snowflake accounts that your users connect to are contained in this organization.
+connection_name
+Name of the connection object.
+Important
+Private Connectivity to the Snowflake Service
+Customers using private connectivity to the Snowflake service need to add a
+privatelink
+segment to the URL just before
+snowflakecomputing.com
+:
+organization_name
+-
+connection_name
+.privatelink.snowflakecomputing.com
+Snowsight
+¶
+Enter the following in the account name field on
+app.snowflake.com
+:
+<organization-name>-<connection-name>
+Copy
+For example:
+myorg-myconnection
+Copy
+When using
+organization
+-
+connection
+to log in, Snowsight navigates to the specific region and locator of the current
+primary connection. During an outage, once the connection has been redirected, users must log in again via
+organization
+-
+connection
+to connect to the new primary.
+Classic Console
+¶
+Enter the following URL in a web browser:
+https://<organization_name>-<connection_name>.snowflakecomputing.com/
+Copy
+For example:
+https://myorg-myconnection.snowflakecomputing.com/
+Copy
+Snowflake CLI
+¶
+Specify the host name for the connection URL in the
+account
+connection parameter in the Snowflake CLI
+config.toml
+file. For information
+about the
+config.toml
+file, see
+Configuring Snowflake CLI
+.

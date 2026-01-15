@@ -1,0 +1,50 @@
+
+parameter by the owner of the object.
+Both the grantee and grantor role for a privilege grant are located in the target account.
+The object is replicated (i.e. the object type is included in the
+object_types
+list).
+Otherwise the grant on the object is not replicated.
+For information about replicating secondary roles and session policies, see
+Session policies with secondary roles
+.
+Note
+If a role is dropped that has the OWNERSHIP privilege on an active pipe in the target account, the refresh operation
+fails.
+Privileges on replication groups and failover groups are
+not
+replicated. If the REPLICATE or FAILOVER privilege has been granted on replication groups or failover groups, these
+privileges need to be granted in both the source
+and
+target accounts. Refer to
+Replication privileges
+for details on these privileges.
+Grants for database objects
+¶
+If
+roles
+and
+databases
+are replicated to a target account (in the same or different replication or
+failover group), refreshing a secondary database synchronizes the privilege grants on the database and the objects in the database
+(schemas, tables, views, etc.) to existing roles in the target account (i.e. roles that have been replicated to the target account).
+Note that only privilege grants on objects supported by database replication are synchronized. For the list of supported objects,
+see
+Replicated database objects
+.
+External tables are not currently supported for replication. As a result, privilege grants on external tables are
+also not replicated.
+Future grants for objects
+¶
+If roles are replicated to the target account,
+future grants
+that are granted at the
+database or schema level are replicated to the target account. This also includes future grants on non-replication supported objects. For
+example, external table replication is not yet supported, however future grants on external tables are replicated.
+When you create an external table in a target account, the privileges granted on future external tables materialize as intended.
+Object creation and ownership
+¶
+If new objects are created in a target account during a refresh from the source account, and roles are not replicated to the target
+account, the OWNERSHIP privilege for the new objects is granted to the GLOBALORGADMIN role.
+If roles are replicated to the target account, the OWNERSHIP privilege is granted to the same role on the target account as the
+role with the OWNERSHIP privilege in the source account when roles

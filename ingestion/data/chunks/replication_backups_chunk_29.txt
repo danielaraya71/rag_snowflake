@@ -1,0 +1,55 @@
+_dependent_table'
+);
+Copy
+002073 (02000): SQL compilation error:
+Sequence used as a default value in table 'MY_BIG_IMPORTANT_DATABASE.OTHER_SCHEMA.RESTORED_DEPENDENT_TABLE'
+column 'ID' was not found or could not be accessed.
+DESC
+TABLE
+restored_dependent_table
+;
+Copy
++------------+--------------+--------+-------+----------------------------------------+-------------+------------+-------+------------+---------+-------------+----------------+
+| name       | type         | kind   | null? | default                                | primary key | unique key | check | expression | comment | policy name | privacy domain |
+|------------+--------------+--------+-------+----------------------------------------+-------------+------------+-------+------------+---------+-------------+----------------|
+| ID         | NUMBER(38,0) | COLUMN | N     | [sequence cannot be found or accessed] | Y           | N          | NULL  | NULL       | NULL    | NULL        | NULL           |
+| FOREIGN_ID | NUMBER(38,0) | COLUMN | Y     | NULL                                   | N           | N          | NULL  | NULL       | NULL    | NULL        | NULL           |
++------------+--------------+--------+-------+----------------------------------------+-------------+------------+-------+------------+---------+-------------+----------------+
+INSERT
+INTO
+restored_dependent_table
+(
+foreign_id
+)
+VALUES
+(
+2
+);
+Copy
+002073 (02000): SQL compilation error:
+Sequence used as a default value in table 'MY_BIG_IMPORTANT_DATABASE.OTHER_SCHEMA.RESTORED_DEPENDENT_TABLE'
+column 'ID' was not found or could not be accessed.
+Create a backup for a dynamic table
+¶
+A dynamic table always involves a reference to some other table. For that reason, you might prefer
+to use schema backups or database backups for dynamic tables, so that the original table and
+the dynamic table can be included in the same backup.
+If you make a table backup for a dynamic table, you include the keyword DYNAMIC in the CREATE BACKUP
+SET command, and in the CREATE TABLE command when you restore from a backup. The following example
+sets up the dynamic table, a table backup set for that table, and creates the first backup:
+CREATE
+DYNAMIC TABLE
+my_dynamic_table
+TARGET_LAG
+=
+'1 minute'
+WAREHOUSE
+=
+my_wh
+AS
+SELECT
+*
+FROM
+my_base_table
+WHERE
+col1

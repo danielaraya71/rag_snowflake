@@ -1,0 +1,117 @@
+"
+=
+$
+dname
+AND
+"object_name"
+=
+$
+sname
+)
+OR
+(
+"object_kind"
+=
+'DATABASE'
+AND
+"object_name"
+=
+$
+dname
+);
+Copy
++-------------+------------------+---------------------------+-------------+---------------------------+
+| object_kind | name             | database_name             | schema_name | object_name               |
+|-------------+------------------+---------------------------+-------------+---------------------------|
+| DATABASE    | DATABASE_BACKUP  | MY_BIG_IMPORTANT_DATABASE | PUBLIC      | MY_BIG_IMPORTANT_DATABASE |
+| DATABASE    | DATABASE_BACKUP2 | MY_BIG_IMPORTANT_DATABASE | PUBLIC      | MY_BIG_IMPORTANT_DATABASE |
+| SCHEMA      | SCHEMA_BACKUP3   | MY_BIG_IMPORTANT_DATABASE | PUBLIC      | PUBLIC                    |
+| TABLE       | TABLE_BACKUP2    | MY_BIG_IMPORTANT_DATABASE | PUBLIC      | MY_SMALL_SECONDARY_TABLE  |
++-------------+------------------+---------------------------+-------------+---------------------------+
+Create a backup for a table with dependencies
+¶
+The following examples show how you might create a table backup for a table
+that refers to a sequence and a foreign key in a different schema. To prepare,
+we create the schema
+other_schema
+containing a sequence and a table. Then we create the
+main table in the
+public
+schema, referring to the sequence and the other table.
+USE
+DATABASE
+my_big_important_database
+;
+CREATE
+SCHEMA
+other_schema
+;
+USE
+SCHEMA
+other_schema
+;
+CREATE
+SEQUENCE
+my_sequence
+;
+CREATE
+TABLE
+my_dimension_table
+(
+id
+INT
+AUTOINCREMENT
+PRIMARY KEY
+);
+USE
+SCHEMA
+public
+;
+CREATE
+TABLE
+dependent_table
+(
+id
+INT
+DEFAULT
+my_big_important_database
+.
+other_schema
+.
+my_sequence
+.
+NEXTVAL
+PRIMARY KEY
+,
+foreign_id
+INT
+,
+FOREIGN
+KEY
+(
+foreign_id
+)
+REFERENCES
+my_big_important_database
+.
+other_schema
+.
+my_dimension_table
+(
+id
+)
+);
+SELECT
+GET_DDL
+(
+'TABLE'
+,
+'dependent_table'
+);
+Copy
+The GET_DDL() output shows the references that point to the other schema:
++-------------------------------------------+
+| GET_DDL('TABLE','DEPENDENT_TABLE')        |
+|-------------------------------------------|
+| create or replace TABLE DEPENDENT_TABLE ( |
+|     ID NUMBER(38,0) NOT NULL DEFAULT MY

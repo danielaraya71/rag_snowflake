@@ -1,0 +1,47 @@
+-ingest pipes
+¶
+You must take additional steps to configure cloud notifications for secondary auto-ingest pipes before failover.
+This section covers why this additional configuration is required, and how to complete it for each supported cloud provider.
+Amazon S3
+¶
+The configuration process depends on how you set up event notifications. For example,
+suppose you have an auto-ingest pipe that relies on an Amazon Simple Notification Service (SNS) topic
+to publish messages about the Snowflake stage location.
+When you replicate the pipe to a target account, Snowflake automatically creates a new Amazon Simple Queue Service (SQS) queue.
+You must subscribe this SQS queue for your target account to the SNS topic to get notifications about the stage location.
+If you use Amazon S3 Event Notifications with Amazon Simple Queue Service (SQS),
+follow the instructions in
+Step 4: Configure event notifications
+.
+Important
+To ensure that the pipe has not missed any notifications, you should refresh the pipe after switching to the new SQS queue.
+You can also migrate from SQS to SNS. For more information, see
+Migrate to Amazon Simple Notification Service (SNS)
+.
+If you use Amazon Simple Notification Service (SNS), see
+Subscribing the Snowflake SQS Queue to your SNS topic
+.
+If you use Amazon EventBridge, see
+Option 3: Setting up Amazon EventBridge to automate Snowpipe
+.
+Microsoft Azure Blob Storage
+¶
+A pipe that automatically loads data from files located on a stage in Microsoft Azure blob storage requires an Event Grid
+subscription, storage queue, and a notification integration bound to the storage queue. A secondary pipe in a target account needs a separate
+Event Grid, storage queue, and notification integration bound to the storage queue. The Event Grid in both source and target accounts must be
+configured as endpoints for the same Azure Storage source.
+See the diagram below for configuration details:
+Create a new Event Grid subscription and storage queue. Then, create a new notification integration in the target account and
+grant Snowflake access to your storage queue. For instructions, see
+Configuring Automation With Azure Event Grid
+.
+Important
+The name of the notification integration in each target account
+must
+match the name of the notification integration in
+the source account.
+External stage for Google Cloud Storage
+¶
+A pipe that automatically loads data from files located in Google Cloud Storage requires a
+Google Pub/Sub subscription and a notification integration
+that references

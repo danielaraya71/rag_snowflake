@@ -1,0 +1,81 @@
+, see
+Replication of resource monitor email notification settings
+.
+Requires Business Critical Edition (or higher).
+Roles
+✔
+Includes
+account and database roles
+.
+Includes privileges granted to roles, as well as roles granted to roles (i.e. hierarchies of roles).
+If users and roles are replicated, roles granted to users are also replicated.
+The REPLICATE and FAILOVER privileges are
+not
+replicated.
+Requires Business Critical Edition (or higher).
+Shares
+✔
+Replication of
+inbound shares
+(shares from providers) is
+not
+supported.
+Users
+✔
+Requires Business Critical Edition (or higher).
+Warehouses
+✔
+Requires Business Critical Edition (or higher). Currently,
+interactive warehouses
+are
+not
+replicated.
+Workspaces
+✔
+Requires Business Critical Edition (or higher).
+Database replication
+¶
+Snowflake account replication supports replicating databases. Replication for a database includes the objects contained in that
+database. The refresh operation for a database includes changes to the objects and data since the previous refresh for that database.
+If
+roles
+are replicated (in the same or different replication or failover group), the database refresh also synchronizes the
+privilege grants on the secondary database and the objects in the database (schemas, tables, views, etc.) to roles in the account.
+Refer to
+Grants for database objects
+for more details.
+Replication of some databases is not supported or might fail the refresh operation. For more information, see
+Current limitations of replication
+.
+Replicated database objects
+¶
+When a primary database is replicated, a snapshot of its database objects and data is transferred to the secondary database. However,
+some database objects are not replicated. The following table indicates which database objects are replicated to a secondary database.
+For specific usage information about these objects, see
+Replication considerations
+.
+Note
+Objects that are
+not
+supported for replication are skipped during replication and won’t be available in the target account post failover.
+Object
+Type or Feature
+Replicated
+Notes
+Schemas
+✔
+By default, all schemas in replicated databases are replicated. If you use failover groups, you can choose
+which schemas within a database are replicated. For more information, see
+Schema-level replication for failover groups
+.
+Tables
+Permanent tables
+✔
+Transient tables
+✔
+Temporary tables
+Automatic Clustering of clustered tables
+✔
+Dynamic tables
+✔
+For more information,

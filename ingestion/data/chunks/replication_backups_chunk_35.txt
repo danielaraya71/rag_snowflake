@@ -1,0 +1,52 @@
+ object, not the restored one. That’s true even
+if you rename the restored object to the same name as the original object. If you want to continue using the
+same backup set after doing a restore, you restore the object under a new name
+and then transfer data back to the original object.
+CREATE DATABASE FROM BACKUP SET
+CREATE SCHEMA FROM BACKUP SET
+CREATE TABLE FROM BACKUP SET
+Views
+¶
+The following system views contain metadata related to backups, backup sets, and backup policies.
+Information schema views
+¶
+These views in the INFORMATION_SCHEMA schema contain information about backup-related objects
+that currently exist:
+BACKUP_POLICIES view
+BACKUP_SETS view
+BACKUPS view
+Account usage views
+¶
+These views in the ACCOUNT_USAGE schema contain information at the account level about backup-related objects
+that exist, or have been dropped, the operations that were performed on the backups, and the storage that they use:
+BACKUP_OPERATION_HISTORY view
+BACKUP_POLICIES view
+BACKUP_SETS view
+BACKUP_STORAGE_USAGE view
+BACKUPS view
+Organization usage views
+¶
+These views in the ORGANIZATION_USAGE schema contain information at the organization level about backup-related objects
+that exist, or have been dropped, the operations that were performed on the backups, and the storage that they use:
+BACKUP_OPERATION_HISTORY view
+BACKUP_POLICIES view
+BACKUP_SETS view
+BACKUPS view
+Terminology change
+¶
+The feature is now called
+backups
+instead of snapshots. All SQL commands, views, and privileges use
+BACKUP
+terminology:
+CREATE BACKUP POLICY, CREATE BACKUP SET
+ALTER BACKUP POLICY, ALTER BACKUP SET
+DROP BACKUP POLICY, DROP BACKUP SET
+SHOW BACKUP POLICIES, SHOW BACKUP SETS, SHOW BACKUPS IN BACKUP SET
+BACKUPS, BACKUP_POLICIES, BACKUP_SETS views in Account Usage, Organization Usage, and Information Schema
+APPLY BACKUP POLICY, APPLY BACKUP RETENTION LOCK privileges
+The former SNAPSHOT/SNAPSHOTS names are still present but deprecated in favor of their BACKUP/BACKUPS equivalents.
+For example:
+CREATE SNAPSHOT POLICY is deprecated; use CREATE BACKUP POLICY instead.
+SNAPSHOTS view is deprecated; use BACKUPS view instead.
+APPLY SNAPSHOT POLICY privilege is deprecated; use APPLY BACKUP POL

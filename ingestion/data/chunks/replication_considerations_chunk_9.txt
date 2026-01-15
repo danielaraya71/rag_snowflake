@@ -1,0 +1,88 @@
+ the original object. The original object and the cloned objects are part
+of the same
+clone group
+. For example, if table
+t3
+in database
+db3
+is created as a clone of
+t2
+, it is in the same clone group
+as the original table
+t1
+and the cloned table
+t2
+.
+If database
+db3
+is later added to the replication group
+rg1
+, table
+t3
+is created in the target account as a logical clone of
+table
+t1
+.
+Considerations
+¶
+Tables that are in the same clone group in the source account might not be in the same clone group in the target account.
+The original table and its cloned table must be in the same replication or failover group.
+In some cases, not all micro-partitions of the clone group can be shared with the cloned table. This can result in additional storage usage
+for the cloned table in the target account.
+Example
+¶
+Table
+t2
+in database
+db2
+is a clone of table
+t1
+in database
+db1
+. Include both databases in
+replication group
+myrg
+to logically replicate
+t2
+to the target account:
+CREATE
+REPLICATION
+GROUP
+myrg
+OBJECT_TYPES
+=
+DATABASES
+ALLOWED_DATABASES
+=
+db1
+,
+db2
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+myaccount2
+REPLICATION_SCHEDULE
+=
+'10 MINUTE'
+;
+Copy
+Replication and automatic clustering
+¶
+In a primary database, Snowflake monitors clustered tables using
+Automatic Clustering
+and reclusters them as
+needed. As part of a refresh operation, clustered tables are replicated to a secondary database with the current sorting of the table
+micro-partitions. As such, reclustering is
+not
+performed again on the clustered tables in the secondary database, which would be
+redundant.
+If a secondary database contains clustered tables and the database is promoted to become the primary database, Snowflake begins Automatic
+Clustering of the tables in this database while simultaneously suspending the monitoring of clustered tables in the previous primary
+database.
+See
+Replication and Materialized Views
+(in this topic) for information about Automatic Clustering for materialized views.
+Replication and large, high-churn tables
+¶
+When one or more rows of a table are updated or deleted, all of the

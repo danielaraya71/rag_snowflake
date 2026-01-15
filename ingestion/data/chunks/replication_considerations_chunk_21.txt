@@ -1,0 +1,67 @@
+. For more information, see
+Stream Replication and Time Travel
+(in this topic).
+Stream Replication and Time Travel
+¶
+After a primary database is failed over, if a stream in the database uses
+Time Travel
+to read a
+table version
+for the source object from a point in time before the last refresh timestamp, the replicated stream cannot be queried or the change data consumed. Likewise, querying the change data for a source object from a point in time before the last refresh timestamp using the
+CHANGES
+clause for
+SELECT
+statements fails with an error.
+This is because a refresh operation collapses the table history into a single table version. Iterative table versions created before the refresh operation timestamp are not preserved in the table history for the replicated source objects.
+Consider the following example:
+Table
+t1
+is created in the primary database with change tracking enabled (table version
+tv0
+). Subsequent DML transactions create table versions
+tv1
+and
+tv2
+.
+A secondary database that contains table
+t1
+is refreshed. The table version for this replicated table is
+tv2
+; however, the table history is not replicated.
+A stream is created in the primary database with its offset set to table version
+tv1
+using Time Travel.
+The secondary database is failed over, becoming the primary database.
+Querying stream
+s1
+returns an error, because table version
+tv1
+is not in the table history.
+Note that when a subsequent DML transaction on table
+t1
+iterates the table version to
+tv3
+, the offset for stream
+s1
+is advanced. The stream is readable again.
+Avoiding Data Loss
+¶
+Data loss can occur when the most recent refresh operation for a secondary database is not completed prior to the failover operation. We recommend refreshing your secondary databases frequently to minimize the risk.
+Replication and tasks
+¶
+This section describes task replication in
+Replicating databases across multiple accounts
+or
+Account Replication and Failover/Failback
+.
+Note
+Database replication does not work for task graphs if the graph is owned by a different role than the role that performs replication.
+Replication Scenarios
+¶
+The following table describes different task scenarios and specifies whether the tasks are replicated or not. Except where noted, the scenarios pertain to both standalone tasks and tasks in a
+task graph
+:
+Scenario
+Replicated
+Notes
+Task was created and either

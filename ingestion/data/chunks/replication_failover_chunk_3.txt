@@ -1,0 +1,65 @@
+ be executed by a role with the FAILOVER privilege.
+The following example promotes
+myaccount2
+in the current
+myorg
+organization to serve as the source account.
+Sign in to target account
+myaccount2
+.
+List failover groups in the account:
+SHOW FAILOVER GROUPS
+;
+Copy
+Execute the following statement for each secondary failover group you want to promote to serve as the primary failover group:
+ALTER
+FAILOVER
+GROUP
+myfg
+PRIMARY
+;
+Copy
+Note
+During a partial outage in your source region, the replication service might continue to be available and might continue
+to refresh the secondary failover groups in target regions.
+To ensure data integrity, Snowflake prevents failover if a refresh operation is in progress. This means you cannot
+promote a secondary failover group to serve as the primary if it is being refreshed by a replication operation.
+The ALTER FAILOVER GROUP … PRIMARY command returns an error in this scenario.
+Resolving failover statement failure due to an in-progress refresh operation
+¶
+If there is a refresh operation in progress for the secondary failover group you are trying to promote, the failover statement
+results in the following error:
+Replication group "<GROUP_NAME>" cannot currently be set as primary because it is being
+refreshed. Either wait for the refresh to finish or cancel the refresh and try again.
+To successfully fail over, you must complete the following steps.
+Select and complete one of the following options:
+Important
+Suspending a refresh operation in the SECONDARY_DOWNLOADING_METADATA or SECONDARY_DOWNLOADING_DATA phase
+might result in an inconsistent state on the target account. For more information, see
+View the current phase of an in-progress refresh operation
+.
+Suspend future refresh operations for the failover group. If there is an in-progress refresh operation, you must wait for
+it to complete before you can failover:
+ALTER
+FAILOVER
+GROUP
+myfg
+SUSPEND
+;
+Copy
+Suspend future refresh operations
+and
+cancel a scheduled refresh operation that is currently in progress (if there is one).
+If the in-progress refresh operation was manually triggered, see
+Cancel an in-progress refresh operation that wasn’t automatically scheduled
+.
+ALTER
+FAILOVER
+GROUP
+myfg
+SUSPEND
+IMMEDIATE
+;
+Copy
+Note
+You might experience a slight delay between the time that the statement returns and the

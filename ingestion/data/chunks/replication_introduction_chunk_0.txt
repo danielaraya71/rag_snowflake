@@ -1,0 +1,73 @@
+Introduction to replication and failover across multiple accounts
+¶
+Standard and Business Critical Feature
+Database and share replication are available to all accounts.
+Replication of other account objects & failover/failback require Business Critical Edition (or higher).
+To inquire about upgrading, please contact
+Snowflake Support
+.
+This feature enables the replication of objects from a
+source
+account to one or more
+target
+accounts in the same organization.
+Replicated objects in each target account are referred to as
+secondary
+objects and are replicas of the
+primary
+objects in the source
+account. Replication is supported across
+regions
+and across
+cloud platforms
+.
+Region support for replication and failover/failback
+¶
+All Snowflake regions across Amazon Web Services, Google Cloud Platform, and Microsoft Azure support replication.
+Customers can replicate across all regions within a
+region group
+. To replicate between regions in
+different region groups, (i.e. from a Snowflake commercial region to a Snowflake government or Virtual Private Snowflake region),
+please contact
+Snowflake Support
+.
+Replication groups and failover groups
+¶
+A
+replication group
+is a defined collection of objects in a source account that are replicated as a unit to one or more target accounts. Replication groups provide read-only access for the replicated objects.
+A
+failover group
+is a replication group that can also fail over. A secondary failover group in a target account provides read-only access for the replicated objects. When a secondary failover group is promoted to become the primary failover group, read-write access is available. You can promote any target account specified in the list of allowed accounts in a failover group to serve as the primary failover group.
+Replication and failover groups provide point-in-time consistency for the objects on the target account. The objects that can be included in a replication or failover group are listed below in
+Replicated objects
+.
+Replication feature / edition matrix
+¶
+Note that some replication features are only available for Business Critical Edition (or higher).
+The following table lists the availability of replication features for each Snowflake edition:
+Feature
+Standard
+Enterprise
+Business Critical
+VPS
+Database replication
+✔
+✔
+✔
+✔
+Share replication
+✔
+✔
+✔
+✔
+Replication Group
+✔
+✔
+✔
+✔
+Account object (other than database and share) replication
+✔
+✔
+Failover Group
+✔

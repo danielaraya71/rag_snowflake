@@ -1,0 +1,120 @@
+¶
+Query Account Usage views
+¶
+The following examples calculate the costs for database replication in one replication group for the past 30 days.
+Query the REPLICATION_GROUP_REFRESH_HISTORY Account Usage view and calculate the sum of the number of bytes replicated per database.
+For example, to calculate the sum of the number of bytes replicated for databases in the replication group
+myrg
+in the last
+30 days:
+SELECT
+SUM
+(
+value
+:totalBytesToReplicate
+)
+as
+sum_database_bytes
+FROM
+snowflake
+.
+account_usage
+.
+replication_group_refresh_history
+rh
+,
+LATERAL
+FLATTEN
+(
+input
+=>
+rh
+.
+total_bytes
+:databases
+)
+WHERE
+rh
+.
+replication_group_name
+=
+'MYRG'
+AND
+rh
+.
+start_time
+>=
+CURRENT_DATE
+()
+-
+INTERVAL
+'30 days'
+;
+Copy
+Note the output of the sum of database bytes:
++--------------------+
+| SUM_DATABASE_BYTES |
+|--------------------|
+|              22016 |
++--------------------+
+Query the REPLICATION_GROUP_USAGE_HISTORY Account Usage view and calculate the sum of the number of credits used and the sum
+of the bytes transferred for replication.
+For example, to calculate the sum of the number of credits used and the sum of the bytes transferred for replication of the
+replication group
+myrg
+in the last 30 days:
+SELECT
+SUM
+(
+credits_used
+)
+AS
+credits_used
+,
+SUM
+(
+bytes_transferred
+)
+AS
+bytes_transferred
+FROM
+snowflake
+.
+account_usage
+.
+replication_group_usage_history
+WHERE
+replication_group_name
+=
+'MYRG'
+AND
+start_time
+>=
+CURRENT_DATE
+()
+-
+INTERVAL
+'30 days'
+;
+Copy
+Note the output of the sum of the credits used and the sum of bytes transferred:
++--------------+-------------------+
+| CREDITS_USED | BYTES_TRANSFERRED |
+|--------------+-------------------|
+|  1.357923604 |             22013 |
++--------------+-------------------+
+Calculate the replication costs for databases using the values of the bytes transferred for databases, sum of the credits used, and
+the sum of all bytes transferred for replication from the previous two steps:
+(<database_bytes_transferred>
+/
+<bytes_transferred>)
+*
+<credits_used>
+For example:
+(22016
+/
+22013)
+*
+1.357923604
+=
+1.

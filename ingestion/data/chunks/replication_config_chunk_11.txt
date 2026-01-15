@@ -1,0 +1,87 @@
+ further fine-tune the
+replication settings by allowing certain schemas to be replicated even though the database that contains them isn’t replicated.
+Specify schemas to replicate or skip
+¶
+You can explicitly specify schemas to replicate or skip in a database in a failover group using the
+optional
+REPLICABLE_WITH_FAILOVER_GROUPS
+parameter.
+REPLICABLE_WITH_FAILOVER_GROUPS parameter
+¶
+The REPLICABLE_WITH_FAILOVER_GROUPS parameter specifies whether a schema that belongs to a database in a failover group is replicated.
+This parameter can be set on a database and any/all schemas in the database. If the parameter is set for a database, all of the schemas
+in the database inherit the value, unless a different value is explicitly set for any given schema.
+The parameter accepts two values,
+'YES'
+or
+'NO'
+(case-insensitive), and is optional:
+If REPLICABLE_WITH_FAILOVER_GROUPS is not explicitly set on a database (or explicitly unset), the database follows the standard replication
+behavior, which is equivalent to setting the parameter to
+'YES'
+.
+If REPLICABLE_WITH_FAILOVER_GROUPS is not explicitly set on a schema (or explicitly unset), the replication behavior is inherited from its
+parent database.
+ALTER
+DATABASE
+<name>
+SET
+REPLICABLE_WITH_FAILOVER_GROUPS
+=
+{
+'YES'
+|
+'NO'
+}
+ALTER
+DATABASE
+<name>
+UNSET
+REPLICABLE_WITH_FAILOVER_GROUPS
+ALTER
+SCHEMA
+<name>
+SET
+REPLICABLE_WITH_FAILOVER_GROUPS
+=
+{
+'YES'
+|
+'NO'
+}
+ALTER
+SCHEMA
+<name>
+UNSET
+REPLICABLE_WITH_FAILOVER_GROUPS
+Copy
+Security requirements
+¶
+To set or unset this parameter on a database or a schema, the following privileges are required:
+REPLICATE (
+account-level privilege
+). Prior to the schema-level replication feature, this privilege was
+only an object-level privilege on replication groups and failover groups.
+Users with the ACCOUNTADMIN role can grant this privilege to other roles.
+USAGE (
+database
+and
+schema
+privilege)
+or any similar privileges that enable taking action on the database and schema.
+Examples
+¶
+Grant necessary privileges on a pre-existing role,
+replicationadmin
+:
+USE
+ROLE
+ACCOUNTADMIN
+;
+GRANT
+REPLICATE
+ON
+ACCOUNT
+TO
+ROLE
+replicationadmin

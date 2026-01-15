@@ -1,0 +1,67 @@
+a target account, however, might cause the first refresh operation to fail. For details on this behavior, refer to
+Initial replication of users and roles
+.
+Use SYSTEM$LINK_ACCOUNT_OBJECTS_BY_NAME() to apply global IDs
+¶
+You can prevent the loss of some object types by linking matching objects with the same name in the source and target accounts. The
+SYSTEM$LINK_ACCOUNT_OBJECTS_BY_NAME function adds a global identifier to account objects in the target account.
+Note
+Global identifiers are only added to account objects that are included in a replication or failover group for the
+following object types:
+RESOURCE_MONITOR
+ROLE
+USER
+WAREHOUSE
+Apply global identifiers to account objects in the target account of the types included in the
+object_types
+list for failover
+group
+myfg
+:
+Execute the following SQL statement using the ACCOUNTADMIN role:
+SELECT
+SYSTEM$LINK_ACCOUNT_OBJECTS_BY_NAME
+(
+'myfg'
+);
+Copy
+Initial replication of users and roles
+¶
+The behavior of the initial refresh operation for USERS and ROLES object types can vary depending on whether or not there are matching
+objects with the same name in the target account.
+Note
+The behavior described in this section applies only the
+first
+time these object types are replicated to the target account.
+The scenarios below describe the replication of USERS. The same also applies to the replication of ROLES.
+If there are existing users in the target account with the same name as users in the source account, the initial refresh operation
+fails and describes the two options you have to continue:
+Force the refresh operation and allow any existing users in the target account to be dropped. The users in the source account
+will be replicated to the target account.
+To force a refresh for a group, use the FORCE parameter for the refresh command. For example, to force the refresh of a failover
+group, execute the following command:
+ALTER
+FAILOVER
+GROUP
+<
+fg_name
+>
+REFRESH
+FORCE
+;
+Copy
+Link the account objects by name. The
+SYSTEM$LINK_ACCOUNT_OBJECTS_BY_NAME
+function links
+users with the same name in both the target account and the source account. Users in the target account that are linked are
+not deleted.
+To link account objects by name, execute the following command:
+SELECT
+SYSTEM$LINK_ACCOUNT_OBJECTS_BY_NAME
+(
+'<rg_name>'
+);
+Copy
+Note
+Any user in the target account that
+does

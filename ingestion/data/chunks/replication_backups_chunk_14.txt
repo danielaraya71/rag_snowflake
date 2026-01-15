@@ -1,0 +1,106 @@
+_policy_with_lock
+;
+Copy
+Create a backup set for schema
+s2
+with the backup policy
+daily_backup_policy_with_lock
+:
+CREATE
+BACKUP
+SET
+s2_backups
+FOR
+SCHEMA
+s2
+WITH
+BACKUP
+POLICY
+daily_backup_policy_with_lock
+;
+Copy
+Create a backup set for database
+d2
+with the backup policy
+daily_backup_policy_with_lock
+:
+CREATE
+BACKUP
+SET
+d2_backups
+FOR
+DATABASE
+d2
+WITH
+BACKUP
+POLICY
+daily_backup_policy_with_lock
+;
+Copy
+Create backups manually
+¶
+You can manually add a backup to a backup set at any time. Doing so makes a backup of the database, schema, or table that’s
+associated with the backup set. You can create backups manually whether or not the backup set also has backups that are
+scheduled by a backup policy. If there’s a backup policy associated with the backup set,
+and the policy defines an expiration period, that expiration period also applies to the manual backup.
+The following example creates a table backup set
+t1_backups
+and then adds the first backup to it:
+CREATE
+BACKUP
+SET
+t1_backups
+FOR
+TABLE
+t1
+;
+ALTER
+BACKUP
+SET
+t1_backups
+ADD
+BACKUP
+;
+Copy
+The following example creates a backup policy with hourly backups, a table backup set
+t2_backups
+that uses the policy, and
+then adds a manual backup to the backup set:
+CREATE
+BACKUP
+POLICY
+hourly_backup_policy
+SCHEDULE
+=
+'60 MINUTE'
+EXPIRE_AFTER_DAYS
+=
+7
+;
+CREATE
+BACKUP
+SET
+t2_backups
+FOR
+TABLE
+t2
+WITH
+BACKUP
+POLICY
+hourly_backup_policy
+;
+-- Wait several hours. Then the backup set already contains several scheduled backups.
+-- You can manually add a backup at any time, in addition to the scheduled backups.
+ALTER
+BACKUP
+SET
+t2_backups
+ADD
+BACKUP
+;
+Copy
+You can run similar commands to add a backup to a schema or database backup set.
+Substitute the name of the schema or database backup set in the ALTER BACKUP SET command.
+Suspend a backup policy on a backup set
+¶
+When you suspend a backup policy on a backup set, you prevent the

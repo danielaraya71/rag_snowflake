@@ -1,0 +1,114 @@
+, enable replication of users, roles, warehouses, resources monitors, and databases
+db1
+and
+db2
+from the source account
+to the
+myaccount2
+account in the same organization. Set the replication schedule to automatically refresh
+myaccount2
+every 10
+minutes.
+Execute the following statement on the source account:
+USE
+ROLE
+myrole
+;
+CREATE
+FAILOVER
+GROUP
+myfg
+OBJECT_TYPES
+=
+USERS
+,
+ROLES
+,
+WAREHOUSES
+,
+RESOURCE MONITORS
+,
+DATABASES
+,
+INTEGRATIONS
+,
+NETWORK POLICIES
+ALLOWED_DATABASES
+=
+db1
+,
+db2
+ALLOWED_INTEGRATION_TYPES
+=
+API INTEGRATIONS
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+myaccount2
+REPLICATION_SCHEDULE
+=
+'10 MINUTE'
+;
+Copy
+Step 4: Create a role with the CREATE FAILOVER GROUP privilege in the target account —
+Optional
+¶
+Create a role in the target account and grant it the CREATE FAILOVER GROUP privilege. This step is optional. If you have already created
+this role, skip to
+Step 5: Create a secondary failover group in the target account
+.
+USE
+ROLE
+ACCOUNTADMIN
+;
+CREATE
+ROLE
+myrole
+;
+GRANT
+CREATE
+FAILOVER
+GROUP
+ON
+ACCOUNT
+TO
+ROLE
+myrole
+;
+Copy
+Step 5: Create a secondary failover group in the target account
+¶
+Note
+If account objects (for example, users or roles) exist in the target account that do not exist in the source account, refer to
+Initial replication of users and roles
+before creating a secondary group.
+Create a secondary failover group in the target account as a replica of the primary failover group in the source account.
+Execute a
+CREATE FAILOVER GROUP … AS REPLICA OF
+statement in each target account for which you
+enabled replication in
+Step 3: Create a primary failover group in a source account
+(in this topic).
+Executed from each target account:
+USE
+ROLE
+myrole
+;
+CREATE
+FAILOVER
+GROUP
+myfg
+AS
+REPLICA
+OF
+myorg
+.
+myaccount1
+.
+myfg
+;
+Copy
+Step 6. Refresh a secondary failover group in the target account manually —
+Optional
+¶

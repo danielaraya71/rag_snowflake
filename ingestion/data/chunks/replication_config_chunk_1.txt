@@ -1,0 +1,97 @@
+Then create a secondary failover group in the target account. When the secondary failover
+group is refreshed in the target account, the previously secondary database will automatically be added as a member of the secondary
+failover group and refreshed with the changes from the primary database.
+For more details on creating primary and secondary failover groups, see
+Workflow
+.
+Note
+When you add a previously replicated database to a replication or failover group, Snowflake does
+not
+re-replicate the data that
+has already been replicated for that database. Only changes since the last refresh are replicated when the group is refreshed.
+Workflow
+¶
+The following SQL statements demonstrate the workflow for enabling account and database object replication and refreshing objects. Each step
+is discussed in detail below.
+Note
+The following examples require replication be enabled for the source and target accounts. For details, see
+Prerequisite: Enable replication for accounts in the organization
+.
+Examples
+¶
+Execute the following SQL statements in your preferred Snowflake client to enable account and database object replication and failover,
+and refresh objects.
+Executed on source account
+¶
+Create a role and grant it the CREATE FAILOVER GROUP privilege. This step is
+optional
+:
+USE
+ROLE
+ACCOUNTADMIN
+;
+CREATE
+ROLE
+myrole
+;
+GRANT
+CREATE
+FAILOVER
+GROUP
+ON
+ACCOUNT
+TO
+ROLE
+myrole
+;
+Copy
+Create a failover group in the source account and enable replication to specific target accounts.
+Note
+If you have databases to add to a replication or failover group that have been previously enabled for database replication and failover
+using
+ALTER DATABASE
+, follow the
+Transitioning from database replication to group-based replication
+instructions (in this
+topic) before adding them to a group.
+To add a database to a failover group, the active role must have the MONITOR privilege on the database. For details
+on database privileges, see
+Database privileges
+(in a separate topic).
+USE
+ROLE
+myrole
+;
+CREATE
+FAILOVER
+GROUP
+myfg
+OBJECT_TYPES
+=
+USERS
+,
+ROLES
+,
+WAREHOUSES
+,
+RESOURCE MONITORS
+,
+DATABASES
+ALLOWED_DATABASES
+=
+db1
+,
+db2
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+myaccount2
+,
+myorg
+.
+myaccount3
+REPLICATION_SCHEDULE
+=
+'10 MINUTE'
+;

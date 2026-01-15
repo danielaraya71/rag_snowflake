@@ -1,0 +1,57 @@
+ We refer to this operation as a
+bulk failover
+.
+To promote a target account to serve as the source account using Snowsight, follow these steps:
+Sign in to
+Snowsight
+.
+Make sure to sign in using the target account
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Replication
+, then select
+Initiate failover
+. Doing so brings up a dialog where you make the remaining choices.
+Select any failover groups to promote.  After the failover, the objects specified in those
+failover groups become writable on the newly promoted primary account. Those objects become
+read-only on the account that formerly was the primary and is now a secondary account.
+Select
+Next
+.
+Select any connections to promote. After the failover, those connections connect to the account
+that you’re promoting to be the new primary account.
+Select
+Next
+.
+Select
+Fail over
+in the confirmation window.
+If any refresh operations are in progress for the failover groups you selected, you can wait for those refreshes
+to complete, or choose an alternative approach if your failover is urgent and should take priority.
+The default action is to wait for the refreshes to complete. That way, the primary and secondary systems are all
+in a consistent state when the bulk failover runs. Snowflake uses your currently selected warehouse to poll the
+status of the ongoing refreshes. If you don’t have a selected warehouse, you select one now using the
+Select warehouse
+option.
+Or, you can proceed with the failover immediately by selecting
+Show advanced options
+.
+To fail over only the failover groups that aren’t currently being refreshed, select
+Exit with current progress
+.
+In that case, you perform additional refreshes later for the groups that were skipped during the bulk failover.
+To cancel the refresh operations and continue the failover, select
+Cancel refreshes and force failover
+.
+In that case, you might need to clean up any inconsistencies on the secondary system from the interrupted refreshes.
+If the failover operation didn’t complete for all failover groups, you can perform another bulk failover. Or you can fail over
+the remaining failover groups one at a time, using the procedure in
+Promote a single failover group to serve as the primary using Snowsight
+.
+Promote a single failover group to serve as the primary using Snowsight
+¶

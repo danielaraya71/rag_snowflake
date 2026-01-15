@@ -1,0 +1,63 @@
+_AWS_SNS_IAM_POLICY
+system function to generate an IAM policy that grants the new SQS queue permission
+to subscribe to your SNS topic. Snowflake created the new SQS queue in your target account when you replicated the failover group from your
+source account.
+SELECT
+SYSTEM$GET_AWS_SNS_IAM_POLICY
+(
+'<topic_arn>'
+);
+Copy
+topic_arn
+is the Amazon Resource Name (ARN) of the SNS topic that you created for the original pipe in your source account.
+Then,
+Subscribe the new Amazon SQS queue to your SNS topic
+.
+Refresh the objects in your new failover group.
+ALTER
+FAILOVER
+GROUP
+my_pipe_failover_group
+REFRESH
+;
+Copy
+Finally, promote the target account to serve as the source account with the
+ALTER FAILOVER GROUP
+command.
+ALTER
+FAILOVER
+GROUP
+my_pipe_failover_group
+PRIMARY
+;
+Copy
+The
+mypipe
+pipe will begin to load any data that was made available since the
+last time the failover group was refreshed in the source account.
+To verify that the replicated pipe is working, query the table from the pipe’s COPY statement.
+SELECT
+*
+FROM
+mytable
+;
+Copy
+Migrate to Amazon Simple Notification Service (SNS)
+¶
+This section covers how to migrate from sending Amazon S3 event notifications directly to an Amazon Simple Queue Service (SQS)
+queue to using an Amazon Simple Notification Service (SNS) topic for the following scenarios:
+Refreshing directory tables automatically for Amazon S3
+Automating Snowpipe for Amazon S3
+When you replicate a directory table or pipe,
+Snowflake creates a new SQS queue in your target account to handle automation. You can configure a single SNS topic to
+deliver event notifications from your S3 bucket to all SQS queues across multiple accounts.
+By broadcasting your S3 event notification(s) to every SQS queue, you reduce the risk of losing notifications and data after failover.
+Note
+If you already use SNS, migration is not necessary.
+Instead, follow the usual steps to configure automation with SNS for secondary directory tables or auto-ingest pipes before failover.
+Configure automated refresh for directory tables on secondary stages
+Configure notifications for secondary auto-ingest pipes
+Prerequisites
+¶
+To migrate, you must meet the following conditions:
+You have already set up one or more event notifications for your S

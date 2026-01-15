@@ -1,0 +1,8 @@
+ target account
+Dropping a secondary replication or failover group
+Dropping a primary replication or failover group
+Troubleshoot issues with creating and editing replication groups using Snowsight
+Limitations of using Snowsight for replication configuration
+Related content
+Introduction to replication and failover across multiple accounts
+Replication considerations

@@ -1,0 +1,66 @@
+ORDER
+BY
+catalog_name
+;
+Copy
++--------------------+--------------+---------------------------------+
+| SCHEMA_NAME        | CATALOG_NAME | REPLICABLE_WITH_FAILOVER_GROUPS |
++--------------------+--------------+---------------------------------+
+| PUBLIC             | DB1          | NO                              |
+| SCH1               | DB1          | YES                             |
+| SCH2               | DB1          | NO                              |
+| SCH3               | DB1          | NO                              |
+| INFORMATION_SCHEMA | DB1          | UNSET                           |
++--------------------+--------------+---------------------------------+
+USE
+ROLE
+replicationadmin
+;
+SELECT
+schema_name
+,
+catalog_name
+,
+replicable_with_failover_groups
+FROM
+db2
+.
+INFORMATION_SCHEMA
+.
+SCHEMATA
+ORDER
+BY
+catalog_name
+;
+Copy
++--------------------+--------------+---------------------------------+
+| SCHEMA_NAME        | CATALOG_NAME | REPLICABLE_WITH_FAILOVER_GROUPS |
++--------------------+--------------+---------------------------------+
+| PUBLIC             | DB2          | YES                             |
+| SCH1               | DB2          | YES                             |
+| SCH2               | DB2          | NO                              |
+| SCH3               | DB2          | YES                             |
+| INFORMATION_SCHEMA | DB2          | UNSET                           |
++--------------------+--------------+---------------------------------+
+Apply global IDs to objects created by scripts in target accounts
+¶
+If you created account objects, for example, users and roles, in your target account by any means
+other than
+via replication (for example,
+using scripts), these users and roles have no global identifier by default. The refresh operation uses global identifiers to synchronize
+these objects to the same objects in the source account.
+In most cases, when a target account is refreshed from the source account, the refresh operation
+drops
+any account objects of the
+types in the
+OBJECT_TYPES
+list in the target account that have no global identifier. The initial replication of users and roles to
+a target account, however, might cause the first refresh operation to fail. For details on this behavior, refer to
+Initial replication of users and roles
+.
+Use SYSTEM$LINK_ACCOUNT_OBJECTS_BY_NAME() to apply global IDs
+¶
+You can prevent the loss of some object types by linking matching objects with the same name in the source and target accounts. The
+SYSTEM$LINK_ACCOUNT_OBJECTS_BY_NAME function adds a global identifier to account objects in the target account.
+Note
+Global identifiers

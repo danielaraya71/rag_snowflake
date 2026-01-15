@@ -1,0 +1,52 @@
+licated stream
+s
+now stores the offset.
+At timestamp
+t3
+, the change data for stream
+s
+is inserted into table
+dt
+.
+At timestamp
+t4
+, the secondary database that stores stream
+s
+is failed over.
+At timestamp
+t5
+, the change data for stream
+s
+is inserted again into table
+dt
+.
+To avoid this situation, replicate and fail over together the databases that store streams and their destination tables.
+Stream References in Task WHEN Clause
+¶
+To avoid unexpected behavior when running replicated tasks that reference streams in the
+WHEN
+boolean_expr
+clause, we recommend that you either:
+Create the tasks and streams in the same database,
+or
+If streams are stored in a different database from the tasks that reference them, include both databases in the same
+failover group
+.
+If a task references a stream in a separate database, and both databases are not included in the same failover group, then the database that contains the task could be failed over without the database that contains the stream. In this scenario, when the task is resumed in the failed over database, it records an error when it attempts to run and cannot find the referenced stream. This issue can be resolved by either failing over the database that contains the stream or recreating the database and stream in the same account as the failed over database that contains the task.
+Stream Staleness
+¶
+If a stream in the primary database has become
+stale
+, the replicated stream in a secondary database is also stale and cannot be queried or its change data consumed. To resolve this issue, recreate the stream in the primary database (using
+CREATE OR REPLACE STREAM
+). When the secondary database is refreshed, the replicated stream is readable again.
+Note that the offset for a recreated stream is the current table version by default. You can recreate a stream that points to an earlier table version using Time Travel; however, the replicated stream would remain unreadable. For more information, see
+Stream Replication and Time Travel
+(in this topic).
+Stream Replication and Time Travel
+¶
+After a primary database is failed over, if a stream in the database uses
+Time Travel
+to read a
+table version
+for the source object from a point in time before the last refresh timestamp, the replicated stream cannot be queried or the change data consumed. Likewise, querying the change data for a source object from a point in time before the last refresh timestamp

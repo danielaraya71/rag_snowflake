@@ -1,0 +1,34 @@
+ a refresh immediately after placing a legal hold on a backup
+in that backup set. If you perform a failover before replicating the backup set that contains the legal hold, the original
+backup set can be overwritten when you fail back to the original primary account, potentially erasing the legal hold.
+Therefore, you can fine-tune the replication for backup-related objects by following these practices:
+To minimize the chance of refresh failures, put the backup set and the optional
+backup policy within the same database and schema.
+If that’s not practical, put those things in the same replication group or failover group.
+That way, all these related objects are replicated at the same time.
+To maximize flexibility about which backup-related objects are replicated and the replication schedule,
+put the backup set and optional backup policy in a different database than the associated database,
+schema, or table.
+That way, you can specify whether the backup-related objects are replicated, and how often.
+If you apply a policy with an expiry period for older backups, make the expiry period longer than
+the interval between replication refresh operations. That way, every new backup is replicated to
+the secondary account at least once before it expires.
+Immediately after adding a legal hold, perform refresh operations on all secondary accounts where the
+database that contains the backup set is replicated. That way, the legal hold and associated backup
+are preserved across any failover and failback operations.
+Suppose that you put a backup policy and an associated backup set into databases that are part of different
+replication groups or failover groups. In that case, make sure to do the initial refresh of the group containing
+the backup policy first. Otherwise, the refresh operation fails because you can’t create a backup set that’s missing
+its associated backup policy in the secondary account.
+Note
+Putting the backup set into a different replication group or failover group than the object of the backup set does require a
+full transfer of all the data, during the first refresh of the group that contains the backup set.
+If you restore a schema backup or database backup on a secondary account, references to objects within the restored schema
+or database might not resolve properly unless the referenced objects are part of the same failover group as the backup.
+Monitor backups and backup operations
+¶
+You can determine which backup-related objects exist, their properties, and how much storage they use
+by querying the following views.
+Information schema:
+BACKUP_POLICIES view
+BACKUP_SETS view

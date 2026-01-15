@@ -1,0 +1,87 @@
+-- You can manually add a backup at any time, in addition to the scheduled backups.
+ALTER
+BACKUP
+SET
+t2_backups
+ADD
+BACKUP
+;
+Copy
+You can run similar commands to add a backup to a schema or database backup set.
+Substitute the name of the schema or database backup set in the ALTER BACKUP SET command.
+Suspend a backup policy on a backup set
+¶
+When you suspend a backup policy on a backup set, you prevent the backup policy from being used to create
+new scheduled backups in that backup set. You also suspend the expiration of existing backups in that
+backup set that use the backup policy. Other backup sets that use the same policy aren’t affected.
+The following example suspends a backup policy on the backup set
+t2_backups
+:
+ALTER
+BACKUP
+SET
+t2_backups
+SUSPEND
+BACKUP
+POLICY
+;
+Copy
+You can also selectively suspend just the creation or just the expiration processes of the backup set.
+The following example suspends the creation of new backups in the backup set
+t3_backups
+, and
+suspends expiration of old backups from the backup set
+t4_backups
+:
+ALTER
+BACKUP
+SET
+t3_backups
+SUSPEND
+BACKUP
+CREATION
+POLICY
+;
+ALTER
+BACKUP
+SET
+t4_backups
+SUSPEND
+BACKUP
+EXPIRATION
+POLICY
+;
+Copy
+For more information about the ALTER BACKUP SET command, see
+ALTER BACKUP SET
+.
+Resume a backup policy on a backup set
+¶
+You can resume suspended backup policies. Doing so resumes the creation and expiration of backups according to the backup
+policy. If any backups reached their expiration time while the policy was suspended, Snowflake deletes those backups as soon as
+the policy is resumed.
+The following example resumes a backup policy on the backup set
+t1_backup
+:
+ALTER
+BACKUP
+SET
+t1_backups
+RESUME
+BACKUP
+POLICY
+;
+Copy
+You can also selectively resume just the creation or just the expiration processes of the backup set.
+The following example resumes the creation of new backups in the backup set
+t3_backups
+, and
+resumes expiration of old backups from the backup set
+t4_backups
+:
+ALTER
+BACKUP
+SET
+t3_backups
+SUSPEND
+BACK

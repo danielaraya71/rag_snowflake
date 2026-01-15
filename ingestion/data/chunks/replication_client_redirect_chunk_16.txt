@@ -1,0 +1,72 @@
+park Java
+¶
+Specify the connection URL in the
+URL
+property in the properties file or
+Map
+that you use to establish the session. For more
+information about creating a session, see
+Creating a Session for Snowpark Java
+.
+# Properties file (a text file) for establishing a Snowpark session
+URL
+=
+https://<organization_name>-<connection_name>.snowflakecomputing.com
+Copy
+For example:
+# Properties file (a text file) for establishing a Snowpark session
+URL
+=
+https://myorg-myconnection.snowflakecomputing.com
+Copy
+Snowpark Scala
+¶
+Specify the connection URL in the
+URL
+property in the properties file or
+Map
+that you use to establish the session. For more
+information about creating a session, see
+Creating a Session for Snowpark Scala
+.
+# Properties file (a text file) for establishing a Snowpark session
+URL
+=
+https://<organization_name>-<connection_name>.snowflakecomputing.com
+Copy
+For example:
+# Properties file (a text file) for establishing a Snowpark session
+URL
+=
+https://myorg-myconnection.snowflakecomputing.com
+Copy
+Authentication and Client Redirect
+¶
+Users must be provisioned in the source account and on each target account if security integrations are not
+replicated
+.
+Federated authentication & SSO
+¶
+Configure federated authentication separately in each target account. Provide the identity provider (IdP) details using the setup
+options in
+Configuring Snowflake to use federated authentication
+:
+Note
+Snowflake recommends configuring your SAML 2.0-compliant identity provider (IdP) with the connection URL rather than an account URL so
+users are redirected to the correct account in case of failover.
+OAuth
+¶
+Configure a security integration object for OAuth in each target account. The security integration object must be identical to the same
+object in the source account. For instructions, see the appropriate topic:
+Snowflake OAuth
+External OAuth
+To retrieve security integration properties, query the
+DESCRIBE INTEGRATION
+command for each security integration
+in the source account. Then recreate each security integration in a target account by executing the
+CREATE INTEGRATION
+command.
+OAuth redirect behavior
+¶
+If you are using Snowflake OAuth for authenticating a client connection and are connecting to Snowflake using a connection URL, you
+are prompted

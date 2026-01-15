@@ -1,0 +1,60 @@
+ account, include
+NETWORK
+POLICIES
+and
+ACCOUNT
+PARAMETERS
+in the
+OBJECT_TYPES
+list.
+If a network policy is associated with a user, include
+NETWORK
+POLICIES
+and
+USERS
+in the
+OBJECT_TYPES
+list.
+For more details, see
+Replicating network policies
+.
+Dangling references and packages policies
+¶
+If there is a
+packages policy
+set on the account, the following dangling references
+error occurs during the refresh operation for a replication or failover group that contains account objects:
+003131 (55000): Dangling references in the snapshot. Correct the errors before refreshing again.
+The following references are missing (referred entity <- [referring entities]):
+POLICY '<policy_db>.<policy_schema>.<packages_policy_name>' <- [ACCOUNT '<account_locator>']
+To avoid dangling references, replicate the database that contains the packages policy to the target account. The database containing the
+policy can be in the same or different replication or failover group.
+Dangling references and secrets
+¶
+For details, see
+Replication and secrets
+.
+Dangling references and streams
+¶
+Dangling references for streams cause replication to fail with the following error message:
+Primary database: the source object ''<object_name>'' for this stream ''<stream_name>'' is not included in the replication group.
+Stream replication does not support replication across databases in different replication groups. Please see Streams Documentation
+https://docs.snowflake.com/en/user-guide/account-replication-considerations#replication-and-streams for options.
+To avoid dangling reference errors:
+The primary database must include both the stream and its base object
+or
+The database that contains the stream and the database that contains the base object referenced by the stream must be included in the
+same replication or failover group.
+Replication and read-only secondary objects
+¶
+All secondary objects in a target account, including secondary databases and shares, are read-only. Changes to replicated objects or object types
+cannot be made locally in a target account. For example, if the
+USERS
+object type is replicated from a source
+account to a target account, new users cannot be created or modified in the target account.
+New, local databases and shares
+can
+be created and modified in a target account. If
+ROLES
+are also replicated
+to the target account, new roles cannot be created or modified in that target account.

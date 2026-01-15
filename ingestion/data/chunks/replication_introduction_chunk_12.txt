@@ -1,0 +1,44 @@
+ external tables materialize as intended.
+Object creation and ownership
+¶
+If new objects are created in a target account during a refresh from the source account, and roles are not replicated to the target
+account, the OWNERSHIP privilege for the new objects is granted to the GLOBALORGADMIN role.
+If roles are replicated to the target account, the OWNERSHIP privilege is granted to the same role on the target account as the
+role with the OWNERSHIP privilege in the source account when roles are next replicated. The roles may be replicated at the same
+time the new objects are created in the target account if the objects and roles are in the same replication (or failover) group.
+Grants for shares
+¶
+In order to enable secure data sharing, grants on objects to shares are replicated even if
+roles
+are not
+replicated to target accounts. This section provides information on how grants on objects to shares are replicated.
+If
+roles
+are replicated from the source account to the target account, grants to objects on shares are replicated if:
+The grantor role exists in the target account
+or
+The grantor role in the source account has the OWNERSHIP privilege on the primary object.
+If
+roles
+are not replicated from the source account to the target account, then:
+Grants on objects to shares are replicated.
+The grantor role for grants on replicated objects to shares is the role with the OWNERSHIP privilege on the object.
+User who refreshes objects in a target account
+¶
+A user who executes the
+ALTER FAILOVER GROUP … REFRESH
+command to refresh objects in a target account
+from the source account must use a role with the REPLICATE privilege on the failover group. Snowflake protects this user in the target account
+by failing in the following scenarios:
+If the user does not exist in the source account, the refresh operation fails.
+If the user exists in the source account, but a role with the REPLICATE privilege was not granted to the user, the refresh operation fails.
+Replication schedule
+¶
+As a best practice, Snowflake recommends scheduling automatic refreshes using the REPLICATION_SCHEDULE parameter. The schedule can be
+defined when creating a new replication or failover group with CREATE
+<object>
+or later (using ALTER
+<object>
+).
+When you create a secondary replication or failover group, Snowflake automatically executes an initial refresh. The next refresh is
+scheduled based on when the prior refresh started

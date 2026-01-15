@@ -1,0 +1,116 @@
++-------------------|
+|  1.357923604 |             22013 |
++--------------+-------------------+
+Calculate the replication costs for databases using the values of the bytes transferred for databases, sum of the credits used, and
+the sum of all bytes transferred for replication from the previous two steps:
+(<database_bytes_transferred>
+/
+<bytes_transferred>)
+*
+<credits_used>
+For example:
+(22016
+/
+22013)
+*
+1.357923604
+=
+1.35810866)
+Query Information Schema table functions
+¶
+For refresh operations within the past 14 days, query the associated Information Schema table functions.
+REPLICATION_GROUP_REFRESH_HISTORY, REPLICATION_GROUP_REFRESH_HISTORY_ALL
+REPLICATION_GROUP_USAGE_HISTORY
+Query the REPLICATION_GROUP_REFRESH_HISTORY table function to view the sum of the number of bytes copied for database replication
+for the replication group
+myrg
+:
+SELECT
+SUM
+(
+value
+:totalBytesToReplicate
+)
+FROM
+TABLE
+(
+information_schema
+.
+replication_group_refresh_history
+(
+'myrg'
+))
+AS
+rh
+,
+LATERAL
+FLATTEN
+(
+input
+=>
+total_bytes
+:databases
+)
+WHERE
+rh
+.
+phase_name
+=
+'COMPLETED'
+AND
+rh
+.
+start_time
+>=
+CURRENT_DATE
+()
+-
+INTERVAL
+'14 days'
+;
+Copy
+Query the REPLICATION_GROUP_USAGE_HISTORY table function to view sum of the number of credits used and the sum of the bytes
+transferred for replication for the replication group
+myrg
+:
+SELECT
+SUM
+(
+credits_used
+),
+SUM
+(
+bytes_transferred
+)
+FROM
+TABLE
+(
+information_schema
+.
+replication_group_usage_history
+(
+date_range_start
+=>
+DATEADD
+(
+'day'
+,
+-
+14
+,
+CURRENT_DATE
+()),
+replication_group_name
+=>
+'myrg'
+));
+Copy
+On this page
+Use Snowsight to monitor replication
+Monitor the progress of refresh operations
+View replication history
+Monitor replication costs
+Monitor replication costs for databases
+Related content
+Introduction to replication and failover across multiple accounts
+Replication considerations

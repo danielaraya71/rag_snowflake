@@ -1,0 +1,132 @@
+
+Enter the following URL in a web browser:
+https://<organization_name>-<connection_name>.snowflakecomputing.com/
+Copy
+For example:
+https://myorg-myconnection.snowflakecomputing.com/
+Copy
+Snowflake CLI
+¶
+Specify the host name for the connection URL in the
+account
+connection parameter in the Snowflake CLI
+config.toml
+file. For information
+about the
+config.toml
+file, see
+Configuring Snowflake CLI
+.
+account = <organization_name>-<connection_name>
+username = <username>
+password = <password>
+Copy
+For example:
+[connections.myconnection]
+account
+=
+"myaccount"
+user
+=
+"jondoe"
+password
+=
+"password"
+Copy
+SnowSQL
+¶
+Specify the host name for the connection URL in the
+accountname
+connection parameter in the SnowSQL
+config
+file. For information
+about the
+config
+file, see
+Configuring SnowSQL
+.
+accountname
+=
+<organization_name>-<connection_name>
+username
+=
+<username>
+password
+=
+<password>
+Copy
+For example:
+accountname
+=
+myorg-myconnection
+username
+=
+jsmith
+password
+=
+mySecurePassword
+Copy
+Snowflake Connector for Python
+¶
+Specify the host name for the connection URL in the
+account
+connection parameter when calling the connect function. For more
+information, see
+Python Connector API
+and
+Using the Python Connector
+.
+con
+=
+snowflake.connector.connect
+(
+account
+=
+<organization_name>-<connection_name>
+user
+=
+<username>
+password
+=
+<password>
+)
+Copy
+For example:
+con
+=
+snowflake.connector.connect
+(
+account
+=
+myorg-myconnection
+user
+=
+jsmith
+password
+=
+mySecurePassword
+)
+Copy
+Snowflake Connector for Spark
+¶
+Specify the connection URL in the
+URL
+property in the properties file or
+Map
+that you use
+to establish the session.
+# Properties file (a text file) for establishing a Connector for Spark session
+URL
+=
+https://<organization_name>-<connection_name>.snowflakecomputing.com
+Copy
+For example:
+URL
+=
+https://myorg-myconnection.snowflakecomputing.com
+Copy
+For more information about using the Snowflake Connector for Spark, see
+Snowflake Connector for Spark
+.
+For configuration options, see
+Setting Configuration Options for the Connector

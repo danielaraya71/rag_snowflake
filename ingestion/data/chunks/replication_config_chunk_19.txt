@@ -1,0 +1,54 @@
+ Then, create a new notification integration in the target account and
+grant Snowflake access to your storage queue. For instructions, see
+Configuring Automation With Azure Event Grid
+.
+Important
+The name of the notification integration in each target account
+must
+match the name of the notification integration in
+the source account.
+External stage for Google Cloud Storage
+¶
+A pipe that automatically loads data from files located in Google Cloud Storage requires a
+Google Pub/Sub subscription and a notification integration
+that references that subscription. Each replicated pipe in a target account also requires a Google Pub/Sub subscription and a
+notification integration that references that subscription.
+The Pub/Sub subscription in each source and target account must be subscribed to the same Pub/Sub Topic
+that receives notifications from the Google Cloud Storage source.
+See the diagram below for configuration details:
+Create a new subscription to your Pub/Sub topic and a new notification integration in your target account.
+Then, grant Snowflake access to the Pub/Sub subscription. For instructions,
+see
+Configuring Automation Using GCS Pub/Sub
+.
+Important
+The name of the notification integration in each target account
+must
+match the name of the notification integration in
+the source account.
+Updating the remote service for API integrations
+¶
+If you have enabled API integration replication, additional steps are required after the API integration is replicated to the target account.
+The replicated integration has its own identity and access management (IAM) entity that are different from the identity and IAM entity
+of the primary integration. Therefore, you must update the permissions on the remote service to grant access to replicated functions.
+The process is similar to granting access to the functions on the primary account. See the below links for more details:
+Amazon Web Services
+Set up the trust relationship(s) between Snowflake and the new IAM role
+.
+Google Cloud Platform:
+Create a GCP Security Policy for the Proxy Service
+.
+Microsoft Azure:
+Step 1.
+Link the API integration for Azure
+Step 2.
+Create a validate-JWT policy
+Comparing data sets in primary and secondary databases
+¶
+Snowflake performs automatic verification checks as part of each replication refresh operation.
+If a verification failure occurs, the refresh fails. Therefore, you don’t have to manually verify
+the replicated data. If you need additional verification for compliance reasons, you
+can perform manual verification steps after the refresh operation finishes.
+Automatic verification by Snowflake
+¶
+Snowflake currently performs the following checks between the primary and secondary account, after

@@ -1,0 +1,85 @@
+property (e.g.
+ROLES
+,
+WAREHOUSES
+).
+For more information, see
+CREATE REPLICATION GROUP
+and
+CREATE FAILOVER GROUP
+.
+Replication and instances of Snowflake classes
+¶
+An instance of the
+CUSTOM_CLASSIFIER
+class is replicated when the database that contains
+the instance is replicated. Replication of instances of other Snowflake
+classes
+is
+not
+supported.
+Historical usage data
+¶
+Historical usage data for activity in a primary database is not replicated to secondary databases. Each account has its own query history,
+login history, etc.
+Historical usage data includes the query data returned by the following
+Snowflake Information Schema
+table functions or
+Account Usage
+views:
+COPY_HISTORY
+LOGIN_HISTORY
+QUERY_HISTORY
+etc.
+On this page
+Replication group and failover group constraints
+Database and share objects
+Account objects
+Replication privileges
+Replication and references across replication groups
+Session policies and secondary roles
+Dangling references and network policies
+Dangling references and packages policies
+Dangling references and secrets
+Dangling references and streams
+Replication and read-only secondary objects
+Replication and objects in target accounts
+Objects recreated in target accounts
+Replication and security policies
+Authentication, password, & session policies
+Privacy policies
+Session policies with secondary roles
+Replication and secrets
+Replication and cloning
+Logical replication of clones
+Replication and automatic clustering
+Replication and large, high-churn tables
+Replication and Time Travel
+Replication and materialized views
+Replication and Apache Iceberg™ tables
+Replication and dynamic tables
+Dynamic tables and replication groups
+Dynamic tables and failover groups
+Replication and Snowpipe Streaming
+Avoiding data loss
+Requirements
+Replication and stages
+Replication and pipes
+Replication of data metric functions (DMFs)
+Replication of stored procedures and user-defined functions (UDFs)
+Stored Procedures and UDFs and Stages
+Stored Procedures and UDFs and External Network Access
+Replication and storage lifecycle policies
+Replication and streams
+Supported Source Objects for Streams
+Avoiding Data Duplication
+Stream References in Task WHEN Clause
+Stream Staleness
+Stream Replication and Time Travel
+Avoiding Data Loss
+Replication and tasks
+Replication Scenarios
+Resumed or Suspended State of Replicated Tasks
+Replicated Tasks and Privilege Grants
+Task Runs After a Failover
+Replication and tags

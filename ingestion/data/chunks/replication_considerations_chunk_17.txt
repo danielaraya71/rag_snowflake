@@ -1,0 +1,43 @@
+ the event table is local
+to your Snowflake account, and Snowflake does not support replicating event tables.
+Replication groups
+When you add the database(s) that contain your DMFs to a replication group, the following occurs in the target account:
+DMFs are replicated from the source account.
+Tables or views that the
+DMF definition
+specifies, such as with a
+foreign key reference
+are replicated from the source account, unless the table
+or view is associated with
+Cross-Cloud Auto-Fulfillment
+.
+Scheduled DMFs in the target account are suspended. The secondary DMFs resume their schedule when you promote the target account to
+source account and the secondary DMFs become primary DMFs.
+Failover groups
+When you replicate the database(s) that contain your DMFs using a failover group, the following occurs in the case of failover:
+Resumes the schedule of suspended DMFs when you promote the target account to source account.
+Suspends scheduled DMFs in the target account after you promote a different account to source account.
+If you do not replicate the database that contains the DMF to a target account, the DMF associations to a table or view are
+dropped when the target account is promoted to source account because they are not available in the
+newly promoted source account.
+Tip
+Prior to failing over your account,
+check the DMF references
+by calling the
+DATA_METRIC_FUNCTION_REFERENCES Information Schema table function to determine the table objects that are associated with a DMF
+before the promotion and refresh operations.
+Replication of stored procedures and user-defined functions (UDFs)
+¶
+Stored procedures and UDFs are replicated from a primary database to secondary databases.
+Stored Procedures and UDFs and Stages
+¶
+If a stored procedure or UDF depends on files in a stage (for example, if the stored
+procedure is defined in Python code that is uploaded from a stage), you must replicate the stage and its files to the secondary
+database. For more information about replicating stages, see
+Stage, pipe, and load history replication
+.
+For example, if a primary database has an in-line Python UDF that imports any code that is stored on a stage, the UDF does not work unless
+the stage and its imported code are replicated in the secondary database.
+Stored Procedures and UDFs and External Network Access
+¶
+If a stored procedure or UDF depends on access to an

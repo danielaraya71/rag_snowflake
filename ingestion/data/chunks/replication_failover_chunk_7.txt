@@ -1,0 +1,17 @@
+For more information, see:
+Using Snowflake Connector for Kafka with Snowpipe Streaming Classic
+.
+Replication and Snowpipe Streaming
+.
+On this page
+Prerequisites
+Promote a target account to serve as the source account
+Promote a target account to serve as the source account using Snowsight
+Promote a single failover group to serve as the primary using Snowsight
+Promote a target account to serve as the source account using SQL
+View the current phase of an in-progress refresh operation
+Cancel an in-progress refresh operation that wasn’t automatically scheduled
+Reopen active channels for Snowpipe Streaming in newly promoted source account
+Snowpipe Streaming and the Kafka connector
+Related content
+ALTER FAILOVER GROUP

@@ -1,0 +1,115 @@
+, this privilege was
+only an object-level privilege on replication groups and failover groups.
+Users with the ACCOUNTADMIN role can grant this privilege to other roles.
+USAGE (
+database
+and
+schema
+privilege)
+or any similar privileges that enable taking action on the database and schema.
+Examples
+¶
+Grant necessary privileges on a pre-existing role,
+replicationadmin
+:
+USE
+ROLE
+ACCOUNTADMIN
+;
+GRANT
+REPLICATE
+ON
+ACCOUNT
+TO
+ROLE
+replicationadmin
+;
+GRANT
+USAGE
+ON
+DATABASE
+db1
+TO
+ROLE
+replicationadmin
+;
+GRANT
+USAGE
+ON
+SCHEMA
+db1
+.
+sch1
+TO
+ROLE
+replicationadmin
+;
+Copy
+Replicate only one schema,
+sch1
+, in the
+db1
+database:
+USE
+ROLE
+replicationadmin
+;
+ALTER
+DATABASE
+db1
+SET
+REPLICABLE_WITH_FAILOVER_GROUPS
+=
+'NO'
+;
+ALTER
+SCHEMA
+sch1
+SET
+REPLICABLE_WITH_FAILOVER_GROUPS
+=
+'YES'
+;
+Copy
+Replicate all schemas except one schema,
+sch2
+, in the
+db2
+database:
+USE
+ROLE
+replicationadmin
+;
+ALTER
+DATABASE
+db2
+SET
+REPLICABLE_WITH_FAILOVER_GROUPS
+=
+'YES'
+;
+ALTER
+SCHEMA
+sch2
+SET
+REPLICABLE_WITH_FAILOVER_GROUPS
+=
+'NO'
+;
+Copy
+Refresh of schemas with REPLICABLE_WITH_FAILOVER_GROUPS set in target accounts
+¶
+During a database refresh:
+Schemas with REPLICABLE_WITH_FAILOVER_GROUPS set to
+'YES'
+are replicated from the source account to the target account.
+Schemas with REPLICABLE_WITH_FAILOVER_GROUPS set to
+'NO'
+are not replicated, except in the following two scenarios:
+The target schema is a replica of the source account schema. In this case, the target schema is always synchronized with its source schema.
+The target schema has a name conflict with the source account schema. In this situation, the replication job fails due to the name
+conflict.
+List databases and schemas with REPLICABLE_WITH_FAILOVER_GROUPS set in your account
+¶
+You can list the values set for the REPLICABLE_WITH_FAILOVER_GROUPS parameter in the current account
+by querying the ACCOUNT_USAGE and INFORMATION_SCHEMA

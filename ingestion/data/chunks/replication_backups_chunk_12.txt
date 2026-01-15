@@ -1,0 +1,107 @@
+ to a role
+¶
+You can grant a role the privilege to apply backup policies with retention lock on backup sets.
+Only a user with the ACCOUNTADMIN role can grant this privilege.
+Important
+Applying a backup policy with a retention lock to a backup set is
+irreversible
+.
+Due to the strong guarantees needed for regulatory compliance, once you put a retention lock on a backup set,
+you can’t revoke the lock. Snowflake support also can’t revoke such a retention lock.
+Backups created with a retention lock can’t be deleted until the expiration period ends.
+If a Snowflake organization is deleted, the organization is no longer a Snowflake customer. In this case,
+Snowflake deletes all backups, including those with retention locks.
+To enable the role
+retention_lock_admin_role
+to apply a backup policy with retention lock on a backup set, execute
+the following statement:
+GRANT
+APPLY
+BACKUP
+RETENTION LOCK
+ON
+ACCOUNT
+TO
+ROLE
+retention_lock_admin_role
+;
+Copy
+Create and configure backups
+¶
+This section provides example workflows for creating and restoring backups.
+Create a backup policy named
+hourly_backup_policy
+. Backups taken with this policy are created hourly
+and each backup expires after 90 days.
+CREATE
+BACKUP
+POLICY
+hourly_backup_policy
+SCHEDULE
+=
+'60 MINUTE'
+EXPIRE_AFTER_DAYS
+=
+90
+COMMENT
+=
+'Hourly backups expire after 90 days'
+;
+Copy
+Create a backup set for table
+t1
+with the backup policy
+hourly_backup_policy
+:
+CREATE
+BACKUP
+SET
+t1_backups
+FOR
+TABLE
+t1
+WITH
+BACKUP
+POLICY
+hourly_backup_policy
+;
+Copy
+Create a backup set for schema
+s1
+with the backup policy
+hourly_backup_policy
+:
+CREATE
+BACKUP
+SET
+s1_backups
+FOR
+SCHEMA
+s1
+WITH
+BACKUP
+POLICY
+hourly_backup_policy
+;
+Copy
+Create a backup set for database
+d1
+with the backup policy
+hourly_backup_policy
+:
+CREATE
+BACKUP
+SET
+d1_backups
+FOR
+DATABASE
+d1
+WITH
+BACKUP
+POLICY
+hourly_backup_policy
+;
+Copy
+Create scheduled backups with retention lock
+¶
+Create a backup set that automatically creates backups with a retention lock on a schedule.

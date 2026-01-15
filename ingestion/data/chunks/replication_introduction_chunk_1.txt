@@ -1,0 +1,99 @@
+¶
+Note that some replication features are only available for Business Critical Edition (or higher).
+The following table lists the availability of replication features for each Snowflake edition:
+Feature
+Standard
+Enterprise
+Business Critical
+VPS
+Database replication
+✔
+✔
+✔
+✔
+Share replication
+✔
+✔
+✔
+✔
+Replication Group
+✔
+✔
+✔
+✔
+Account object (other than database and share) replication
+✔
+✔
+Failover Group
+✔
+✔
+Data protected with
+Tri-Secret Secure
+✔
+✔
+Dataset replication
+✔
+✔
+Cortex Search Service replication
+✔
+✔
+Replicated objects
+¶
+This feature supports replicating the objects listed below. Database replication and share replication are available on all editions.
+Replication of all other objects is only available for Business Critical Edition (or higher). For details on feature availability,
+see the
+Replication feature / edition matrix
+.
+Object
+Type or Feature
+Replicated
+Notes
+Databases
+✔
+Replication of some databases is not supported or might fail the refresh operation. For more information, see
+Current limitations of replication
+.
+External volumes
+✔
+Failover group replication requires Business Critical Edition or higher later. Replication group replication is available to
+all accounts.
+Integrations
+Security, API, Notification, Storage, External Access
+✔
+For additional caveats and details on the supported types, see
+Integration replication
+.
+Requires Business Critical Edition (or higher).
+Network policies
+✔
+Requires Business Critical Edition (or higher).
+Parameters (account level)
+✔
+Requires Business Critical Edition (or higher).
+Programmatic access tokens for
+users
+✔
+If users and roles are replicated, programmatic access tokens for users are replicated automatically.
+Resource monitors
+✔
+Resource monitor notifications for non-administrator users are replicated if you include
+users
+in the group, however account
+administrator notification settings are not replicated. For more information, see
+Replication of resource monitor email notification settings
+.
+Requires Business Critical Edition (or higher).
+Roles
+✔
+Includes
+account and database roles
+.
+Includes privileges granted to roles, as well as roles granted to roles (i.e. hierarchies of roles).
+If users and roles are replicated, roles granted to users are also replicated.
+The REPLICATE and FAILOVER privileges are
+not
+replicated.
+Requires Business Critical Edition (or higher).
+Shares
+✔
+Rep

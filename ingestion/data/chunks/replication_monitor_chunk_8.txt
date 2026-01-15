@@ -1,0 +1,7 @@
+ the progress of refresh operations
+View replication history
+Monitor replication costs
+Monitor replication costs for databases
+Related content
+Introduction to replication and failover across multiple accounts
+Replication considerations

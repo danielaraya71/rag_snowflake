@@ -1,0 +1,58 @@
+over. For more information, see
+Configure cloud storage access for secondary storage integrations
+.
+If you replicate an external stage with a directory table, and you have configured
+automated refresh
+for the source
+directory table, you must configure automated refresh for the
+secondary
+directory table before failover. For more information,
+see
+Configure automated refresh for directory tables on secondary stages
+.
+A copy command might take longer than expected if the directory table on a replicated stage is not consistent with the
+replicated files on the stage. To make a directory table consistent, refresh it with an
+ALTER STAGE … REFRESH
+statement.
+To check the consistency status of a directory table, use the
+SYSTEM$GET_DIRECTORY_TABLE_STATUS
+function.
+Replication and pipes
+¶
+This section describes the current level of replication functionality supported for different types of pipes.
+Snowflake supports replication for the following:
+Pipe objects, including auto-ingest and REST endpoint pipes that load data from external stages.
+Pipe-level parameters.
+Privilege grants on pipe objects.
+Note
+To associate a secondary stage or pipe with a different cloud storage location than the one associated with the primary object,
+contact the support team. For example, you might choose a location in another region.
+Pipes in secondary databases
+¶
+Pipes in a secondary database are in a
+READ_ONLY
+execution state and receive notifications
+but do not load data until you promote the secondary database to serve as the primary.
+After you promote a secondary database, the pipes will transition to a
+FAILING_OVER
+execution state.
+Once failover is complete, the pipes should be in the
+RUNNING
+execution state
+and begin to load any data that is available since the last refresh time (that is, the last time that the former primary database was updated).
+Replication of auto-ingest pipes
+¶
+In the event of a failover, a replicated auto-ingest pipe becomes the new primary pipe and can do the following:
+Load any data that has not yet been loaded.
+This includes any data that is new since the newly promoted primary database was last refreshed.
+Continue to receive notifications when the stage has new files to load, and loads data from those files.
+Note
+To receive notifications, you must configure a secondary auto-ingest pipe in a target account
+prior to failover
+.
+For more information, see
+Configure notifications for secondary auto-ingest pipes
+.
+Replication of REST endpoint pipes
+¶
+For pipes

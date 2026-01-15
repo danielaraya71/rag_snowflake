@@ -1,0 +1,55 @@
+ connection
+must
+have the same name as its primary connection. The connection name is included in the connection
+URL.
+Execute the SQL statements in this section in the
+target
+account where you want to create a secondary connection.
+Note
+Only a user with the ACCOUNTADMIN role can execute the SQL commands in this section.
+Execute the SHOW CONNECTIONS command to view all connections. Copy the value of the
+primary
+column for the primary connection.
+You will use this value when creating the secondary connection in the next step.
+SHOW
+CONNECTIONS
+;
++
+--------------------+-------------------------------+---------------------+-------------------+-----------------+---------------+-------------------------------+-------------------------------------+-------------------------------------------+-------------------+-------------------+
+| snowflake_region   | created_on                    | account_name        | name              | comment         | is_primary    | primary                       | failover_allowed_to_accounts        | connection_url                            | organization_name | account_locator   |
+|--------------------+-------------------------------+---------------------+-------------------+-----------------+---------------+-------------------------------+-------------------------------------+-------------------------------------------+-------------------+-------------------|
+| AWS_US_WEST_2      | 2020-07-19 14:49:11.183 -0700 | MYORG.MYACCOUNT1    | MYCONNECTION      | NULL            | true          | MYORG.MYACCOUNT1.MYCONNECTION | MYORG.MYACCOUNT2, MYORG.MYACCOUNT3  | myorg-myconnection.snowflakecomputing.com | MYORG             | MYACCOUNTLOCATOR1 |
++
+--------------------+-------------------------------+---------------------+-------------------+-----------------+---------------+-------------------------------+-------------------------------------+-------------------------------------------+-------------------+-------------------+
+Copy
+Execute the CREATE CONNECTION … AS REPLICA OF command to create a secondary connection.
+For example, create a secondary connection named
+myconnection
+that is linked to the
+myorg.myaccount1.myconnection
+primary
+connection. After
+AS
+REPLICA
+OF
+, paste in the fully qualified name of the primary connection (the name that you copied from the
+SHOW CONNECTIONS output in the previous step).
+CREATE
+CONNECTION
+myconnection
+AS
+REPLICA
+OF
+MYORG
+.
+MYACCOUNT1
+.
+MYCONNECTION
+;
+Copy
+Execute the SHOW CONNECTIONS command to verify the secondary connection was created.
+SHOW
+CONNECTIONS
+;
++
+--------------------+-------------------------------+---------------------+-------------------+----------------

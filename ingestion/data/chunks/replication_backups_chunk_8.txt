@@ -1,0 +1,86 @@
+No
+Policies
+Yes
+The following kinds of policies are included in a schema or database backup:
+Column-level security (masking)
+Row access policies
+Tag-based masking policies
+If any table included in the backup has any other kind of policy applied (for example an
+aggregation policy, a projection policy, or a storage lifecycle policy), backup creation
+fails.
+Grants
+Yes
+If you drop a role, associated ownership grants are transferred to the role that
+performs the DROP ROLE command. Grants other than ownership are deleted in this case.
+Therefore, the grants on a restored object might differ from the grants that existed
+when the backup was created.
+Database roles
+No
+Object tagging
+Yes
+Alerts
+Yes
+Network rules
+Yes
+Github repos
+No
+Models
+No
+Model monitors
+No
+Datasets
+No
+Notebooks
+No
+Contacts
+No
+Cortex search services
+No
+Dbt projects
+No
+Image repositories
+No
+Listings
+No
+Organization listings
+No
+Pipes
+No
+Policy (aggregation)
+No
+Policy (authentication)
+No
+Policy (feature)
+No
+Policy (join)
+No
+Policy (packages)
+No
+Policy (password)
+No
+Policy (privacy)
+No
+Policy (projection)
+No
+Policy (session)
+No
+Provisioned throughput
+No
+Semantic views
+No
+Services
+No
+Streamlits
+No
+How Snowflake associates objects with their backup sets
+¶
+When you create a backup set for a database, schema, or table, Snowflake associates the backup set with the
+internal ID of that database, schema, or table. If you delete the original object, you can’t add any more backups
+to that backup set. This behavior applies even if you recreate an object with the same name, or replace it with an
+object that was restored from a backup.
+If you instead rename the original object, then you can continue making more backups of it by adding more backups to
+the same backup set. In that case, the output of SHOW BACKUP SETS changes to reflect the OBJECT_NAME value of the
+renamed object.
+If you want to make backups of a table but you frequently drop and recreate that table, perhaps through CREATE OR REPLACE
+statements, include it in a backup set for the schema or database that contains the table. That way, you can keep using
+the same backup set regardless of changes to

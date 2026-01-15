@@ -1,0 +1,50 @@
+.e. changing or deleting data) written to tables in the primary database.
+Note
+The data retention period parameter,
+DATA_RETENTION_TIME_IN_DAYS
+, is only replicated to database objects in the secondary
+database, not to the database itself. For more details about parameter replication, see
+Parameters
+.
+Replication and materialized views
+¶
+In a primary database, Snowflake performs automatic background maintenance of materialized views. When a base table changes, all
+materialized views defined on the table are updated by a background service that uses compute resources provided by Snowflake. In addition,
+if Automatic Clustering is enabled for a materialized view, then the view is monitored and reclustered as necessary in a primary database.
+A refresh operation replicates the materialized view
+definitions
+to a secondary database; the materialized view
+data
+is not
+replicated. Automatic background maintenance of materialized views in a secondary database is enabled by default. If Automatic
+Clustering is enabled for a materialized view in a primary database, automatic monitoring and reclustering of the materialized view in the
+secondary database is also enabled.
+Note
+The charges for automated background synchronization of materialized views are billed to each account that contains a secondary
+database.
+Replication and Apache Iceberg™ tables
+¶
+Consider the following points when you use replication for Iceberg tables:
+Snowflake currently supports replication of Snowflake-managed tables only.
+Replicating converted Iceberg tables isn’t supported. Snowflake skips converted tables during refresh operations.
+For replicated tables, you must configure access to a storage location in the
+same region
+as the target account.
+If you drop or alter a storage location that is used for replication on the primary external volume, refresh operations might fail.
+Secondary tables in the target account are read-only until you promote the target account to serve as the source account.
+Snowflake maintains the
+directory hierarchy
+of the primary Iceberg table for the secondary table.
+Replication costs apply for this feature. For more information, see
+Understanding replication cost
+.
+For considerations about the account objects for replication and failover groups, see
+Account objects
+.
+Replication and dynamic tables
+¶
+Dynamic table replication behavior varies based on whether the primary database containing the dynamic table is part
+of a replication group or a failover group.
+Dynamic tables and replication groups
+¶
+A database that contains a dynamic table can be replicated using a replication group. The source object(s)

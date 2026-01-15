@@ -1,0 +1,103 @@
+s1
+WITH
+BACKUP
+POLICY
+hourly_backup_policy
+;
+Copy
+Create a backup set for database
+d1
+with the backup policy
+hourly_backup_policy
+:
+CREATE
+BACKUP
+SET
+d1_backups
+FOR
+DATABASE
+d1
+WITH
+BACKUP
+POLICY
+hourly_backup_policy
+;
+Copy
+Create scheduled backups with retention lock
+¶
+Create a backup set that automatically creates backups with a retention lock on a schedule.
+The retention lock prevents anyone, even privileged users, from deleting or modifying backups
+in any backup set that the policy is attached to.
+Only a role that has the APPLY BACKUP RETENTION LOCK privilege on the account can create a backup policy
+with a retention lock.
+Important
+Applying a backup policy with a retention lock to a backup set is
+irreversible
+.
+Due to the strong guarantees needed for regulatory compliance, once you put a retention lock on a backup set,
+you can’t revoke the lock. Snowflake support also can’t revoke such a retention lock.
+Backups created with a retention lock can’t be deleted until the expiration period ends.
+If a Snowflake organization is deleted, the organization is no longer a Snowflake customer. In this case,
+Snowflake deletes all backups, including those with retention locks.
+Create a policy with a retention lock that creates a daily backup with an expiration period of 90 days:
+CREATE
+BACKUP
+POLICY
+daily_backup_policy_with_lock
+WITH RETENTION LOCK
+SCHEDULE
+=
+'1440 MINUTE'
+EXPIRE_AFTER_DAYS
+=
+90
+COMMENT
+=
+'regulatory backups: they have a retention lock and expire after 90 days'
+;
+Copy
+Create a backup set for table
+t2
+with the backup policy
+daily_backup_policy_with_lock
+:
+CREATE
+BACKUP
+SET
+t2_backups
+FOR
+TABLE
+t2
+WITH
+BACKUP
+POLICY
+daily_backup_policy_with_lock
+;
+Copy
+Create a backup set for schema
+s2
+with the backup policy
+daily_backup_policy_with_lock
+:
+CREATE
+BACKUP
+SET
+s2_backups
+FOR
+SCHEMA
+s2
+WITH
+BACKUP
+POLICY
+daily_backup_policy_with_lock
+;
+Copy
+Create a backup set for database
+d2
+with the backup policy
+daily_backup_policy_with_lock
+:
+CREATE
+BACKUP
+SET
+d2_backups

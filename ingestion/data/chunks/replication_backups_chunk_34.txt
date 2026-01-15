@@ -1,0 +1,60 @@
+ the group that contains the backup set.
+If you restore a schema backup or database backup on a secondary account, references to objects within the restored schema
+or database might not resolve properly unless the referenced objects are part of the same failover group as the backup.
+Monitor backups and backup operations
+¶
+You can determine which backup-related objects exist, their properties, and how much storage they use
+by querying the following views.
+Information schema:
+BACKUP_POLICIES view
+BACKUP_SETS view
+BACKUPS view
+Account usage:
+BACKUP_OPERATION_HISTORY view
+BACKUP_POLICIES view
+BACKUP_SETS view
+BACKUP_STORAGE_USAGE view
+BACKUPS view
+Organization usage:
+BACKUP_OPERATION_HISTORY view
+BACKUP_POLICIES view
+BACKUP_SETS view
+BACKUPS view
+SQL reference topics
+¶
+Backup policy
+¶
+CREATE BACKUP POLICY
+ALTER BACKUP POLICY
+DROP BACKUP POLICY
+SHOW BACKUP POLICIES
+Backup set
+¶
+CREATE BACKUP SET
+ALTER BACKUP SET
+DROP BACKUP SET
+SHOW BACKUP SETS
+Backups
+¶
+You don’t run an actual CREATE BACKUP command. To create a new backup, you run ALTER BACKUP SET … ADD BACKUP.
+Or when you associate the backup set with a backup policy that has a schedule, Snowflake automatically creates
+backups in the backup set based on the specified schedule. To delete an older backup, you run ALTER BACKUP SET … DELETE
+BACKUP. Such operations require you to specify the identifier for a specific backup. You can find the backup identifiers,
+along with other information such as when each backup was created, by using the following command.
+SHOW BACKUPS IN BACKUP SET
+Restoring objects from backups
+¶
+You use the syntax CREATE
+object_kind
+FROM BACKUP SET to restore each kind of object
+from the appropriate kind of backup set.
+Further backups in the backup set use the original object, not the restored one. That’s true even
+if you rename the restored object to the same name as the original object. If you want to continue using the
+same backup set after doing a restore, you restore the object under a new name
+and then transfer data back to the original object.
+CREATE DATABASE FROM BACKUP SET
+CREATE SCHEMA FROM BACKUP SET
+CREATE TABLE FROM BACKUP SET
+Views
+¶
+The following system views contain metadata related to backups, backup sets

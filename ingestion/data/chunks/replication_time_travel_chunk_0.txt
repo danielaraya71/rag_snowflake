@@ -1,0 +1,44 @@
+Understanding & using Time Travel
+¶
+Snowflake Time Travel enables accessing historical data (that is, data that has been changed or deleted) at any point within a defined period.
+It serves as a powerful tool for performing the following tasks:
+Restoring objects that might have been accidentally or intentionally deleted. You can restore individual objects,
+such as tables, or restore all the objects inside a container object by restoring an entire schema or database.
+Duplicating and backing up data from key points in the past.
+Analyzing data usage/manipulation over specified periods of time.
+Introduction to Time Travel
+¶
+Using Time Travel, you can perform the following actions within a defined period of time:
+Query data in the past that has since been updated or deleted.
+Create clones of entire tables, schemas, and databases at or before specific points in the past.
+Restore tables, schemas, databases, and some other kinds of objects that have been dropped.
+Note
+When querying historical data in a table or non-materialized view, the current table or view schema is used. For more
+information, see
+Usage notes
+for AT | BEFORE.
+After the defined period of time has elapsed, the data is moved into
+Snowflake Fail-safe
+and these actions
+can no longer be performed.
+Note
+A long-running Time Travel query will delay moving any data and objects (tables, schemas, and databases) in the account into Fail-safe,
+until the query completes.
+Time Travel SQL extensions
+¶
+To support Time Travel, the following SQL extensions have been implemented:
+AT | BEFORE
+clause which can be specified in SELECT statements and CREATE … CLONE commands (immediately
+after the object name). The clause uses one of the following parameters to pinpoint the exact historical data you want to access:
+TIMESTAMP
+OFFSET (time difference in seconds from the present time)
+STATEMENT (query ID for statement)
+UNDROP <object>
+command for tables, schemas, databases, accounts, external volumes, and tags.
+Data retention period
+¶
+A key component of Snowflake Time Travel is the data retention period.
+When data in a table is modified, including deletion of data or dropping an object containing data, Snowflake preserves the state of the data
+before the update. The data retention period specifies the number of days for which this historical data is preserved and, therefore,
+Time Travel operations (SELECT, CREATE … CLONE, UNDROP) can be performed on the data.
+The standard retention period is 

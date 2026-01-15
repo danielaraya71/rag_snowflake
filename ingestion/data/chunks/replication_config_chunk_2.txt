@@ -1,0 +1,125 @@
+ privileges
+(in a separate topic).
+USE
+ROLE
+myrole
+;
+CREATE
+FAILOVER
+GROUP
+myfg
+OBJECT_TYPES
+=
+USERS
+,
+ROLES
+,
+WAREHOUSES
+,
+RESOURCE MONITORS
+,
+DATABASES
+ALLOWED_DATABASES
+=
+db1
+,
+db2
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+myaccount2
+,
+myorg
+.
+myaccount3
+REPLICATION_SCHEDULE
+=
+'10 MINUTE'
+;
+Copy
+Executed on target account
+¶
+Create a role in the target account and grant it the CREATE FAILOVER GROUP privilege. This step is
+optional
+:
+USE
+ROLE
+ACCOUNTADMIN
+;
+CREATE
+ROLE
+myrole
+;
+GRANT
+CREATE
+FAILOVER
+GROUP
+ON
+ACCOUNT
+TO
+ROLE
+myrole
+;
+Copy
+Create a failover group in the target account as a replica of the failover group in the source account.
+Note
+If account objects (for example, users or roles) exist in the target account that do not exist in the source account, refer to
+Initial replication of users and roles
+before creating a secondary group.
+USE
+ROLE
+myrole
+;
+CREATE
+FAILOVER
+GROUP
+myfg
+AS
+REPLICA
+OF
+myorg
+.
+myaccount1
+.
+myfg
+;
+Copy
+Manually refresh the secondary failover group. This is an
+optional
+step. If the primary failover group is created with
+a replication schedule, the initial refresh of the secondary failover group is automatically executed when the secondary
+failover group is created.
+Create a role with the REPLICATE privilege on the failover group. This step is
+optional
+.
+Execute in the target account using a role with the OWNERSHIP privilege on the failover group:
+GRANT
+REPLICATE
+ON
+FAILOVER
+GROUP
+myfg
+TO
+ROLE
+my_replication_role
+;
+Copy
+Execute the refresh statement using a role with the REPLICATE privilege:
+USE
+ROLE
+my_replication_role
+;
+ALTER
+FAILOVER
+GROUP
+myfg
+REFRESH
+;
+Copy
+Create a role with the FAILOVER privilege on the failover group. This step is
+optional
+.
+Execute in the target account using a role with the OWNERSHIP privilege on the failover group:
+GRANT
+FAILO

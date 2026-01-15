@@ -1,0 +1,71 @@
+ that have dangling references (i.e. references to objects in another replication or failover
+group) might successfully replicate to a target account in some circumstances. If the replication operation results in behavior in the
+target account consistent with behavior that can occur in the source account, replication succeeds.
+For example, if a column in a table in failover group
+fg_a
+references a sequence in failover group
+fg_b
+, replication of both
+groups succeeds. If
+fg_a
+is replicated
+before
+fg_b
+, insert operations (after failover) on the table that references the
+sequence
+fails
+if
+fg_b
+was not replicated. This behavior can occur in a source account. If a sequence is dropped in a
+source account, insert operations on a table with a column referencing the dropped sequence fails.
+When the dangling reference is a security policy that protects data, the replication (or failover) group with the security policy
+must
+be replicated before any replication group that contains objects that reference the policy is replicated.
+Attention
+Making updates to security policies that protect data in separate replication or failover groups may result in inconsistencies
+and should be done with care.
+For database objects, you can view
+object dependencies
+in the Account Usage
+OBJECT_DEPENDENCIES view
+.
+Session policies and secondary roles
+¶
+For details, see
+Session policies with secondary roles
+Dangling references and network policies
+¶
+Dangling references in network policies can cause replication to fail with the following error message:
+Dangling references in the snapshot. Correct the errors before refreshing again.
+The following references are missing (referred entity <- [referring entities])
+To avoid dangling references, specify the following object types in the
+OBJECT_TYPES
+list when executing the CREATE or
+ALTER command for the replication or failover group:
+If a network policy uses a network rule, include the database that contains the schema where the network rule was created.
+If a network policy is associated with the account, include
+NETWORK
+POLICIES
+and
+ACCOUNT
+PARAMETERS
+in the
+OBJECT_TYPES
+list.
+If a network policy is associated with a user, include
+NETWORK
+POLICIES
+and
+USERS
+in the
+OBJECT_TYPES
+list.
+For more details, see
+Replicating network policies
+.
+Dangling references and packages policies
+¶
+If there is a
+packages policy
+set on the account, the following dangling references
+error occurs during the

@@ -1,0 +1,93 @@
+ storage, you must call
+DESCRIBE EXTERNAL VOLUME
+after you
+add the new storage location to retrieve the Snowflake-generated external ID.
+You need the external ID to configure access to S3 in the next step.
+Snowflake sets this new location as the
+active storage location
+for the secondary
+external volume.
+In the source account, create a Snowflake-managed Iceberg table that uses the external volume that you updated with the additional storage
+location.
+For example:
+CREATE
+ICEBERG
+TABLE
+my_iceberg_table
+(
+amount
+int
+)
+CATALOG
+=
+'SNOWFLAKE'
+EXTERNAL_VOLUME
+=
+'exvol1'
+BASE_LOCATION
+=
+'my_iceberg_table'
+;
+Copy
+In the source account, retrieve information about the
+Snowflake service principal
+for
+your
+target account
+by following these steps:
+Retrieve the name (
+account_name
+) of your target account by using the
+SHOW REPLICATION ACCOUNTS
+command.
+SHOW
+REPLICATION
+ACCOUNTS
+LIKE
+'my_target_account%'
+;
+Copy
+Call the
+SYSTEM$DESC_ICEBERG_ACCESS_IDENTITY
+system function.
+Specify the cloud provider for the target storage location and the name of your target account
+exactly
+as
+it appears in the
+account_name
+column of the SHOW REPLICATION ACCOUNTS output.
+For example:
+SELECT
+SYSTEM$DESC_ICEBERG_ACCESS_IDENTITY
+(
+'S3'
+,
+'MY_TARGET_ACCOUNT_1'
+);
+Copy
+Configure Snowflake access to the storage location associated with your target account.
+Follow the instructions for your cloud provider, using the information you retrieved for the service principal in the target account:
+Configure an external volume for Amazon S3
+. Use the external ID associated with the storage location for your target account.
+Configure an external volume for Google Cloud Storage
+Configure an external volume for Azure
+. In the
+AZURE_CONSENT_URL
+TEMPLATE
+returned by
+SYSTEM$DESC_ICEBERG_ACCESS_IDENTITY, replace
+your_tenant_id
+with the ID for your
+tenant that the storage location belongs to.
+In the source account, use the
+CREATE REPLICATION GROUP
+command to create a replication group.
+Specify
+EXTERNAL
+VOLUMES
+in the
+OBJECT_TYPES
+list. In the
+ALLOWED_DATABASES
+list, include the database with the Iceberg table(s) you want to replicate. In the
+ALLOWED_EXTERNAL_VOLUM

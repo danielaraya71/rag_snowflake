@@ -1,0 +1,53 @@
+, you reduce the risk of losing notifications and data after failover.
+Note
+If you already use SNS, migration is not necessary.
+Instead, follow the usual steps to configure automation with SNS for secondary directory tables or auto-ingest pipes before failover.
+Configure automated refresh for directory tables on secondary stages
+Configure notifications for secondary auto-ingest pipes
+Prerequisites
+¶
+To migrate, you must meet the following conditions:
+You have already set up one or more event notifications for your S3 bucket. For instructions, see the topic for your use case:
+Refreshing Directory Tables Automatically for Amazon S3: Creating a New S3 Event Notification
+Creating a New S3 Event Notification to Automate Snowpipe
+You have already created a replication or failover group in a target account that includes a stage with a directory table or a pipe.
+Migrate to an SNS Topic
+¶
+Create an SNS topic in your AWS account.
+For instructions, see
+Creating an Amazon SNS topic
+in the AWS SNS documentation.
+Subscribe your target destinations (for example, other SQS queues or AWS Lambda workloads) for your S3 event notification(s)
+to your SNS topic. SNS publishes event notifications for your bucket to all subscribers to the topic.
+For instructions, see the
+AWS SNS documentation
+.
+Update the access policy for your topic with the following permissions:
+Allow the Snowflake IAM user to subscribe the SQS queue that is in your
+target
+account
+to your topic.
+Allow Amazon S3 to publish event notifications from your bucket to the SNS topic.
+For instructions, see
+Step 1: Subscribe the Snowflake SQS Queue to the SNS Topic
+.
+In your target Snowflake account, call the
+SYSTEM$CONVERT_PIPES_SQS_TO_SNS
+function.
+The function subscribes the SQS queue in your
+target
+account to your SNS topic without interrupting metadata
+synchronization or ingestion work.
+Specify your S3 bucket name and SNS topic ARN.
+SELECT
+SYSTEM$CONVERT_PIPES_SQS_TO_SNS
+(
+'s3_mybucket'
+,
+'arn:aws:sns:us-west-2:001234567890:MySNSTopic'
+)
+Copy
+Update your S3 event notifications to use your SNS topic as a destination. For instructions, see the
+Amazon S3 User Guide
+.
+After you complete these steps, the SQS queue automatically

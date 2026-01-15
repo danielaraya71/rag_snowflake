@@ -1,0 +1,137 @@
+atabases
+. Network rules are schema-level objects
+and are replicated with the database in which they are contained. For example:
+CREATE
+FAILOVER
+GROUP
+fg
+OBJECT_TYPES
+=
+network policies
+,
+databases
+ALLOWED_DATABASES
+=
+testdb2
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+myaccount2
+;
+Copy
+Network policies assigned to an account
+The replication or failover group must include
+network
+policies
+and
+account
+parameters
+. If the network policy uses
+network rules, you must also include
+databases
+. For example:
+CREATE
+FAILOVER
+GROUP
+fg
+OBJECT_TYPES
+=
+network policies
+,
+account
+parameters
+,
+databases
+ALLOWED_DATABASES
+=
+testdb2
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+myaccount2
+;
+Copy
+Network policies assigned to a user
+The replication or failover group must include
+network
+policies
+and
+users
+. If the network policy uses network rules, you
+must also include
+databases
+. For example:
+CREATE
+FAILOVER
+GROUP
+fg
+OBJECT_TYPES
+=
+network policies
+,
+users
+,
+databases
+ALLOWED_DATABASES
+=
+testdb2
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+myaccount2
+;
+Copy
+Network policies assigned to a security integration
+Network policy replication applies to network policies that are specified in Snowflake OAuth and SCIM
+security integrations
+, provided that the replication or failover group includes
+integrations
+,
+security
+integrations
+and
+network
+policies
+. If the network policy uses network rules, you must also
+include
+databases
+.
+CREATE
+FAILOVER
+GROUP
+fg
+OBJECT_TYPES
+=
+network policies
+,
+integrations
+,
+databases
+ALLOWED_DATABASES
+=
+testdb2
+ALLOWED_INTEGRATION_TYPES
+=
+security
+integrations
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+myaccount2
+;
+Copy
+Example
+¶
+For this example, assume the following:
+Source account:
+https://example-northamericawest.snowflakecomputing.com/
+Target account:
+https://example-northamericaeast.snowflakecomputing.com/
+Connection URL:
+https://example-global.snowflakecomputing.com
+A secondary connection exists in the target account (i.e. only refresh operations are needed).
+Network

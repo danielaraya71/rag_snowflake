@@ -1,0 +1,75 @@
+IFIER
+class. Instances
+of all other Snowflake
+classes
+are
+not
+replicated. For the full list of Snowflake
+classes, see
+Available classes
+.
+Packages policies
+Python UDF, UDTF, stored procedures
+✔
+If there is a
+packages policy
+set on the source account, in order
+to successfully replicate account objects, the database containing the packages policy
+must
+be replicated to the target account
+in the same or different replication or failover group. Otherwise, the refresh operation fails with a
+dangling references error
+.
+Objects for machine learning workflows
+Models
+✔
+For usage information, see
+Snowflake Model Registry
+.
+Datasets
+✔
+For information about how replication works for Datasets, see
+Dataset replication
+.
+Online feature tables
+Online feature tables do not support replication or cloning.
+Git repository clones
+✔
+For information about how replication works for Git repository clones, see
+Git repository replication
+.
+For usage information for Git repository clones, see
+Using a Git repository in Snowflake
+.
+Snowflake Notebooks
+✔
+For information about how replication works for Snowflake Notebooks, see
+Notebook replication
+.
+Database replication and encryption
+¶
+Snowflake protects metadata and data sets at rest and in transit between the source and target accounts. The account
+master key
+(AMK) encrypts the key hierarchy within the account as shown in the
+hierarchical key model
+. Snowflake encrypts replicated data in the target account using the
+account master key and the key hierarchy in the target account, regardless of whether you enable Tri-Secret Secure in the target account.
+When you enable Tri-Secret Secure in the target account, Snowflake uses the composite master key and the corresponding key hierarchy in
+the target account to encrypt the data. Note that target accounts do not have Tri-Secret Secure enabled by default; you must enable this
+feature.
+For more information about data encryption in Snowflake, see
+Understanding end-to-end encryption in Snowflake
+.
+External volume replication
+¶
+Preview Feature
+— Open
+Available to all accounts.
+Standard & Business Critical Feature
+Replication of external volumes to a replication group is available to all accounts.
+Replication of external volumes to a failover group requires Business Critical Edition or later.
+To inquire about upgrading, please contact
+Snowflake Support
+.
+Iceberg tables rely on external volumes, which are
+account-level objects that require

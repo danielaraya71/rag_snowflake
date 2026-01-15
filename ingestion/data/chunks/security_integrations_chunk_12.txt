@@ -1,0 +1,59 @@
+
+replication group centralizes the replication management of the objects and avoids scenarios where some objects are replicated and other
+objects are not replicated. Otherwise, you must coordinate the replication operation carefully to ensure that all objects are replicated to
+the target account.
+For example, you can have a replication group for databases. This replication group (e.g.
+rg1
+) specifies the database that contains the
+secret and the database to store the ServiceNow data. The other replication group (e.g.
+rg2
+) specifies the user, role, and integration
+objects and the grants of these roles to users. In this scenario, if you replicate the integrations first and then decide to refresh the
+target account to include the secret database, users, and roles, the replication refresh operation is successful.
+However, if you replicate the users and roles and the database that contains the secret in a group before you replicate the integration,
+then a placeholder secret is used until the security integration is replicated; the placeholder secret prevents a dangling reference. Once
+the security integration is replicated, the placeholder secret is replaced with the real secret.
+This procedure is a representative example to do the following:
+Replicate the integrations and the databases containing the secret and ingested data.
+Refresh the failover group.
+Promote the secondary connection in the source account to serve as the primary connection.
+Install and use the connector after replication.
+For this procedure, assume the following:
+Source account:
+https://example-northamericawest.snowflakecomputing.com/
+Target account:
+https://example-northamericaeast.snowflakecomputing.com/
+Connection URL:
+https://example-global.snowflakecomputing.com
+A secondary connection exists in the target account (i.e. only refresh operations are needed).
+Other security integrations for authentication and network policies to restrict access are already replicated.
+Source account steps:
+Verify that the objects for the connector exist in the source Snowflake account by executing SHOW commands on each of these object types.
+show
+secrets
+in
+database
+secretsdb
+;
+show security integrations
+;
+show api integrations
+;
+show
+tables
+in
+database
+destdb
+;
+show warehouses
+;
+show roles
+;
+Copy
+Note that
+secretsdb
+is the name of the database that contains the secret and
+destdb
+is the name of the database that contains
+the ingested data from ServiceNow.
+Update the failover group to include API

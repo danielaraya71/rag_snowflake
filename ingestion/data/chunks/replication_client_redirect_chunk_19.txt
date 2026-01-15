@@ -1,0 +1,21 @@
++-------------------------------------------+-------------------+-------------------+
+| snowflake_region   | created_on                    | account_name        | name              | comment         | is_primary    | primary                       | failover_allowed_to_accounts        | connection_url                            | organization_name | account_locator   |
+|--------------------+-------------------------------+---------------------+-------------------+-----------------+---------------+-------------------------------+-------------------------------------+-------------------------------------------+-------------------+-------------------|
+| AWS_US_WEST_2      | 2020-07-19 14:49:11.183 -0700 | MYORG.MYACCOUNT1    | MYCONNECTION      | NULL            | false         | MYORG.MYACCOUNT1.MYCONNECTION | MYORG.MYACCOUNT2, MYORG.MYACCOUNT3  | myorg-myconnection.snowflakecomputing.com | MYORG             | MYACCOUNTLOCATOR1 |
+| AWS_US_EAST_1      | 2020-07-22 13:52:04.925 -0700 | MYORG.MYACCOUNT2    | MYCONNECTION      | NULL            | true          | MYORG.MYACCOUNT1.MYCONNECTION |                                     | myorg-myconnection.snowflakecomputing.com | MYORG             | MYACCOUNTLOCATOR2 |
++--------------------+-------------------------------+---------------------+-------------------+-----------------+---------------+-------------------------------+-------------------------------------+-------------------------------------------+-------------------+-------------------+
+Modifying the DNS settings for private connectivity to the Snowflake service
+¶
+To redirect client connections to a secondary account, your network administrator must modify the DNS setting created in
+Configuring the DNS settings for private connectivity to the Snowflake service
+.
+Using a tool provided by your DNS provider, modify the DNS setting for the connection URL.
+Set the destination hostname as the complete Snowflake account URL for the account that stores your new primary connection, including the
+additional segments that identify the region and cloud platform where your account is hosted and the support for AWS PrivateLink, Azure
+Private Link, or Google Cloud Private Service Connect. This is the account name where client connections to the connection URL will now
+redirect. Be sure to include the private connectivity OCSP URL when updating the DNS settings.
+For example:
+myaccount1.us-east-1.privatelink.snowflakecomputing.com.
+ocsp.myaccount1.us-east-1.privatelink.snowflakecomputing.com.
+Copy
+(Note the trailing period,

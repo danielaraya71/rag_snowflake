@@ -1,0 +1,22 @@
+Specify your S3 bucket name and SNS topic ARN.
+SELECT
+SYSTEM$CONVERT_PIPES_SQS_TO_SNS
+(
+'s3_mybucket'
+,
+'arn:aws:sns:us-west-2:001234567890:MySNSTopic'
+)
+Copy
+Update your S3 event notifications to use your SNS topic as a destination. For instructions, see the
+Amazon S3 User Guide
+.
+After you complete these steps, the SQS queue automatically unbinds from your S3 event notification(s).
+All of the directory tables and pipes that use the specified S3 bucket will start using SNS as the source of notifications.
+On this page
+Requirements
+Replication and stages
+Replication and pipes
+Example 1: Replicate a named internal stage
+Example 2: Replicate an external stage and storage integration
+Example 3: Replicate an auto-ingest pipe
+Migrate to Amazon Simple Notification Service (SNS)

@@ -1,0 +1,21 @@
+-managed serverless compute. Standard serverless compute billing applies. For billing
+details, see “Table 5: Serverless Feature Table” in the
+Snowflake Service Consumption Table
+. To view the related credits that are consumed by data recovery
+through Fail-safe, use the following metering history views. Filter for the FAILSAFE_RECOVERY service type:
+METERING_DAILY_HISTORY view
+METERING_HISTORY view
+Considerations
+¶
+For fail-safe and Snowpipe Streaming Classic, be aware of the following limitations:
+Fail-safe doesn’t support tables that contain data ingested by Snowpipe Streaming Classic. For such tables, you can’t use fail-safe for recovery because fail-safe operations on that table will fail completely. For more information, see
+Snowpipe Streaming limitations
+.
+On this page
+What is Fail-safe?
+View Fail-safe storage for your account
+Billing for Fail-safe
+Considerations
+Related content
+Understanding & using Time Travel
+Data storage considerations

@@ -1,0 +1,60 @@
+Monitoring replication and failover
+¶
+Standard & Business Critical Feature
+Database and share replication are available to all accounts.
+Replication of other account objects & failover/failback require Business Critical Edition (or higher).
+To inquire about upgrading, please contact
+Snowflake Support
+.
+This topic provides information on how to monitor account replication progress, history, and costs.
+Use Snowsight to monitor replication
+¶
+To monitor the replication progress and status for
+replication and failover groups
+in an
+organization, use the
+Replication
+page in Snowsight.
+You can view the status and details of refresh operations, including:
+Current status of the most recent refresh operation.
+Replica lag time (time since the last refresh operation).
+Distribution of replica lag times across groups.
+Date and time of the next scheduled refresh operation.
+Note
+Snowsight lists the replication and failover groups for which your role has the MONITOR, OWNERSHIP, or REPLICATE privilege on.
+Refresh operation details are only available to users with the ACCOUNTADMIN role or the OWNERSHIP privilege on the group.
+You must be signed in to the source or target account to view refresh operation details. If you are not, you will be prompted to sign in.
+Both the source account and the target account must use the same connection type (public internet). Otherwise, signing in to
+the target account fails.
+Currently, if your account uses private connectivity, you can’t use Snowsight to create or modify groups or connection
+objects. However, you can use Snowsight to monitor groups that were created using SQL.
+To view the replication status of each replication or failover group, complete the following steps:
+Sign in to
+Snowsight
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Replication
+and then select
+Groups
+.
+The
+Groups
+page displays
+refresh operation details
+for all the groups for which your
+role has a privilege to view. You can use the tiles to filter the view.
+For example, if the
+Status
+tile indicates there are failed refresh operations, you can select the tile to investigate the group(s)
+with failures.
+The lag time in the
+Longest Replication lag
+tile refers to the duration of time since the last refresh operation. This is the
+length of time that the secondary replication or failover group
+lags
+behind the primary group. The longest lag time is the

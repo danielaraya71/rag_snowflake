@@ -1,0 +1,69 @@
+ in Snowflake, see
+Understanding end-to-end encryption in Snowflake
+.
+External volume replication
+¶
+Preview Feature
+— Open
+Available to all accounts.
+Standard & Business Critical Feature
+Replication of external volumes to a replication group is available to all accounts.
+Replication of external volumes to a failover group requires Business Critical Edition or later.
+To inquire about upgrading, please contact
+Snowflake Support
+.
+Iceberg tables rely on external volumes, which are
+account-level objects that require extra configuration to connect to your external cloud storage. Before you can replicate an Iceberg table,
+you must configure replication for external volumes. Account replication supports the replication of external volumes. For more
+information about replicating external volumes and Snowflake-managed Iceberg tables, see
+Configure replication for Snowflake-managed Apache Iceberg™ tables
+.
+For more information about external volumes, see
+External volume
+.
+Integration replication
+¶
+Business Critical Feature
+Requires Business Critical Edition (or higher). To inquire about upgrading, please contact
+Snowflake Support
+.
+Account replication supports the replication of integrations for the following features:
+Security integrations of the following types:
+Federated Authentication & SSO (i.e. SAML2)
+SCIM
+Snowflake OAuth
+External OAuth
+For more information about security integrations, see
+Replication of security integrations & network policies across multiple accounts
+.
+API integrations.
+After replicating API integrations to a target account, you must grant access to the remote service to the replicated
+external functions. For more information, see
+Updating the remote service for API integrations
+.
+Notification integrations of the following types:
+TYPE = EMAIL
+TYPE = QUEUE with DIRECTION = OUTBOUND
+TYPE = WEBHOOK
+Storage integrations.
+When you replicate a storage integration, you must establish a new trust relationship for your cloud storage in the target
+accounts. To learn more, see
+Configure cloud storage access for secondary storage integrations
+.
+External access integrations.
+For more information about external access integrations, see
+External network access overview
+.
+Network policy replication
+¶
+Business Critical Feature
+Requires Business Critical Edition (or higher).
+The feature supports replicating network policies.
+For more information, see
+Replication of security integrations & network policies across multiple accounts
+.
+Parameter replication
+¶
+Business Critical Feature
+Requires Business Critical Edition (or higher).
+This feature supports replicating account-level parameters and object parameters. Object parameters

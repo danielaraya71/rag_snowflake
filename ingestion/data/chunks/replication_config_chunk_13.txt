@@ -1,0 +1,85 @@
+ source account schema. In this case, the target schema is always synchronized with its source schema.
+The target schema has a name conflict with the source account schema. In this situation, the replication job fails due to the name
+conflict.
+List databases and schemas with REPLICABLE_WITH_FAILOVER_GROUPS set in your account
+¶
+You can list the values set for the REPLICABLE_WITH_FAILOVER_GROUPS parameter in the current account
+by querying the ACCOUNT_USAGE and INFORMATION_SCHEMA views.
+Tip
+If you aren’t familiar with why you might use the ACCOUNT_USAGE or INFORMATION_SCHEMA views,
+see
+Differences between Account Usage and Information Schema
+.
+Examples
+¶
+For these examples, we’ll use the INFORMATION_SCHEMA views. That way, you can see the settings immediately
+after making any changes.
+Using the pre-existing
+replicationadmin
+role, return all the parameter values for the account, which has two databases:
+db1
+database explicitly set to
+NO
+and
+sch1
+schema in the database explicitly set to
+YES
+. Only that
+one schema in the database is eligible for replication.
+db2
+database explicitly set to
+YES
+and
+sch2
+schema in the database explicitly set to
+NO
+. All schemas
+in the database are eligible for replication except for that one schema.
+USE
+ROLE
+replicationadmin
+;
+SELECT
+database_name
+,
+replicable_with_failover_groups
+FROM
+db1
+.
+INFORMATION_SCHEMA
+.
+DATABASES
+;
+Copy
++---------------+---------------------------------+
+| DATABASE_NAME | REPLICABLE_WITH_FAILOVER_GROUPS |
++---------------+---------------------------------+
+| DB1           | NO                              |
+| DB2           | YES                             |
+| DB3           | UNSET                           |
++---------------+---------------------------------+
+SELECT
+schema_name
+,
+catalog_name
+,
+replicable_with_failover_groups
+FROM
+db1
+.
+INFORMATION_SCHEMA
+.
+SCHEMATA
+ORDER
+BY
+catalog_name
+;
+Copy
++--------------------+--------------+---------------------------------+
+| SCHEMA_NAME        | CATALOG_NAME | REPLICABLE_WITH_FAILOVER_GROUPS |
++--------------------+--------------+---------------------------------+
+| PUBLIC             | DB1          | NO                              |
+| SCH1               | DB1          | YES                             |
+| SCH2               | DB1          | NO                              |
+| SCH3               | DB1          | NO                              |
+| INFORMATION_SCHEMA | DB1         

@@ -1,0 +1,94 @@
+ select
+Admin
+»
+Accounts
+.
+Select
+Client Redirect
+.
+Locate the connection you want to edit. Select the
+More
+menu (
+…
+) in the last column of the row.
+Modify target accounts for a connection using SQL
+¶
+You can add more than one target account for a primary connection using the
+ALTER CONNECTION
+command.
+For an example, see
+Examples
+.
+Dropping a connection
+¶
+You can drop a connection using Snowsight or SQL.
+Drop a connection using Snowsight
+¶
+Note
+Currently, if your account uses private connectivity, you can’t use Snowsight to drop a connection.
+To delete a connection, you must sign in as a user with the ACCOUNTADMIN role to the
+source
+account with the primary connection.
+Sign in to
+Snowsight
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Client Redirect
+.
+Locate the connection you want to delete. Select the
+More
+menu (
+…
+) in the last column of the row.
+Select
+Drop
+, then select
+Drop Connection
+Drop a connection using SQL
+¶
+You can use the
+DROP CONNECTION
+command to delete a connection.
+Delete all secondary connections in target accounts.
+Delete the primary connection in the source account.
+For an example, see
+Examples
+.
+Monitoring Client Redirect
+¶
+You can monitor Client Redirect connections and usage for accounts in an organization using Snowsight or SQL.
+Monitor Client Redirect using Snowsight
+¶
+Note
+Only a user with the ACCOUNTADMIN role can view connection details using Snowsight.
+You must be signed in to the target account as a user with the ACCOUNTADMIN role. If you are not, you will be
+prompted to sign in.
+Currently, if your account uses private connectivity, you can’t use Snowsight to monitor Client Redirect.
+To view the Client Redirect connection details, complete the following steps:
+Sign in to
+Snowsight
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Replication
+and then select
+Client Redirect
+.
+If there is no active warehouse for the session, you will be prompted to select a warehouse.
+Monitor a specific connection using search and filters.
+You can search by connection name. In the
+(search) box, enter the connection name to filter results.
+Choose
+Redirecting
+to filter the results by primary (
+To
+) or secondary

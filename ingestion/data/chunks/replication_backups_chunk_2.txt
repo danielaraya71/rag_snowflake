@@ -1,0 +1,35 @@
+ is set to one hour, a backup of the object is taken every 60 minutes.
+The
+expiration period
+is the length of time the backup is valid. After a backup expires,
+Snowflake deletes it automatically, unless a legal hold is applied to that particular backup.
+Tip
+If the backup set doesn’t have a retention lock and the particular backup doesn’t have a legal
+hold applied, you can delete the backup manually before the end of the expiration period.
+You can manually delete backups one at a time, always starting with the oldest backup that
+doesn’t have a legal hold.
+Each backup policy must have one or both of the schedule and expiration period properties. For example, you can
+create a policy with a schedule and an expiration period, and let Snowflake handle all creation and removal
+of the backups in all backup sets where that policy is applied. Alternatively, you might
+create a policy with a schedule and no expiration period if you want to manage removing older backups yourself.
+Or, you can create a policy with an expiration period but without a schedule, and then manage
+backup creation yourself. You can’t create a policy with no schedule and no expiration period.
+If you associate a backup policy with a backup set, you can do so when you create the backup set, or you can apply the policy
+later. Or, you can have a backup set that doesn’t have an associated backup policy. In that case, you manually control when to take
+new backups and expire old ones.
+You can apply a backup policy to multiple backup sets. If you modify a backup policy, Snowflake applies the changes to all
+backup sets that the policy is attached to.
+Retention lock
+¶
+A
+retention lock
+protects a backup from deletion for the defined expiration period.
+You can use a backup with a retention lock for backups for regulatory compliance and cyber resilience.
+The following restrictions apply for a backup set with retention lock:
+Backups can’t be deleted by any role, including the ACCOUNTADMIN role.
+You can’t decrease the backup expiration period, although you can increase the expiration period.
+You can’t drop a backup set if there are any unexpired backups in the set.
+You can’t drop a schema that contains a backup set with any unexpired backups.
+You can’t drop a database that contains a backup set with any unexpired backups.
+You can’t drop an account that contains a database with a backup set that has any unexpired backups.
+Important

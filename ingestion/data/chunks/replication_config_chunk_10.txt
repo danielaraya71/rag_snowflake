@@ -1,0 +1,69 @@
+
+, execute the following statement from the target account:
+USE
+ROLE
+my_replication_role
+;
+ALTER
+FAILOVER
+GROUP
+myfg
+REFRESH
+;
+Copy
+Step 7. Grant the FAILOVER privilege on failover group to role —
+Optional
+¶
+To execute the command to fail over a secondary failover group in a target account, you must use a role with the
+FAILOVER privilege
+on the failover group. The FAILOVER privilege is currently
+not
+replicated and must be granted in each source and target account.
+For more information, see
+Replication of roles and grants
+.
+For example, to grant the FAILOVER privilege to role
+my_failover_role
+on failover group
+my_fg
+, execute the
+following statement in the
+target account
+using a role with the OWNERSHIP privilege on the group:
+GRANT
+FAILOVER
+ON
+FAILOVER
+GROUP
+myfg
+TO
+ROLE
+my_failover_role
+;
+Copy
+For instructions on creating a custom role with a specified set of privileges, see
+Creating custom roles
+.
+For general information about roles and privilege grants for performing SQL actions on
+securable objects
+, see
+Overview of Access Control
+.
+Schema-level replication for failover groups
+¶
+For databases in failover groups, you can optionally configure the REPLICABLE_WITH_FAILOVER_GROUPS parameter on the database
+and/or individual schemas in the database to specify a subset of schemas for replication.
+This feature enables you to control the schemas in a failover group that are replicated, which is useful if only a subset of data
+in a database needs the added disaster recovery protection provided by failover.
+Because this parameter is enabled by default for all databases and the schemas they contain, you adjust the replication
+granularity by choosing which databases and/or schemas to omit from replication. You can further fine-tune the
+replication settings by allowing certain schemas to be replicated even though the database that contains them isn’t replicated.
+Specify schemas to replicate or skip
+¶
+You can explicitly specify schemas to replicate or skip in a database in a failover group using the
+optional
+REPLICABLE_WITH_FAILOVER_GROUPS
+parameter.
+REPLICABLE_WITH_FAILOVER_GROUPS parameter
+¶
+The REPLICABLE_WITH_FAILOVER_GROUPS parameter specifies whether a schema that belongs

@@ -1,0 +1,107 @@
+
+myfg
+SUSPEND
+;
+Copy
+Suspend future refresh operations
+and
+cancel a scheduled refresh operation that is currently in progress (if there is one).
+If the in-progress refresh operation was manually triggered, see
+Cancel an in-progress refresh operation that wasn’t automatically scheduled
+.
+ALTER
+FAILOVER
+GROUP
+myfg
+SUSPEND
+IMMEDIATE
+;
+Copy
+Note
+You might experience a slight delay between the time that the statement returns and the time that the cancellation
+of the refresh operation is finished.
+Verify no refresh operations are in progress for the failover group
+myfg
+. The following query
+should return no results:
+SELECT
+phase_name
+,
+start_time
+,
+job_uuid
+FROM
+TABLE
+(
+INFORMATION_SCHEMA
+.
+REPLICATION_GROUP_REFRESH_HISTORY
+(
+'myfg'
+))
+WHERE
+phase_name
+<>
+'COMPLETED'
+and
+phase_name
+<>
+'CANCELED'
+;
+Copy
+To see canceled refresh operations for failover group
+myfg
+, you can execute the following statement:
+SELECT
+phase_name
+,
+start_time
+,
+job_uuid
+FROM
+TABLE
+(
+INFORMATION_SCHEMA
+.
+REPLICATION_GROUP_REFRESH_HISTORY
+(
+'myfg'
+))
+WHERE
+phase_name
+=
+'CANCELED'
+;
+Copy
+Now you can promote the secondary failover group
+myfg
+to primary failover group:
+ALTER
+FAILOVER
+GROUP
+myfg
+PRIMARY
+;
+Copy
+Resume scheduled replication in target accounts
+¶
+On failover, scheduled refreshes on all secondary failover groups are suspended.
+ALTER FAILOVER GROUP … RESUME
+must be executed in each
+target account
+with a
+secondary failover group to resume automatic refreshes.
+ALTER
+FAILOVER
+GROUP
+myfg
+RESUME
+;
+Copy
+View the current phase of an in-progress refresh operation
+¶
+A refresh operation can be safely canceled during most phases of the refresh operation. However, canceling a refresh operation
+in the SECONDARY_DOWNLOADING_METADATA or SECONDARY_DOWNLOADING_DATA phase might result in an inconsistent state on the target
+account.  If the refresh operation has started one of these phases, it proceeds to completion regardless of the availability of
+the source account. Allowing the phase to complete before you fail over ensures replicas are in a consistent state.
+After the replicas are in a consistent state, you can resume or replay your ingest and transformation pipelines to

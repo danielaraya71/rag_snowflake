@@ -1,0 +1,39 @@
+PLICATE privilege was not granted to the user, the refresh operation fails.
+Replication schedule
+¶
+As a best practice, Snowflake recommends scheduling automatic refreshes using the REPLICATION_SCHEDULE parameter. The schedule can be
+defined when creating a new replication or failover group with CREATE
+<object>
+or later (using ALTER
+<object>
+).
+When you create a secondary replication or failover group, Snowflake automatically executes an initial refresh. The next refresh is
+scheduled based on when the prior refresh started and the scheduling interval, or the next valid time based on the cron expression. For
+example, if the refresh schedule interval is 10 minutes and the prior refresh operation (either a scheduled refresh or manually triggered
+refresh) starts at 12:01, the next refresh is scheduled for 12:11.
+Snowflake ensures only one refresh is executed at any given time. If a refresh is still executing when the next refresh is scheduled, the
+next refresh is delayed to start when the currently executing refresh completes. For example, if a refresh is scheduled to execute 15
+minutes after the hour, every hour, and the prior refresh completes at 12:16, the next refresh is scheduled to execute when the previously
+executing refresh is completed.
+Note
+Automatically scheduled refresh operations are executed using the role with the OWNERSHIP privilege on the replication
+or failover group. If a scheduled refresh operation fails due to insufficient privileges, grant the required privileges
+to the role with the OWNERSHIP privilege on the group.
+Suspend and resume scheduled replication
+¶
+A secondary failover group cannot be promoted to the primary group while a refresh is executing. To fail over gracefully, suspend scheduled
+replication in the target account. After the failover is completed, resume the scheduled replication. For more information,
+see
+ALTER FAILOVER GROUP
+.
+Replication to accounts on lower editions
+¶
+If either of the following conditions is true, Snowflake displays an error message:
+A primary replication group with only database and/or share objects is in a Business Critical (or higher) account but one
+or more of the accounts approved for replication are on lower editions. Business Critical Edition is intended for Snowflake
+accounts with extremely sensitive data.
+A primary replication or failover group with any
+object types
+is in a
+Business Critical (or higher) account and a signed business associate agreement is in place to store PHI data in the account per HIPAA
+and

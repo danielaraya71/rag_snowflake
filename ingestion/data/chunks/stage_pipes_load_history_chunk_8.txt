@@ -1,0 +1,117 @@
+ pipe with auto-ingest enabled that loads data from the external stage into a table named
+mytable
+.
+CREATE
+PIPE
+snowpipe_db
+.
+public
+.
+mypipe
+AUTO_INGEST
+=
+TRUE
+AWS_SNS_TOPIC
+=
+'<topic_arn>'
+AS
+COPY
+INTO
+snowpipe_db
+.
+public
+.
+mytable
+FROM
+@
+snowpipe_db
+.
+public
+.
+my_s3_stage
+FILE_FORMAT
+=
+(
+TYPE
+=
+'JSON'
+);
+Copy
+Refresh the pipe with an
+ALTER PIPE
+statement to load data from the stage from the last 7 days.
+ALTER
+PIPE
+mypipe
+REFRESH
+;
+Copy
+Finally, use
+CREATE FAILOVER GROUP
+to create a failover group
+that allows replication of storage integrations.
+CREATE
+FAILOVER
+GROUP
+my_pipe_failover_group
+OBJECT_TYPES
+=
+DATABASES
+,
+INTEGRATIONS
+ALLOWED_INTEGRATION_TYPES
+=
+STORAGE INTEGRATIONS
+ALLOWED_DATABASES
+=
+snowpipe_db
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+my_account_2
+;
+Copy
+The second part of the example completes the replication and failover process in a
+target
+account:
+Create a failover group as a replica of the failover group in the source account.
+CREATE
+FAILOVER
+GROUP
+my_pipe_failover_group
+AS
+REPLICA
+OF
+myorg
+.
+my_account_1
+.
+my_pipe_failover_group
+;
+Copy
+Execute a
+DESCRIBE INTEGRATION
+statement to retrieve the ARN for the
+AWS IAM User for your Snowflake account on the secondary deployment.
+Use the ARN to grant the IAM user permissions to access your S3 bucket.
+See Step 5: Grant the IAM User Permissions to Access Bucket Objects
+.
+DESC
+INTEGRATION
+my_s3_storage_int
+;
+Copy
+Call the
+SYSTEM$GET_AWS_SNS_IAM_POLICY
+system function to generate an IAM policy that grants the new SQS queue permission
+to subscribe to your SNS topic. Snowflake created the new SQS queue in your target account when you replicated the failover group from your
+source account.
+SELECT
+SYSTEM$GET_AWS_SNS_IAM_POLICY
+(
+'<topic_arn>'
+);
+Copy
+topic_arn
+is the Amazon Resource Name (ARN) of the SNS topic that you created for

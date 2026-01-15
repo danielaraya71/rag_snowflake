@@ -1,0 +1,8 @@
+ and limitations
+Related content
+Introduction to replication and failover across multiple accounts
+SYSTEM$DESC_ICEBERG_ACCESS_IDENTITY
+CREATE FAILOVER GROUP
+ALTER FAILOVER GROUP
+CREATE REPLICATION GROUP
+ALTER REPLICATION GROUP

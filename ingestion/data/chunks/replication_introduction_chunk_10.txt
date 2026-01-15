@@ -1,0 +1,61 @@
+ are replicated in the suspended state to each target account
+and can be resumed in the target account.
+Workspace replication
+¶
+Preview Feature
+— Open
+Available to all accounts.
+Requires Business Critical Edition (or higher). To inquire about upgrading, please contact
+Snowflake Support
+.
+Shared workspaces
+are replicated when they are included in a database that is part of a
+replication or failover group. Private workspaces are replicated when their owning users are replicated. In secondary (target) accounts,
+replicated content is read-only; Workspace files (including SQL files, Notebook files, and so on) are executable but cannot be edited.
+Dataset replication
+¶
+Account replication supports replicating Datasets. Datasets are materialized data objects that you use with Snowflake ML.
+For usage information, see
+Snowflake Datasets
+.
+Replication is supported for Datasets created starting with the General Availability of the Dataset replication feature.
+For the release announcement, see
+Mar 20, 2025: Snowflake Datasets (General availability)
+.
+Cortex Search Service replication
+¶
+Business Critical Feature
+Requires Business Critical Edition (or higher).
+The feature supports replicating Cortex Search Services.
+For more information, see
+Replicate a Cortex Search Service
+.
+Replication of roles and grants
+¶
+Business Critical Feature
+Requires Business Critical Edition (or higher).
+In order to replicate grants on objects to roles, roles must be replicated from the source account to the target account. To
+replicate roles in a replication or failover group, you must include
+roles
+in the
+object_types
+list. Roles can be in a
+separate replication or failover group from the data objects on which the privileges are granted.
+When
+roles
+are replicated, grants on objects are
+only
+replicated to a target account if:
+The privilege was granted by the owner of the object or indirectly by a role that was granted the privilege with the
+WITH GRANT OPTION
+parameter by the owner of the object.
+Both the grantee and grantor role for a privilege grant are located in the target account.
+The object is replicated (i.e. the object type is included in the
+object_types
+list).
+Otherwise the grant on the object is not replicated.
+For information about replicating secondary roles and session policies, see
+Session policies with secondary roles
+.
+Note
+If a role is dropped that has the OWNERSHIP privilege on an active pipe in the target

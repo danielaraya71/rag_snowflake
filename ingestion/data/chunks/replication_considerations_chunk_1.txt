@@ -1,0 +1,68 @@
+ information on required privileges for database replication,
+see the
+required privileges table
+in
+Step 6. Refreshing a secondary database on a schedule
+.
+Privilege
+Object
+Usage
+Notes
+OWNERSHIP
+Replication Group
+Failover Group
+Grants the ability to delete, alter, and grant or revoke access to an object.
+Can be granted by:
+The ACCOUNTADMIN role
+or
+A role that has the MANAGE GRANTS privilege
+or
+A role that has the OWNERSHIP privilege on the group.
+CREATE REPLICATION GROUP
+Account
+Grants the ability to create a replication group.
+Must be granted by the ACCOUNTADMIN role.
+CREATE FAILOVER GROUP
+Account
+Grants the ability to create a failover group.
+Must be granted by the ACCOUNTADMIN role.
+FAILOVER
+Failover Group
+Grants the ability to promote a secondary failover group to serve as primary failover group.
+Can be granted or revoked by a role with the OWNERSHIP privilege on the group.
+REPLICATE
+Replication Group
+Failover Group
+Grants the ability to refresh a secondary group.
+Can be granted or revoked by a role with the OWNERSHIP privilege on the group.
+MODIFY
+Replication Group
+Failover Group
+Grants the ability to change the settings or properties of an object.
+Can be granted or revoked by a role with the OWNERSHIP privilege on the group.
+MONITOR
+Replication Group
+Failover Group
+Grants the ability to view details within an object.
+Can be granted or revoked by a role with the OWNERSHIP privilege on the group.
+For instructions on creating a custom role with a specified set of privileges, see
+Creating custom roles
+.
+For general information about roles and privilege grants for performing SQL actions on
+securable objects
+, see
+Overview of Access Control
+.
+Replication and references across replication groups
+¶
+Objects in a replication (or failover) group that have dangling references (i.e. references to objects in another replication or failover
+group) might successfully replicate to a target account in some circumstances. If the replication operation results in behavior in the
+target account consistent with behavior that can occur in the source account, replication succeeds.
+For example, if a column in a table in failover group
+fg_a
+references a sequence in failover group
+fg_b
+, replication of both
+groups succeeds. If
+fg_a
+is replicated

@@ -1,0 +1,71 @@
+.
+If this column contains
+destinations available
+, there are no secondary replication or failover groups.
+The number of destinations available indicates the number of target accounts the primary group can be replicated to.
+Status
+Displays the status of the latest refresh operation.
+You must be signed in to the source or target account in order to access replication details.
+If you are not signed in, select
+Sign in
+to view refresh operation status for the secondary group.
+Both the source account and the target account must use the same connection type (public internet). Otherwise, signing in
+to the target account fails.
+Replication Lag
+The length of time since the last refresh operation. This is the length of time that the secondary replication group “lags” behind
+the primary replication group.
+Next Refresh
+The date and time of the next scheduled refresh operation.
+You can select a replication or failover group to view detailed information about each refresh operation. For more information, see
+the section on replication history in Snowsight
+.
+Monitor the progress of refresh operations
+¶
+This section provides information on how to monitor replication progress for a specific replication or failover group using either
+Snowsight or SQL.
+Use Snowsight to monitor the progress of refresh operations
+¶
+You can view the status of a refresh operation in progress and the details of historical refresh operations using Snowsight.
+Sign in to
+Snowsight
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Replication
+, select
+Groups
+.
+Select the name of a replication or failover group.
+Tip
+If your account uses private connectivity, you can still use Snowsight to monitor groups.
+Although creating or modifying groups or connection objects through Snowsight isn’t currently available
+with private connectivity, Snowsight can monitor the groups that you create using SQL.
+For more information about the detailed view, see
+the section on replication history in Snowsight
+.
+Use SQL to monitor the progress of refresh operations
+¶
+To monitor the progress of a replication or failover group refresh, query the
+REPLICATION_GROUP_REFRESH_PROGRESS, REPLICATION_GROUP_REFRESH_PROGRESS_BY_JOB, REPLICATION_GROUP_REFRESH_PROGRESS_ALL
+table function (in the
+Snowflake Information Schema
+).
+Example
+¶
+View the progress of the most recent refresh operation for the failover group
+myfg
+:
+SELECT
+phase_name
+,
+start_time
+,
+end_time
+,
+progress
+,
+details

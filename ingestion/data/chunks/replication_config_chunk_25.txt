@@ -1,0 +1,46 @@
+over group was previously configured for database replication.
+Solution
+Disable database replication for the database. See
+Transitioning from database replication to group-based replication
+.
+You cannot add a share to a group
+¶
+Error
+Share '<share_name>' is already configured to replicate to
+account '<account_name>' by replication group '<group_name>'.
+Cause
+A share can only be in one replication or failover group. One of the shares you selected for the group is already included
+in another replication or failover group.
+Solution
+Choose
+Select Objects
+and unselect any share(s) that are already included in another group.
+Limitations of using Snowsight for replication configuration
+¶
+Only a user with the ACCOUNTADMIN role can create a replication or failover group using Snowsight. A user with a role with the
+CREATE REPLICATION GROUP or CREATE FAILOVER GROUP privilege can create a group using the respective SQL commands.
+Only a user with the ACCOUNTADMIN role can edit or drop a replication or failover group using Snowsight. A user with a role
+with the OWNERSHIP privilege on a replication or failover group can edit and drop groups using the respective SQL commands.
+If your account uses private connectivity, you can’t use Snowsight to create, modify, or drop groups. You can use SQL
+to complete these actions.
+On this page
+Region support for replication and failover/failback
+Transitioning from database replication to group-based replication
+Workflow
+Replicating account objects and databases
+Schema-level replication for failover groups
+Apply global IDs to objects created by scripts in target accounts
+Configure cloud storage access for secondary storage integrations
+Configure automated refresh for directory tables on secondary stages
+Configure notifications for secondary auto-ingest pipes
+Updating the remote service for API integrations
+Comparing data sets in primary and secondary databases
+Modifying a replication or failover group in a source account
+Pause or resume a replication schedule in a target account
+Dropping a secondary replication or failover group
+Dropping a primary replication or failover group
+Troubleshoot issues with creating and editing replication groups using Snowsight
+Limitations of using Snowsight for replication configuration
+Related content
+Introduction to replication and failover across multiple accounts
+Replication considerations

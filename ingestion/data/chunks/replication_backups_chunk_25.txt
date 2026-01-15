@@ -1,0 +1,139 @@
+_backups
+;
+Copy
+Delete the
+s1_backups
+backup set:
+DROP
+BACKUP
+SET
+s1_backups
+;
+Copy
+Delete the
+d1_backups
+backup set:
+DROP
+BACKUP
+SET
+d1_backups
+;
+Copy
+Find all the backup sets that contain backups of a specific table
+¶
+The following example shows how to find all the backup sets that contain a specific table inside a specific schema and database.
+The SHOW TABLES command uses a pipe operator to retrieve the names of the database, schema, and table and store them in variables.
+The SHOW BACKUP SETS output is filtered to show the backup sets that back up the database containing the table, or the schema
+containing the table, or that contain that single table.
+The filtered output from SHOW BACKUP SETS shows that there are two database backup sets for the
+database
+my_big_important_database
+, one schema backup set for the schema
+my_big_important_database.public
+, and one table backup set for the table
+my_big_important_database.public.my_small_secondary_table
+.
+SHOW
+TABLES
+IN
+SCHEMA
+public
+->>
+SET
+(
+dname
+,
+sname
+,
+tname
+)
+=
+(
+SELECT
+"database_name"
+,
+"schema_name"
+,
+"name"
+FROM
+$
+1
+WHERE
+"name"
+=
+'MY_SMALL_SECONDARY_TABLE'
+AND
+"kind"
+=
+'TABLE'
+);
+SHOW
+BACKUP
+SETS
+->>
+SELECT
+"object_kind"
+,
+"name"
+,
+"database_name"
+,
+"schema_name"
+,
+"object_name"
+FROM
+$
+1
+WHERE
+(
+"object_kind"
+=
+'TABLE'
+AND
+"database_name"
+=
+$
+dname
+AND
+"schema_name"
+=
+$
+sname
+AND
+"object_name"
+=
+$
+tname
+)
+OR
+(
+"object_kind"
+=
+'SCHEMA'
+AND
+"database_name"
+=
+$
+dname
+AND
+"object_name"
+=
+$
+sname
+)
+OR
+(
+"object_kind"
+=
+'DATABASE'
+AND
+"object_name"
+=
+$
+dname
+);
+Copy
++-------------+------------------+---------------------------+-------------+---------------------------+
+| object_kind | name             | database_name             | schema_name | object_name               |
+|-------------+------------------+---------------------------+-------------+---------------------------|
+| DATABASE    | DATABASE_BACKUP  | MY_BIG_IMPORTANT

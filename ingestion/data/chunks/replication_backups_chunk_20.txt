@@ -1,0 +1,63 @@
+_d1
+FROM
+BACKUP
+SET
+d1_backups
+IDENTIFIER
+'29c2c1b9-6599-4f0b-87b8-d43377fd7c77'
+;
+Copy
+Delete a backup from a backup set
+¶
+For any backup set, you can only delete the oldest backup that doesn’t have a legal hold. You do so by specifying the backup
+ID. You can find the backups that don’t have a legal hold by examining the
+is_under_legal_hold
+property. You can find the
+oldest backup by examining the
+created_on
+property.
+Note
+You can’t delete any backup from a backup set if a backup policy with retention lock is attached to that backup set,
+or if that particular backup has a legal hold applied.
+The backup that you delete from the backup set must be the earliest backup in the set.
+Find the ID of the table backup to delete in the
+backup_id
+column in the following output.
+Sorting in ascending order by the
+created_on
+column puts the oldest backup first.
+You could add
+LIMIT
+1
+to the SELECT command to return only the row with the details of the oldest backup.
+SHOW
+BACKUPS
+IN
+BACKUP
+SET
+t1_backups
+->>
+SELECT
+"created_on"
+,
+"backup_id"
+,
+"expire_on"
+FROM
+$
+1
+WHERE
+"is_under_legal_hold"
+=
+'N'
+ORDER
+BY
+"created_on"
+;
+Copy
++-------------------------------+--------------------------------------+-------------------------------+
+| created_on                    | backup_id                            | expire_on                     |
+|-------------------------------+--------------------------------------+-------------------------------|
+| 2024-08-19 17:12:28.991 -0700 | 983e0b66-91eb-41cb-8a0b-037abfec1914 | 2024-08-20 17:12:28.991 -0700 |
+| 2024-08-19 18:12:33.824 -0700 | b5624ef0-1f35-452f-b132-09d8f0592e52 | 2024-08-20 18:12:33.824 -0700 |
+| 2024-08-19 19:12:43.830 -0700 | eca1a94a-fd40-46db-a2

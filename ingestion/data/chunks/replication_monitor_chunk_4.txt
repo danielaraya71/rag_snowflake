@@ -1,0 +1,116 @@
+ filter results by refresh operation status:
+Refresh Cancelled
+Refresh Failed
+Refresh In Progress
+Refresh Successful
+Choose
+Duration
+to show refresh operation details for:
+Last hour
+Last 24 hours
+Last 7 days
+All
+Selecting
+All
+displays the last 14 days of refresh operations.
+The details for each refresh operation include the following columns:
+Column
+Description
+Query ID
+Query ID of the refresh operation.
+Status
+Displays the status of the refresh operation. Valid values include
+Successful
+,
+Failed
+,
+In
+Progress
+.
+Ended
+Date and time the refresh operation ended.
+Duration
+The length of time the refresh operation took to complete.
+The duration period is broken down and color coded by
+replication phase
+. The width
+of each colored segment indicates the portion of the time spent in that phase.
+The image below is for reference only. This graph is available when you
+select the refresh operation
+for additional details.
+Transferred
+The number of bytes replicated.
+Objects
+The number of objects replicated.
+Select a row to view additional details about a specific refresh operation including:
+Duration of each replication phase.
+Error message (for failed refresh operations).
+List of database objects replicated by type and number.
+Number of databases replicated and database names.
+Use SQL to view replication history
+¶
+To view the replication history of a specific replication or failover group within a specified date range, query one of the following:
+REPLICATION_GROUP_REFRESH_HISTORY, REPLICATION_GROUP_REFRESH_HISTORY_ALL
+table function (in the
+Snowflake Information Schema
+).
+REPLICATION_GROUP_REFRESH_HISTORY view
+(in
+Account Usage
+).
+Examples
+¶
+Query the Information Schema REPLICATION_GROUP_REFRESH_HISTORY table function to view the account replication history of failover
+group
+myfg
+in the last 7 days:
+SELECT
+PHASE_NAME
+,
+START_TIME
+,
+END_TIME
+,
+TOTAL_BYTES
+,
+OBJECT_COUNT
+FROM
+TABLE
+(
+information_schema
+.
+replication_group_refresh_history
+(
+'myfg'
+))
+WHERE
+START_TIME
+>=
+CURRENT_DATE
+()
+-
+INTERVAL
+'7 days'
+;
+Copy
+Query the Account Usage REPLICATION_GROUP_REFRESH_HISTORY view to view the account replication history in the current month:
+SELECT
+REPLICATION_GROUP_NAME
+,
+PHASE_NAME
+,
+START_TIME
+,
+END_TIME
+,
+TOTAL_BYTES
+,
+OBJECT_COUNT
+FROM
+snowflake
+.
+account_usage
+.
+replication_group_refresh_history
+WHERE
+START_TIME

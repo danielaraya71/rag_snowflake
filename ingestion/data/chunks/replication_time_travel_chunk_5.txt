@@ -1,0 +1,82 @@
+S
+command.
+To include information about objects that have already been dropped, include the HISTORY clause with the
+SHOW command.
+The following example shows how you might check the retention periods of certain objects by filtering the output of
+the SHOW commands.
+The following example checks the retention period for specific named tables:
+SHOW
+TABLES
+->>
+SELECT
+"name"
+,
+"retention_time"
+FROM
+$
+1
+WHERE
+"name"
+IN
+(
+'MY_TABLE1'
+,
+'MY_TABLE2'
+);
+Copy
+The following example checks for schemas where Time Travel is turned off:
+SHOW
+SCHEMAS
+->>
+SELECT
+"name"
+,
+"retention_time"
+FROM
+$
+1
+WHERE
+"retention_time"
+=
+0
+;
+Copy
+The following example checks for databases where retention time is larger than the default.
+The results include databases that have already been dropped.
+SHOW DATABASES
+HISTORY
+->>
+SELECT
+"name"
+,
+"retention_time"
+,
+"dropped_on"
+FROM
+$
+1
+WHERE
+"retention_time"
+>
+1
+;
+Copy
+Changing the data retention period for an object
+¶
+If you change the data retention period for a table, the new retention period impacts all data that is active, as well as any data currently
+in Time Travel. The impact depends on whether you increase or decrease the period:
+Increasing Retention
+:
+Causes the data currently in Time Travel to be retained for the longer time period.
+For example, if you have a table with a 10-day retention period and increase the period to 20 days, data that would have been removed
+after 10 days is now retained for an additional 10 days before moving into Fail-safe.
+Note that this doesn’t apply to any data that is older than 10 days and has already moved into Fail-safe.
+Decreasing Retention
+:
+Reduces the amount of time data is retained in Time Travel:
+For active data modified after the retention period is reduced, the new shorter period applies.
+For data that is currently in Time Travel:
+If the data is still within the new shorter period, it remains in Time Travel.
+If the data is outside the new period, it moves into Fail-safe.
+For example, if you have a table with a 10-day retention period and you decrease the period to 1-day, data from days 2 to 10 will be moved
+into Fail-safe, leaving only the data from day 1 accessible

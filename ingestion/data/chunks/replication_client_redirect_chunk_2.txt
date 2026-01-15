@@ -1,0 +1,84 @@
+ replication
+SHOW
+REPLICATION
+ACCOUNTS
+;
+-- Configure failover accounts for the primary connection
+ALTER
+CONNECTION
+myconnection
+ENABLE
+FAILOVER
+TO
+ACCOUNTS
+myorg
+.
+myaccount2
+,
+myorg
+.
+myaccount3
+;
+-- View the details for the connection
+SHOW
+CONNECTIONS
+;
+Copy
+If private connectivity to the Snowflake service is enabled for your Snowflake account, you must create
+and manage a DNS CNAME record for your connection URL. For more details, see
+Configuring the DNS settings for private connectivity to the Snowflake service
+.
+Executed on target account
+¶
+Create a secondary connection linked to the primary connection. The name of the secondary connection must be the same name as the primary
+connection.
+CREATE
+CONNECTION
+myconnection
+AS
+REPLICA
+OF
+myorg
+.
+myaccount1
+.
+myconnection
+;
+Copy
+If private connectivity to the Snowflake service is enabled for your Snowflake account, you must create
+or update a DNS CNAME record for your connection URL. For more details, see
+Modifying the DNS settings for private connectivity to the Snowflake service
+.
+Outage occurs in source region: Failover
+¶
+If an outage occurs in the region where the primary connection is located, promote a secondary connection in a different region
+to serve as the primary connection.
+Executed on target account
+¶
+Sign in to the target account that you want to promote to serve as the new source account.
+Promote the secondary connection to serve as the primary connection:
+ALTER
+CONNECTION
+myconnection
+PRIMARY
+;
+Copy
+If private connectivity to the Snowflake service is enabled for your Snowflake account, you must create
+or update a DNS CNAME record for your connection URL. For more details, see
+Modifying the DNS settings for private connectivity to the Snowflake service
+.
+Outage resolved: Failback
+¶
+Once the outage is resolved, promote the original primary connection to serve as the primary connection again.
+Executed on the target account that previously served as the source account
+¶
+Sign in to the target account that served as the source account prior to the outage.
+Promote the secondary connection back to primary connection:
+ALTER
+CONNECTION
+myconnection
+PRIMARY
+;
+Copy
+If private connectivity to the Snowflake service is enabled for your Snowflake account, you must create
+or

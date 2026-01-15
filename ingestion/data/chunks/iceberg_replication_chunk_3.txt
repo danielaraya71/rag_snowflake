@@ -1,0 +1,101 @@
+
+VOLUMES
+in the
+OBJECT_TYPES
+list. In the
+ALLOWED_DATABASES
+list, include the database with the Iceberg tables that you want to replicate. In the
+ALLOWED_EXTERNAL_VOLUMES
+list, include the external volumes that provide access to the Iceberg tables that you want to replicate.
+CREATE
+FAILOVER
+GROUP
+my_iceberg_fg
+OBJECT_TYPES
+=
+DATABASES
+,
+EXTERNAL
+VOLUMES
+ALLOWED_DATABASES
+=
+my_iceberg_database
+ALLOWED_EXTERNAL_VOLUMES
+=
+my_external_volume
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+my_account_1
+;
+Copy
+Note
+If you receive a SQL parser error, your list of allowed external volumes might be too long. If you receive this error, shorten this
+list in your CREATE FAILOVER GROUP statement, and then use the
+ALTER FAILOVER GROUP
+command to add
+additional allowed external volumes to the failover group.
+To update an existing group, use the
+ALTER FAILOVER GROUP
+command to add
+EXTERNAL
+VOLUMES
+to the
+OBJECT_TYPES
+list.
+Include any other existing objects in the
+OBJECT_TYPES
+list to avoid dropping those objects in the target account.
+For example, add
+EXTERNAL
+VOLUMES
+to a failover group that already includes
+DATABASES
+:
+ALTER
+FAILOVER
+GROUP
+my_iceberg_rg
+SET
+OBJECT_TYPES
+=
+DATABASES
+,
+EXTERNAL
+VOLUMES
+ALLOWED_EXTERNAL_VOLUMES
+=
+my_external_volume
+;
+Copy
+In the target account, create a failover group as a replica of the group in the source account (
+my_source_account
+):
+CREATE
+FAILOVER
+GROUP
+my_iceberg_fg
+AS
+REPLICA
+OF
+myorg
+.
+my_source_account
+.
+my_iceberg_fg
+;
+Copy
+Skip this step if you already have a secondary group that replicates the group in the source account.
+In the target account, run a refresh command.
+ALTER
+FAILOVER
+GROUP
+my_iceberg_fg
+REFRESH
+;
+Copy
+As long as you replicate the database that contains your Snowflake-managed Iceberg table and you’ve
+configured access to your cloud storage for the target account, Snowflake replicates the table in the target account.
+Note
+The refresh operation fails if Snow

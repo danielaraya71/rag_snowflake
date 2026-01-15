@@ -1,0 +1,88 @@
+ security integration. The security integration is an account-level object and can’t be
+included in any backup.
+Types of objects in database and schema backups
+¶
+The following table lists the objects that are included in a database or schema backup:
+Object
+Included in backup
+Notes
+Permanent tables
+Yes
+Time Travel information for tables isn’t stored as part of a backup.
+Transient tables
+Yes
+Such tables continue to be transient tables after you restore them.
+Transient schemas and transient databases also retain the transient property
+after you restore them.
+Temporary tables
+No
+Temporary tables are session scoped and aren’t included in backups.
+Dynamic tables
+Yes
+Dynamic tables have their own data definition language (DDL) syntax for backups. You can run
+CREATE BACKUP SET FOR DYNAMIC TABLE and CREATE DYNAMIC TABLE FROM BACKUP SET commands.
+When you restore a dynamic table from a backup, the table is restored in a suspended state.
+Snowflake
+automatically initializes
+the new table
+during its first refresh.
+External tables
+No
+Hybrid tables
+No
+Apache Iceberg™ tables
+No
+Table constraints
+Yes
+Event tables
+No
+Sequences
+Yes
+Views
+Yes
+Materialized views
+No
+Secure views
+Yes
+File formats
+Yes
+Internal stages
+No
+External stages
+No
+Temporary stages
+No
+Directory tables
+No
+Pipes
+No
+Stored procedures
+Yes
+SQL, Javascript, Python, Java, and Scala procedures are all supported.
+User-defined functions (UDFs)
+Yes
+SQL, Javascript, Python, Java, and Scala functions are all supported.
+Both scalar UDFs and user-defined table functions (UDTFs) are included in the backup.
+Java UDFs in backups have the same requirements as in
+Limitations on cloning
+.
+Streams
+No
+Tasks
+Yes
+Tasks are included in the backup. Tasks restored from a backup are suspended and must be resumed.
+Data metric functions (DMFs)
+No
+Policies
+Yes
+The following kinds of policies are included in a schema or database backup:
+Column-level security (masking)
+Row access policies
+Tag-based masking policies
+If any table included in the backup has any other kind of policy applied (for example an
+aggregation policy, a projection policy, or a storage lifecycle policy), backup creation
+fails.
+Grants
+Yes
+If you drop a role, associated ownership grants are transferred to the role that
+performs the DROP

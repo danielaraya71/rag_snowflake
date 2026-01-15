@@ -1,0 +1,83 @@
+back, a user connecting to either the source account or target account via an OAuth client
+might
+need to re-authenticate to the target account.
+Re-authentication is likely to be necessary if the OAuth authorization server is not configured to issue a refresh token. Therefore,
+ensure that the OAuth authorization server issues refresh tokens so that the OAuth client can connect to the source and target Snowflake
+accounts.
+For this procedure, assume the following:
+Source account:
+https://example-northamericawest.snowflakecomputing.com/
+Target account:
+https://example-northamericaeast.snowflakecomputing.com/
+Connection URL:
+https://example-global.snowflakecomputing.com
+A secondary connection exists in the target account (i.e. only refresh operations are needed).
+The Snowflake OAuth or External OAuth security integrations already exist in the source account.
+This procedure is a representative example to do the following:
+Replicate an OAuth security integration.
+Refresh the failover group.
+Promote the secondary connection in the target account to serve as the primary connection.
+Source account steps:
+If the failover group already specifies
+security
+integrations
+, skip to the next step. This would be true if you have already
+configured the failover group for the purposes of
+SAML SSO in the target account
+(in this topic) or
+SCIM
+(also in this topic).
+Otherwise, modify the existing failover group using an ALTER FAILOVER GROUP command to specify
+security
+integrations
+.
+ALTER
+FAILOVER
+GROUP
+fg
+SET
+OBJECT_TYPES
+=
+users
+,
+roles
+,
+warehouses
+,
+resource monitors
+,
+integrations
+ALLOWED_INTEGRATION_TYPES
+=
+security
+integrations
+;
+Copy
+Target account steps:
+Refresh the secondary failover group to update the target account to include the OAuth security integration objects.
+ALTER
+FAILOVER
+GROUP
+fg
+REFRESH
+;
+Copy
+Verify connecting to each Snowflake account using the OAuth client of your choice.
+Optionally, promote the secondary failover group and the secondary connection in the target account to primary. This will promote the
+target account to serve as the new source account.
+Failover group:
+ALTER
+FAILOVER
+GROUP
+fg
+PRIMARY
+;
+Copy
+Connection:
+ALTER
+CONNECTION
+global
+PRIMARY
+;
+Copy
+If you completed the previous step, reverify that you can connect to each Snowflake account using

@@ -1,0 +1,80 @@
+ expires backups in the background.
+The owner of the backup set needs to have the following privileges:
+The appropriate privilege on the object that’s the subject of the backup set: SELECT for a table
+backup, or USAGE for a schema backup or database backup.
+Any privilege on the parent schema or database for the subject of the backup set.
+Any privilege on the parent schema and database of the backup set.
+If any of those privileges are missing, the automatic backup creation or expiration fails. You can
+monitor these background operations using the ACCOUNT_USAGE.BACKUP_OPERATION_HISTORY view.
+Grant privileges required to create backup policies and sets
+¶
+Note
+The role used to grant these privileges must have the OWNERSHIP privilege on the schema,
+or it must have the CREATE BACKUP SET or CREATE BACKUP POLICY privilege WITH GRANT OPTION.
+You can grant the following privileges to a custom account role or a database role.
+To enable the role
+myrole
+to create a backup policy in schema
+myschema
+, execute the following statement:
+GRANT
+CREATE
+BACKUP
+POLICY
+ON
+SCHEMA
+policy_schema
+TO
+ROLE
+myrole
+;
+Copy
+To enable the role
+myrole
+to create a backup set in schema
+myschema
+, execute the following statement:
+GRANT
+CREATE
+BACKUP
+SET
+ON
+SCHEMA
+policy_schema
+TO
+ROLE
+myrole
+;
+Copy
+Grant the APPLY privilege on a backup policy to a role
+¶
+Note
+Only a user with the ACCOUNTADMIN role can grant this privilege.
+You can grant this privilege to a custom account role or a database role.
+To enable the role
+myrole
+to apply the backup policy
+hourly_backup_policy
+to a backup set, execute the following statement:
+GRANT
+APPLY
+ON
+BACKUP
+POLICY
+hourly_backup_policy
+TO
+ROLE
+myrole
+;
+Copy
+Grant the APPLY BACKUP RETENTION LOCK privilege to a role
+¶
+You can grant a role the privilege to apply backup policies with retention lock on backup sets.
+Only a user with the ACCOUNTADMIN role can grant this privilege.
+Important
+Applying a backup policy with a retention lock to a backup set is
+irreversible
+.
+Due to the strong guarantees needed for regulatory compliance, once you put a retention lock on a backup set,
+you can’t revoke the lock. Snowflake support also can’t revoke such a retention lock.
+Back

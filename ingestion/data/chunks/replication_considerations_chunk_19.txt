@@ -1,0 +1,61 @@
+
+Replicated streams can successfully track the change data for tables and views in the same database.
+Currently, the following source object types are
+not
+supported:
+External tables
+Tables or views in databases separate from the stream databases, unless
+both
+the stream database and the database that stores the source object are included in the same
+replication or failover group
+.
+Tables or views in a shared databases (i.e. databases shared from provider accounts to your account)
+Replicating streams on directory tables is supported when you enable
+Stage, pipe, and load history replication
+.
+A database replication or refresh operation fails if the primary database includes a stream with an unsupported source object. The operation also fails if the source object for any stream has been dropped.
+Append-only streams are not supported on replicated source objects.
+Avoiding Data Duplication
+¶
+Note
+In addition to the scenario described in this section, streams in a secondary database could return duplicate rows the first time they are included in a refresh operation. In this case,
+duplicate rows
+refers to a single row with multiple METADATA$ACTION column values.
+After the initial refresh operation, you should not encounter this specific issue in a secondary database.
+Data duplication occurs when DML operations write the same change data from a stream multiple times without a uniqueness check. This can occur if a stream and a destination table for the stream change data are stored in separate databases, and these databases are not replicated and failed over in the same group.
+For example, suppose you regularly insert change data from stream
+s
+into table
+dt
+. (For this example, the source object for the stream does not matter.) Separate databases store the stream and destination table.
+At timestamp
+t1
+, a row is inserted into the source table for stream
+s
+, creating a new table version. The stream stores the offset for this table version.
+At timestamp
+t2
+, the secondary database that stores the stream is refreshed. Replicated stream
+s
+now stores the offset.
+At timestamp
+t3
+, the change data for stream
+s
+is inserted into table
+dt
+.
+At timestamp
+t4
+, the secondary database that stores stream
+s
+is failed over.
+At timestamp
+t5
+, the change data for stream
+s
+is inserted again into table
+dt
+.
+To avoid this situation, replicate and fail over together the databases that store streams and their destination tables.
+Stream References in

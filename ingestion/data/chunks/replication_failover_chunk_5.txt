@@ -1,0 +1,98 @@
+ operation. However, canceling a refresh operation
+in the SECONDARY_DOWNLOADING_METADATA or SECONDARY_DOWNLOADING_DATA phase might result in an inconsistent state on the target
+account.  If the refresh operation has started one of these phases, it proceeds to completion regardless of the availability of
+the source account. Allowing the phase to complete before you fail over ensures replicas are in a consistent state.
+After the replicas are in a consistent state, you can resume or replay your ingest and transformation pipelines to update the
+replicas to the current state.
+To view the current phase of an in-progress refresh operation for a failover group, use the Information Schema
+REPLICATION_GROUP_REFRESH_PROGRESS, REPLICATION_GROUP_REFRESH_PROGRESS_BY_JOB, REPLICATION_GROUP_REFRESH_PROGRESS_ALL
+table function.
+For example, to view the current phase of an in-progress refresh operation for failover group
+myfg
+, execute
+the following statement:
+SELECT
+phase_name
+,
+start_time
+,
+end_time
+FROM
+TABLE
+(
+INFORMATION_SCHEMA
+.
+REPLICATION_GROUP_REFRESH_PROGRESS
+(
+'myfg'
+)
+);
+Copy
+For a list of refresh operations phases, see the
+usage notes
+for the function.
+Cancel an in-progress refresh operation that wasn’t automatically scheduled
+¶
+To cancel an in-progress refresh operation that was not triggered automatically by a replication schedule, you must use the
+SYSTEM$CANCEL_QUERY
+function:
+Find the query ID or JOB_UUID for running refresh operations using one of the following options:
+Find the query IDs for all running refresh operations:
+SELECT
+query_id
+,
+query_text
+FROM
+TABLE
+(
+INFORMATION_SCHEMA
+.
+QUERY_HISTORY
+())
+WHERE
+query_type
+=
+'REFRESH REPLICATION GROUP'
+AND
+execution_status
+=
+'RUNNING'
+ORDER
+BY
+start_time
+;
+Copy
+Use the QUERY_TEXT column to identify the QUERY_ID for failover group refresh operations from the list.
+Find the JOB_UUID for an in-progress refresh operation for a specific failover group
+myfg
+:
+SELECT
+phase_name
+,
+start_time
+,
+job_uuid
+FROM
+TABLE
+(
+INFORMATION_SCHEMA
+.
+REPLICATION_GROUP_REFRESH_HISTORY
+(
+'myfg'
+))
+WHERE
+phase_name
+<>
+'COMPLETED'
+and
+phase_name
+<>
+'CANCELED'
+;
+Copy
+Cancel the refresh operation using the SYSTEM$CANCEL_QUERY function and the QUERY_ID or JOB_UUID:
+SELECT
+SYSTEM$CANCEL_QUERY
+(
+'<QUERY_ID | JOB_UUID>'

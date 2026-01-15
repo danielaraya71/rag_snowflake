@@ -1,0 +1,50 @@
+ objects from backups.
+Yes
+Backup storage
+Snowflake-managed cloud object storage to store backup data.
+Billed for bytes retained for backups, similar to bytes retained for clones.
+You can monitor costs for backup storage in the
+TABLE_STORAGE_METRICS
+view using the
+RETAINED_FOR_CLONE_BYTES
+column, and in the
+BACKUP_STORAGE_USAGE
+view.
+Access control privileges
+¶
+The following table lists privileges and the object type on which the privilege is granted for managing and using backups.
+Privilege
+Object type
+Description
+CREATE BACKUP POLICY
+Schema
+Grants the ability to create a backup policy in a schema. The role granting this privilege must also have the USAGE
+privilege on the schema.
+CREATE BACKUP SET
+Schema
+Grants the ability to create a backup set in a schema. The role granting this privilege must also have the USAGE
+privilege on the schema. To actually create the backup set also requires the appropriate privilege on the object that’s the
+subject of the backup set: SELECT for a table backup, or USAGE for a schema backup or database backup.
+APPLY
+Backup policy
+Grants the ability to apply a specific backup policy. Only a user with the ACCOUNTADMIN role can grant this privilege.
+APPLY BACKUP RETENTION LOCK
+Account
+Grants the ability to create and apply backup policies with retention lock. This privilege is granted to the ACCOUNTADMIN
+role and can be delegated.
+This privilege is required to enable a role to do the following:
+Create a backup policy with retention lock.
+Apply a backup policy with retention lock on a backup set.
+Create a backup, either manually by a user or automatically on a schedule, in a backup set protected by a policy
+with retention lock.
+APPLY LEGAL HOLD
+Account
+Grants the ability to add or remove a legal hold from a backup. By default, the ACCOUNTADMIN role has this privilege.
+The following privilege requirements apply when Snowflake automatically creates or expires backups in the background.
+The owner of the backup set needs to have the following privileges:
+The appropriate privilege on the object that’s the subject of the backup set: SELECT for a table
+backup, or USAGE for a schema backup or database backup.
+Any privilege on the parent schema or database for the subject of the backup set.
+Any privilege on the parent schema and database of the backup set.
+If any of those privileges are missing, the automatic backup creation or expiration fails. You can
+monitor

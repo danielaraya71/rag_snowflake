@@ -1,0 +1,84 @@
+ name, and confirm that the restored table refers to
+the objects in the other schema:
+CREATE
+TABLE
+restored_dependent_table
+FROM
+BACKUP
+SET
+dependency_experiments
+IDENTIFIER
+'0fd44138-b571-449b-be0a-72779501f80e'
+;
+SELECT
+GET_DDL
+(
+'TABLE'
+,
+'restored_dependent_table'
+);
+Copy
++----------------------------------------------------+
+| GET_DDL('TABLE','RESTORED_DEPENDENT_TABLE')        |
+|----------------------------------------------------|
+| create or replace TABLE RESTORED_DEPENDENT_TABLE ( |
+|     ID NUMBER(38,0) NOT NULL DEFAULT MY_BIG_IMPORTANT_DATABASE.OTHER_SCHEMA.MY_SEQUENCE.NEXTVAL,
+|     FOREIGN_ID NUMBER(38,0),                         |
+|     foreign key (FOREIGN_ID) references MY_BIG_IMPORTANT_DATABASE.OTHER_SCHEMA.MY_DIMENSION_TABLE(ID),
+|     primary key (ID)                                 |
+| );                                                 |
++----------------------------------------------------+
+To illustrate what happens if the referred-to object no longer exists, we drop the sequence
+and then restore the table again from the same backup:
+DROP
+SEQUENCE
+my_big_important_database
+.
+other_schema
+.
+my_sequence
+;
+CREATE
+TABLE
+OR
+REPLACE
+restored_dependent_table
+FROM
+BACKUP
+SET
+dependency_experiments
+IDENTIFIER
+'0fd44138-b571-449b-be0a-72779501f80e'
+;
+SELECT
+*
+FROM
+restored_dependent_table
+;
+Copy
+Querying the table still works:
++----+------------+
+| ID | FOREIGN_ID |
+|----+------------|
++----+------------+
+0 Row(s) produced. Time Elapsed: 0.129s
+However, operations such as GET_DDL(), DESCRIBE, and INSERT all fail because they
+depend on a sequence that no longer exists:
+SELECT
+GET_DDL
+(
+'TABLE'
+,
+'restored_dependent_table'
+);
+Copy
+002073 (02000): SQL compilation error:
+Sequence used as a default value in table 'MY_BIG_IMPORTANT_DATABASE.OTHER_SCHEMA.RESTORED_DEPENDENT_TABLE'
+column 'ID' was not found or could not be accessed.
+DESC
+TABLE
+restored_dependent_table
+;
+Copy
++------------+--------------+--------+-------+----------------------------------------+-------------+------------+-------+------------+---------+-------------+----------------+
+| name       | type         |

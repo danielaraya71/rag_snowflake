@@ -1,0 +1,70 @@
+Configure replication for Snowflake-managed Apache Iceberg™ tables
+¶
+Preview Feature
+— Open
+Available to all accounts.
+Standard & Business Critical Feature
+Replication of Snowflake-managed Iceberg tables to a replication group is available to all accounts.
+Replication of Snowflake-managed Iceberg tables to a failover group requires Business Critical Edition (or higher).
+To inquire about upgrading, please contact
+Snowflake Support
+.
+With this feature, you can replicate
+Snowflake-managed Apache Iceberg™ tables
+from a source account to one or more target accounts in the same organization.
+Replication for Iceberg tables works similarly to replication for regular Snowflake tables. Snowflake replicates an Iceberg table
+when you add its parent database to a failover or replication group.
+However, Snowflake-managed Iceberg tables rely on external volumes, which are account-level objects that require extra configuration to connect
+to your external cloud storage. Before you can replicate an Iceberg table, you must configure replication for external volumes.
+Opt in to the public preview for replication for Snowflake-managed Iceberg tables
+¶
+To opt in to this public preview, you must opt in both the source and target account.
+To opt in your source account, after you
+enable preview features
+for your account, use the
+ALTER ACCOUNT
+command to enable the following parameters at the
+account level:
+ENABLE_ICEBERG_MANAGED_TABLE_REPLICATION
+Note
+You can also enable this parameter at the failover group level.
+ENABLE_SELECTIVE_EXTERNAL_VOLUME_REPLICATION_PUPR
+For example:
+ALTER
+ACCOUNT
+SET
+ENABLE_ICEBERG_MANAGED_TABLE_REPLICATION
+=
+TRUE
+ENABLE_SELECTIVE_EXTERNAL_VOLUME_REPLICATION_PUPR
+=
+TRUE
+;
+Copy
+Repeat the previous step for your target account.
+Enable replication
+¶
+A user with the ORGADMIN role must enable replication for each source and target account in the organization:
+USE
+ROLE
+ORGADMIN
+;
+SELECT
+SYSTEM$GLOBAL_ACCOUNT_SET_PARAMETER
+(
+'<organization_name>.<account_name>'
+,
+'ENABLE_ACCOUNT_DATABASE_REPLICATION'
+,
+'true'
+);
+Copy
+For more information, see
+Prerequisite: Enable replication for accounts in the organization
+.
+For more information about replication, see
+Introduction to replication and failover across multiple accounts
+.
+Replicate an external volume by using a failover group
+¶
+These steps provide a sample workflow for replicating an external volume

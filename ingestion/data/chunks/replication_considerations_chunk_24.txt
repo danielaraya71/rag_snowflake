@@ -1,0 +1,47 @@
+
+¶
+If the parent database is replicated to a target account along with role objects in the same, or different, replication or failover group, the privileges granted on the tasks in the database are replicated as well.
+The following logic determines which task privileges are replicated in a replication or refresh operation:
+If the current task owner (that is, the role that has the OWNERSHIP privilege on a task) is the same role as when the task was resumed last, then all current grants on the task are replicated to the secondary database.
+If the current task owner is
+not
+the same role as when the task was resumed last, then only the OWNERSHIP privilege granted to the owner role in the task version is replicated to the secondary database.
+If the current task owner role is not available (for example, a child task is dropped but a new version of the task graph is not committed yet), then only the OWNERSHIP privilege granted to the owner role in the task version is replicated to the secondary database.
+Task Runs After a Failover
+¶
+After a secondary failover group is promoted to serve as the primary group, any resumed tasks in databases within the failover group are scheduled gradually. The amount of time required to restore normal scheduling of all resumed standalone tasks and task graphs depends on the number of resumed tasks in a database.
+Replication and tags
+¶
+Tags and their assignments can be replicated from a source account to a target account.
+Tag assignments cannot be modified in the target account after the initial replication from the source account. For example,
+setting a tag on a secondary (i.e. replicated) database is not allowed. To modify tag assignments in the target account, modify
+them in the source account and replicate them to the target account.
+To successfully replicate tags, ensure that the replication or failover group includes:
+The database containing the tags in the
+ALLOWED_DATABASES
+property.
+Other account-level objects that have a tag in the
+OBJECT_TYPES
+property (e.g.
+ROLES
+,
+WAREHOUSES
+).
+For more information, see
+CREATE REPLICATION GROUP
+and
+CREATE FAILOVER GROUP
+.
+Replication and instances of Snowflake classes
+¶
+An instance of the
+CUSTOM_CLASSIFIER
+class is replicated when the database that contains
+the instance is replicated. Replication of instances of other Snowflake
+classes
+is
+not
+supported.
+Historical usage data
+¶
+Historical usage data for activity in

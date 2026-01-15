@@ -1,0 +1,64 @@
+ if you execute a CREATE OR REPLACE statement for an
+existing table
+t1
+, table
+t1
+is dropped, and then a new table
+t1
+is created. For more information, see the
+usage notes for CREATE TABLE
+.
+When objects are replaced on the target account, the DROP and CREATE statements do not execute atomically during a refresh operation.
+This means the object might disappear briefly from the target account while it is being recreated as a new object.
+Replication and security policies
+¶
+The database containing a security policy and the references (i.e. assignments) can be replicated using replication and failover
+groups. Security policies include:
+Aggregation policies
+Authentication policies
+Masking policies
+Password policies
+Privacy policies
+Projection policies
+Row access policies
+Session policies
+, including
+session policies with secondary roles
+Tag-based masking policies
+If you are using
+database replication
+,
+see
+Database replication and security objects
+.
+Authentication, password, & session policies
+¶
+Authentication, password, and session policy references for users are replicated when specifying the database containing policy
+(
+ALLOWED_DATABASES
+=
+policy_db
+) and
+USERS
+in a replication group or failover group.
+If either the policy database or users have already been replicated to a target account, update the replication or failover group
+in the source account to include the databases and object types required to successfully replicate the policy. Then execute a refresh
+operation to update the target account.
+If user-level policies are not in use,
+USERS
+do not need to be included in the replication or failover group.
+Note
+The policy must be in the same account as the account-level policy assignment and the user-level policy assignment.
+If you have a security policy set on the account or a user in the account and you do not update the
+replication or failover group to include the
+policy_db
+containing the policy and
+USERS
+, a dangling reference occurs in
+the target account. In this case, a dangling reference means that Snowflake cannot locate the policy in the target account because the
+fully-qualified name of the policy points to the database in the source account. Consequently, the target account or users in the target
+account are not required to comply with the security policy.
+To successfully replicate a security policy, verify the replication or failover group includes the object types and databases required
+to prevent a dangling reference.
+Privacy policies
+¶

@@ -1,0 +1,55 @@
+ error message:
+A primary replication group with only database and/or share objects is in a Business Critical (or higher) account but one
+or more of the accounts approved for replication are on lower editions. Business Critical Edition is intended for Snowflake
+accounts with extremely sensitive data.
+A primary replication or failover group with any
+object types
+is in a
+Business Critical (or higher) account and a signed business associate agreement is in place to store PHI data in the account per HIPAA
+and
+HITRUST CSF
+regulations. However, no such agreement is in place for one or more of the accounts
+enabled for replication, regardless if they are Business Critical (or higher) accounts.
+This behavior is implemented in an effort to help prevent account administrators for Business Critical (or higher) accounts from
+inadvertently replicating sensitive data to accounts on lower editions.
+An account administrator (a user with the ACCOUNTADMIN role) or a user with a role with the
+CREATE REPLICATION GROUP/CREATE FAILOVER GROUP or OWNERSHIP privilege can override this default behavior by including the
+IGNORE EDITION CHECK clause when executing the CREATE
+<object>
+or ALTER
+<object>
+statement. If IGNORE EDITION CHECK is set, the primary replication or failover group may be replicated to the specified accounts on
+lower Snowflake editions in these specific scenarios.
+Note
+Failover groups can only be created in a Business Critical Edition (or higher) account. Therefore failover groups can
+only
+be
+replicated to an account that is a Business Critical Edition (or higher) account.
+Current limitations of replication
+¶
+Databases created from shares cannot be replicated.
+Refresh operations fail if the primary database includes a stream with an unsupported source object.
+The operation also fails if the source object for any stream has been dropped.
+Append-only streams are not supported on replicated source objects.
+Note
+Database replication does not work for task graphs if the graph is owned by a different role than the role that performs replication.
+On this page
+Region support for replication and failover/failback
+Replication groups and failover groups
+Replication feature / edition matrix
+Replicated objects
+Database replication
+External volume replication
+Integration replication
+Network policy replication
+Parameter replication
+Resource monitor replication
+Role replication
+Share replication
+Backup replication for database, schema, and table backups
+User replication
+Warehouse replication
+Workspace replication
+Dataset replication
+Cortex Search Service replication
+Replication of

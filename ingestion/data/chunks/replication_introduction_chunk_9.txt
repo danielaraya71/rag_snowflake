@@ -1,0 +1,69 @@
+ user authentication methods, and provisioning
+users and groups with SCIM:
+Authentication Method
+Works in Target Accounts
+Notes
+Password
+✔
+Password with MFA (multi-factor authentication)
+✔
+Users who are enrolled in MFA in the source account must separately enroll in MFA when they log in to each target account.
+Multi-factor authentication (MFA)
+✔
+Users who are enrolled in MFA in the source account must separately enroll in MFA when they log in to each target account.
+Key-pair authentication
+✔
+Programmatic access tokens
+✔
+Programmatic access tokens are replicated to the target account only if users and roles are replicated.
+Federated Authentication
+✔
+Refer to
+Replication of security integrations & network policies across multiple accounts
+for details on replicating federated SSO (i.e. SAML2) security integrations.
+Snowflake OAuth
+✔
+Refer to
+Replication of security integrations & network policies across multiple accounts
+for details on replicating OAuth security integrations.
+External OAuth
+✔
+Refer to
+Replication of security integrations & network policies across multiple accounts
+for details on replicating OAuth security integrations.
+SCIM
+✔
+Refer to
+Replication of security integrations & network policies across multiple accounts
+for details on replicating SCIM security integrations.
+Note
+If
+USERS
+and
+ROLES
+objects are replicated to a target account, these object types are read-only in the target account
+and cannot be modified. Users and roles must be created in the source account, then replicated to each target account. Refer to
+Replication and read-only secondary objects
+.
+Warehouse replication
+¶
+Business Critical Feature
+Requires Business Critical Edition (or higher). To inquire about upgrading, please contact
+Snowflake Support
+.
+This feature supports replicating warehouses and privileges granted on warehouses to roles (if
+roles
+are replicated).
+The state of the primary warehouse is not replicated. Warehouses are replicated in the suspended state to each target account
+and can be resumed in the target account.
+Workspace replication
+¶
+Preview Feature
+— Open
+Available to all accounts.
+Requires Business Critical Edition (or higher). To inquire about upgrading, please contact
+Snowflake Support
+.
+Shared workspaces
+are replicated when they are included in a database that is part of a
+replication or failover group. Private workspaces are replicated when their owning users are replicated. In secondary (target)

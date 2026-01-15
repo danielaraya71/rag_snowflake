@@ -1,0 +1,90 @@
+ login when a user lands on the login page.
+In the source account, update the SAML2 security integration to specify the connection URL for the
+saml2_snowflake_issuer_url
+and
+saml2_snowflake_acs_url
+security integration properties.
+CREATE
+OR
+REPLACE
+SECURITY INTEGRATION
+my_idp
+TYPE
+=
+saml2
+ENABLED
+=
+true
+SAML2_ISSUER
+=
+'http://www.okta.com/exk6e8mmrgJPj68PH4x7'
+SAML2_SSO_URL
+=
+'https://example.okta.com/app/snowflake/exk6e8mmrgJPj68PH4x7/sso/saml'
+SAML2_PROVIDER
+=
+'OKTA'
+SAML2_X509_CERT
+=
+'MIIDp...'
+SAML2_SP_INITIATED_LOGIN_PAGE_LABEL
+=
+'OKTA'
+SAML2_ENABLE_SP_INITIATED
+=
+true
+SAML2_SNOWFLAKE_ISSUER_URL
+=
+'https://example-global.snowflakecomputing.com'
+SAML2_SNOWFLAKE_ACS_URL
+=
+'https://example-global.snowflakecomputing.com/fed/login'
+;
+Copy
+In Okta, assign the Snowflake application to users. For details, see
+Assign an app integration to a user
+.
+Verify that SSO to the source account works for users that are specified in the Snowflake application in Okta and users in the source
+account.
+Note that SSO should work for both IdP-initiated and Snowflake-initiated SSO flows. For details, see
+Supported SSO workflows
+.
+In the source account, if a failover group does not already exist,
+create
+a failover group to
+include security integrations. Note that this example is representative and includes other account objects that might or might not be
+necessary to replicate.
+If a failover group already exists,
+alter
+the failover group to include integrations.
+CREATE
+FAILOVER
+GROUP
+FG
+OBJECT_TYPES
+=
+users
+,
+roles
+,
+warehouses
+,
+resource monitors
+,
+integrations
+ALLOWED_INTEGRATION_TYPES
+=
+security
+integrations
+ALLOWED_ACCOUNTS
+=
+example
+.
+northamericaeast
+REPLICATION_SCHEDULE
+=
+'10 MINUTE'
+;
+Copy
+Target Account Steps:
+Prior to replication, verify the number of users and security integr

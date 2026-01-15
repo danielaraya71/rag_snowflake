@@ -1,0 +1,131 @@
+¶
+This example demonstrates how replication works for internal stages. In particular, the example shows how the directory table
+is the single source of truth for stage metadata before and after replication.
+The first part of the example completes the following tasks in a
+source
+account.
+Create an internal stage named
+my_int_stage
+with a directory table enabled to replicate the files on the stage. Then copy data
+from a table named
+my_table
+into files on the stage.
+Note
+The example refreshes the directory table after loading
+file1
+and
+file2
+onto the stage to synchronize
+the table metadata with the latest set of files in the stage definition for the directory tables.
+However, no refresh operation occurs after loading
+file3
+.
+CREATE
+OR
+REPLACE
+STAGE
+my_stage
+DIRECTORY
+=
+(
+ENABLE
+=
+TRUE
+);
+COPY
+INTO
+@
+my_stage
+/
+folder1
+/
+file1
+from
+my_table
+;
+COPY
+INTO
+@
+my_stage
+/
+folder2
+/
+file2
+from
+my_table
+;
+ALTER
+STAGE
+my_stage
+REFRESH
+;
+COPY
+INTO
+@
+my_stage
+/
+folder3
+/
+file3
+from
+my_table
+;
+Copy
+Create a failover group:
+CREATE
+FAILOVER
+GROUP
+my_stage_failover_group
+OBJECT_TYPES
+=
+DATABASES
+ALLOWED_DATABASES
+=
+my_database_1
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+my_account_2
+;
+Copy
+The second part of the example completes the replication and failover process in a
+target
+account:
+Create a failover group as a replica of the failover group in the source account, refresh the objects in the new failover group,
+and promote the target account to serve as the source account.
+CREATE
+FAILOVER
+GROUP
+my_stage_failover_group
+AS
+REPLICA
+OF
+myorg
+.
+my_account_1
+.
+my_stage_failover_group
+;
+ALTER
+FAILOVER
+GROUP
+my_stage_failover_group
+REFRESH
+;
+ALTER
+FAILOVER
+GROUP
+my_stage_failover_group
+PRIMARY
+;
+Copy
+Next, refresh the directory table on the replicated stage and copy all of the
+files tracked by the directory table on
+my_stage
+into a table named
+my_table
+.
+Note
+The COPY INTO statement loads
+file1

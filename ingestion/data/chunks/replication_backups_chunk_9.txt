@@ -1,0 +1,53 @@
+ making more backups of it by adding more backups to
+the same backup set. In that case, the output of SHOW BACKUP SETS changes to reflect the OBJECT_NAME value of the
+renamed object.
+If you want to make backups of a table but you frequently drop and recreate that table, perhaps through CREATE OR REPLACE
+statements, include it in a backup set for the schema or database that contains the table. That way, you can keep using
+the same backup set regardless of changes to the table.
+When you restore a table from a backup, the restored table starts with a different name than the original. Suppose that
+you want to completely replace the contents of the original table with the backup data, and continue to use the same backup set
+for more backups of that same table. In that case, use a TRUNCATE or DELETE statement to remove the contents of the original table,
+and an INSERT … SELECT statement to copy the data from the restored table. Don’t drop the original table and rename the restored table
+to the name of the original table.
+Backups and encryption
+¶
+The data within backup sets is protected by the same end-to-end encryption as other Snowflake objects and table data.
+For more information about Snowflake encryption, see
+Understanding end-to-end encryption in Snowflake
+.
+Key rotation also applies to the data within backups.
+Backups and data lineage
+¶
+Snowflake doesn’t preserve
+data lineage
+metadata with database, schema, and table
+backups. After you restore an object from a backup, you can’t use Snowsight to view lineage information for the
+restored data.
+Cost for backups
+¶
+The following table describes charges for backups.
+For information about credit consumption, see the
+Snowflake Service Consumption Table
+.
+Cost component
+Description
+Billed
+Backup compute
+Snowflake-managed compute service generates scheduled backup creation and expiration.
+Yes
+Restore compute
+Snowflake-managed warehouses are used to restore objects from backups.
+Yes
+Backup storage
+Snowflake-managed cloud object storage to store backup data.
+Billed for bytes retained for backups, similar to bytes retained for clones.
+You can monitor costs for backup storage in the
+TABLE_STORAGE_METRICS
+view using the
+RETAINED_FOR_CLONE_BYTES
+column, and in the
+BACKUP_STORAGE_USAGE
+view.
+Access control privileges
+¶
+The following table lists privileges and the object type on which the privilege is granted for managing and using

@@ -1,0 +1,136 @@
+_refresh_history
+(
+'myfg'
+))
+WHERE
+START_TIME
+>=
+CURRENT_DATE
+()
+-
+INTERVAL
+'7 days'
+;
+Copy
+Query the Account Usage REPLICATION_GROUP_REFRESH_HISTORY view to view the account replication history in the current month:
+SELECT
+REPLICATION_GROUP_NAME
+,
+PHASE_NAME
+,
+START_TIME
+,
+END_TIME
+,
+TOTAL_BYTES
+,
+OBJECT_COUNT
+FROM
+snowflake
+.
+account_usage
+.
+replication_group_refresh_history
+WHERE
+START_TIME
+>=
+DATE_TRUNC
+(
+'month'
+,
+CURRENT_DATE
+());
+Copy
+Monitor replication costs
+¶
+To monitor credit usage for replication, query one of the following:
+REPLICATION_GROUP_USAGE_HISTORY view
+(in
+Account Usage
+).
+REPLICATION_GROUP_USAGE_HISTORY
+table function (in the
+Snowflake Information Schema
+).
+Examples
+¶
+Query the REPLICATION_GROUP_USAGE_HISTORY table function to view credits used for account replication in the last 7 days:
+SELECT
+start_time
+,
+end_time
+,
+replication_group_name
+,
+credits_used
+,
+bytes_transferred
+FROM
+TABLE
+(
+information_schema
+.
+replication_group_usage_history
+(
+date_range_start
+=>
+DATEADD
+(
+'day'
+,
+-
+7
+,
+CURRENT_DATE
+())));
+Copy
+Query the Account Usage REPLICATION_GROUP_USAGE_HISTORY view to view the credits used by replication or failover group for account
+replication history in the current month:
+SELECT
+start_time
+,
+end_time
+,
+replication_group_name
+,
+credits_used
+,
+bytes_transferred
+FROM
+snowflake
+.
+account_usage
+.
+replication_group_usage_history
+WHERE
+start_time
+>=
+DATE_TRUNC
+(
+'month'
+,
+CURRENT_DATE
+());
+Copy
+Monitor replication costs for databases
+¶
+The cost for replication for an individual database included in a replication or failover group can be calculated by retrieving the
+number of copied bytes for the database and associating it with the credits used.
+Examples
+¶
+Query Account Usage views
+¶
+The following examples calculate the costs for database replication in one replication group for the past 30 days.
+Query the REPLICATION_GROUP_REFRESH_HISTORY Account Usage view and calculate the sum of the number of bytes replicated per database.
+For example, to calculate the sum of the number of bytes replicated for databases in the replication group
+myrg
+in the last
+30 days:
+SELECT
+SUM
+(
+value
+:totalBytesToReplicate
+)
+as
+sum

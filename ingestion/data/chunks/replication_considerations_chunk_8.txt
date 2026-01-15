@@ -1,0 +1,67 @@
+ that is referenced in the integration.
+If you replicate the secret and do not replicate the integration from
+account1
+to
+account2
+, the integration doesn’t work in the
+target account (
+account2
+) because there is no integration to use the secret. Additionally, if you failover and the target account is
+promoted to source account, the integration will not work.
+When you decide to failover to make
+account1
+as the source account, the secret and integration references match and the placeholder
+secret is not used. This allows you to use the security integration and the secret that contains the credentials because the objects can
+reference each other.
+Replication and cloning
+¶
+Historically
+Cloned objects
+were replicated physically rather than logically to secondary databases. That is,
+cloned tables in a standard database don’t contribute to the overall data storage unless or until DML operations on the clone
+add to or modify existing data. However, when a cloned table is replicated to a secondary database, the physical data is also replicated,
+increasing the data storage usage for your account.
+A logically replicated cloned table shares the micro-partitions of the original table it was cloned from,
+reducing the physical storage of the secondary table in the target account.
+If the original table and cloned table are included in the same replication or failover group, the cloned table can be replicated
+logically to the target account.
+Logical replication of clones
+¶
+If the original and cloned table are included in the same replication or failover group, the cloned table can be replicated
+logically to the target account.
+For example, if table
+t2
+in database
+db2
+is a clone of table
+t1
+in database
+db1
+, and both databases are included
+in replication group
+rg1
+, then table
+t2
+is created as a logical clone in the target account.
+A cloned object can be cloned to create additional clones of the original object. The original object and the cloned objects are part
+of the same
+clone group
+. For example, if table
+t3
+in database
+db3
+is created as a clone of
+t2
+, it is in the same clone group
+as the original table
+t1
+and the cloned table
+t2
+.
+If database
+db3
+is later added to the replication group
+rg1
+, table
+t3
+is created in the

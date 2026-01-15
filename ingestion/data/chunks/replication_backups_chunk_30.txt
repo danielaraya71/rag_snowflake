@@ -1,0 +1,88 @@
+ backup for a dynamic table, you include the keyword DYNAMIC in the CREATE BACKUP
+SET command, and in the CREATE TABLE command when you restore from a backup. The following example
+sets up the dynamic table, a table backup set for that table, and creates the first backup:
+CREATE
+DYNAMIC TABLE
+my_dynamic_table
+TARGET_LAG
+=
+'1 minute'
+WAREHOUSE
+=
+my_wh
+AS
+SELECT
+*
+FROM
+my_base_table
+WHERE
+col1
+IS
+NOT
+NULL
+;
+CREATE
+BACKUP
+SET
+dynamic_table_backups
+FOR
+DYNAMIC TABLE
+my_dynamic_table
+;
+ALTER
+BACKUP
+SET
+dynamic_table_backups
+ADD
+BACKUP
+;
+Copy
+The following example shows how to determine the backup IDs for backups created at various times.
+In this case, the newest backup is the first row in the result set. Then you use the ID of the backup
+in the CREATE DYNAMIC TABLE command.
+SHOW
+BACKUPS
+IN
+BACKUP
+SET
+dynamic_table_backups
+->>
+SELECT
+"created_on"
+,
+"backup_id"
+FROM
+$
+1
+ORDER
+BY
+"created_on"
+DESC
+;
+CREATE
+DYNAMIC TABLE
+restored_dynamic_table
+FROM
+BACKUP
+SET
+dynamic_table_backups
+IDENTIFIER
+'<backup_id_from_SHOW_BACKUPS_output>'
+;
+Copy
+Tip
+When you restore a dynamic table from a backup, Snowflake
+automatically initializes
+the new table during its first refresh.
+Add and remove legal holds
+¶
+Before you work with legal holds for Snowflake backups, learn their purpose and requirements. For more information, see
+Legal hold
+.
+Suppose that your organization’s legal or compliance team sends a litigation hold request, specifying what types of data need to be
+preserved. In that case, you might follow a process as follows:
+You work with the legal team to identify where the relevant data is stored, and which backup sets contain the associated objects.
+You put a legal hold on a backup from the applicable timeframe within a backup set. Doing so disables any automatic expiration for that backup.
+You can put a legal hold on a backup that Snowflake created automatically based on a schedule, or that you created manually. The
+legal hold applies whether or not the backup set has an associated backup policy, or an expiration period, or a retention lock.
+You perform refresh operations for any secondary accounts where the database

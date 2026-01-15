@@ -1,0 +1,57 @@
+ its files to the secondary
+database. For more information about replicating stages, see
+Stage, pipe, and load history replication
+.
+For example, if a primary database has an in-line Python UDF that imports any code that is stored on a stage, the UDF does not work unless
+the stage and its imported code are replicated in the secondary database.
+Stored Procedures and UDFs and External Network Access
+¶
+If a stored procedure or UDF depends on access to an
+external network location
+, you must
+replicate the following objects:
+EXTERNAL ACCESS INTEGRATIONS must be included in the
+allowed_integration_types
+list for the replication or
+failover group.
+The database that contains the network rule.
+The database that contains the secret that stores the credentials to authenticate with the external network location.
+If the secret object references a security integration, you must include SECURITY INTEGRATIONS in the
+allowed_integration_types
+list for the replication or failover group.
+Replication and storage lifecycle policies
+¶
+Snowflake replicates
+storage lifecycle policies
+and their associations with tables to target accounts, but doesn’t run the policies.
+Snowflake doesn’t replicate archived data in the COOL or COLD tiers.
+Archived data in your source account isn’t available in the target account.
+After failover to a target account, Snowflake pauses storage lifecycle policy execution in the
+original source account. After
+failback
+to the source account, Snowflake resumes
+policy execution.
+Snowflake never automatically runs secondary storage lifecycle policies on secondary tables,
+even after failover. However, you can use secondary policies in a target account by attaching
+them to new tables. For those new tables, Snowflake runs the policies.
+Replication and streams
+¶
+This section describes recommended practices and potential areas of concern when replicating streams in
+Replicating databases across multiple accounts
+or
+Account Replication and Failover/Failback
+.
+Supported Source Objects for Streams
+¶
+Replicated streams can successfully track the change data for tables and views in the same database.
+Currently, the following source object types are
+not
+supported:
+External tables
+Tables or views in databases separate from the stream databases, unless
+both
+the stream database and the database that stores the source object are included in the same
+replication or failover group
+.
+Tables or views in a shared databases (i.e. databases shared from provider accounts to your account)
+Replicating streams on

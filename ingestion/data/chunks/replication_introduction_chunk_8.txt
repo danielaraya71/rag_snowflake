@@ -1,0 +1,71 @@
+ replicated:
+The
+notify_users
+list for a warehouse-level resource monitor is replicated to target accounts.
+Email notifications for non-administrator users
+are sent
+on the target account.
+If
+resource
+monitors
+is included in the
+object_types
+list for the replication or failover group, but
+users
+is not included, the
+notify_users
+list for a secondary warehouse-level resource monitor is empty.
+Account administrator notification settings are
+not
+replicated:
+An account administrator must
+enable email notifications
+in each account using the web interface.
+Resource monitor notifications are sent to account administrators if they have enabled email notifications in the source and/or
+target accounts.
+Role replication
+¶
+Business Critical Feature
+Requires Business Critical Edition (or higher).
+This feature supports replicating roles, including role hierarchies. Role objects must be replicated to replicate access privileges.
+Replicated access privileges are listed in
+Replication of roles and grants
+below.
+Note
+All roles are replicated.
+Share replication
+¶
+This feature supports replication of share objects as well as access privileges granted to shares on database objects.
+Replication of
+inbound shares
+(shares from providers) is
+not
+supported.
+Backup replication for database, schema, and table backups
+¶
+The Snowflake
+backups
+feature lets you encapsulate a series of backups for a specific database,
+schema, or table inside an object known as a backup set. You can optionally control the schedule of automatic backups and
+automatic deletion of backups after an expiry period by applying a backup policy to the backup set. Backup sets and
+backup policies are database-level objects. Snowflake replicates those objects along with the databases and schemas that contain them.
+For information about how Snowflake replicates backup sets and backup policies, see
+Replicate backup-related objects
+.
+User replication
+¶
+Business Critical Feature
+Requires Business Critical Edition (or higher).
+This feature supports replicating users and their properties to target accounts, the following user authentication methods, and provisioning
+users and groups with SCIM:
+Authentication Method
+Works in Target Accounts
+Notes
+Password
+✔
+Password with MFA (multi-factor authentication)
+✔
+Users who are enrolled in MFA in the source account must separately enroll in MFA when they log in to each target account.
+Multi-factor authentication (MFA)
+✔
+Users who are enrolled in MFA in the source account must separately enroll in MFA when they log in to each target account.

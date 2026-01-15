@@ -1,0 +1,72 @@
+ in the source account. Without these
+updates, user verification cannot occur, which will result in the inability of the user to access the target account.
+Current Limitation
+:
+For SAML SSO to Snowflake, replicating a SAML2 security integration that specifies the connection URL is only supported on the current
+primary connection and not supported on the secondary connection. Note that for failover, the result is promoting a secondary connection
+to serve as the primary connection. After failover, SAML SSO works on the new primary connection.
+If SAML SSO is needed for both primary and secondary connections, then create and manage SAML2 security integrations independently on
+both Snowflake accounts.
+For this procedure, assume the following:
+Source account:
+https://example-northamericawest.snowflakecomputing.com/
+Target account:
+https://example-northamericaeast.snowflakecomputing.com/
+Connection URL:
+https://example-global.snowflakecomputing.com
+A secondary connection does not exist in the target account.
+This procedure is a representative example to do the following:
+Replicate a SAML2 security integration from the source account to the target account.
+Test failover.
+Promote the secondary connection in the source account to serve as the primary connection.
+Source account steps (includes IdP steps):
+If the source account is already configured for
+Database Failover/Failback and Client Redirect
+,
+skip to the next step.
+Otherwise, enable failover using an
+ALTER CONNECTION
+command:
+ALTER
+CONNECTION
+global
+ENABLE
+FAILOVER
+TO
+ACCOUNTS
+example
+.
+northamericaeast
+;
+Copy
+Using Okta as a representative example for the identity provider, create a
+Snowflake application in Okta
+that specifies the connection URL. Update
+the Okta fields as follows:
+Label
+:
+Snowflake
+Subdomain
+:
+example-global
+Browser plugin auto-submit
+: Check the box to enable automatic login when a user lands on the login page.
+In the source account, update the SAML2 security integration to specify the connection URL for the
+saml2_snowflake_issuer_url
+and
+saml2_snowflake_acs_url
+security integration properties.
+CREATE
+OR
+REPLACE
+SECURITY INTEGRATION
+my_idp
+TYPE
+=
+saml2
+ENABLED
+=
+true
+SAML2_ISSUER
+=
+'http://www.okta.com

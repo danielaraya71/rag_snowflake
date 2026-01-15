@@ -1,0 +1,42 @@
+1 and later
+If you are using the Kafka connector: Kafka connector version 1.9.3 and later
+The data retention time for successfully inserted rows in your upstream data source must be
+greater than the configured replication schedule. If you are using the Kafka connector, ensure your
+log.retention
+configuration is set with a sufficient buffer.
+Replication and stages
+¶
+The following constraints apply to stage objects:
+Snowflake currently supports stage replication as part of group-based replication (replication and failover groups).
+Stage replication is not supported for database replication.
+You can replicate an external stage. However, the files on an external stage are not replicated.
+You can replicate an internal stage. To replicate the files on an internal stage, you must enable a directory table on the stage.
+Snowflake replicates only the files that are mapped by the directory table.
+When you replicate an internal stage with a directory table, you cannot disable the directory table on the primary or secondary stage.
+The directory table contains critical information about replicated files and files loaded using a COPY statement.
+A refresh operation will fail if the directory table on an internal stage contains a file that is larger than 5GB. To work around this
+limitation, move any files larger than 5GB to a different stage.
+You cannot disable the directory table on a primary or secondary stage, or any stage that has previously been replicated. Follow
+these steps
+before
+you add the database that contains the stage to a replication or failover group.
+Disable the directory table
+on the primary stage.
+Move the files that are larger than 5GB to another stage that does not have a directory table enabled.
+After you move the files to another stage, re-enable the directory table on the primary stage.
+Files on user stages and table stages are not replicated.
+For named external stages that use a storage integration, you must configure the trust relationship for secondary storage integrations
+in your target accounts prior to failover. For more information, see
+Configure cloud storage access for secondary storage integrations
+.
+If you replicate an external stage with a directory table, and you have configured
+automated refresh
+for the source
+directory table, you must configure automated refresh for the
+secondary
+directory table before failover. For more information,
+see
+Configure automated refresh for directory tables on secondary stages
+.
+A copy command might take longer than expected if the directory table on a replicated stage is not consistent with the
+replicated files

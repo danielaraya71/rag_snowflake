@@ -1,0 +1,54 @@
+Redirecting client connections
+¶
+Business Critical Feature
+Requires Business Critical Edition (or higher). To inquire about upgrading, please contact
+Snowflake Support
+.
+Client Redirect enables redirecting your client connections to Snowflake accounts in different
+regions
+without changing the connection settings for your application.
+You can use Client Redirect in combination with the
+account replication
+feature for business continuity
+and disaster recovery. You can also use Client Redirect to minimize changes needed in your application
+settings when migrating your account to another region or cloud platform.
+Introduction to Client Redirect
+¶
+Client Redirect is implemented through a Snowflake
+connection
+object. The connection object stores a secure
+connection URL
+that you use
+with a Snowflake client to connect to Snowflake.
+The hostname in the connection URL is composed of your organization name and the connection object name in addition to a common domain name:
+organization_name
+-
+connection_name
+.snowflakecomputing.com
+Note that this hostname does not specify the account to which you are connecting. An account administrator determines the account to use by
+designating the connection in that account to serve as the
+primary connection
+. When you use the connection URL to connect to Snowflake,
+you are connecting to the account that contains the primary connection.
+If an outage occurs in a region or cloud platform and the outage affects the account with the primary connection, the administrator can
+promote a connection in a different account in a different region or cloud platform to serve as the primary connection.
+Through this outage, you can continue to use the same connection URL to connect to Snowflake. Snowflake resolves the connection URL to the
+account with the newly promoted connection (the account outside of the region or cloud platform affected by the outage).
+Note
+The Snowflake accounts that store the primary and secondary connections must be hosted in different
+regions
+.
+Client Redirect flow
+¶
+Complete the steps in
+Configuring Client Redirect
+(in this topic) to create a connection URL for client connections. This
+includes creating a primary connection and linked secondary connection(s).
+Update Snowflake clients to connect using the connection URL.
+Using a connection URL
+(in this topic) contains a list of
+supported clients and connection details.
+In the event of a service outage in the region where the primary connection is located, complete the steps in
+Redirecting client connections
+(in this topic) to update the connection URL to redirect to a secondary connection.
+When the outage is resolved, complete the steps in

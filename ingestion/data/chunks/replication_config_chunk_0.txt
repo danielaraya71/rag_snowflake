@@ -1,0 +1,61 @@
+Replicating databases and account objects across multiple accounts
+¶
+Standard & Business Critical Feature
+Database and share replication are available to all accounts.
+Replication of other account objects & failover/failback require Business Critical Edition (or higher).
+To inquire about upgrading, please contact
+Snowflake Support
+.
+This topic describes the steps necessary to replicate account objects and data across Snowflake accounts in the same organization,
+and keep the objects and data synchronized. Account replication can occur across Snowflake accounts in different
+regions
+and across
+cloud platforms
+.
+Note
+When you upgrade an account to Business Critical Edition (or higher), it might take up to 12 hours for failover capabilities
+to become available.
+Region support for replication and failover/failback
+¶
+Customers can replicate across all regions within a Region Group. To replicate between regions in different
+Region groups
+(for example, from a Snowflake commercial region to a Snowflake government region), please contact
+Snowflake Support
+to enable
+access.
+Transitioning from database replication to group-based replication
+¶
+Databases that have been enabled for replication using
+ALTER DATABASE
+must have replication
+disabled
+before
+they can be added to a replication or failover group.
+Note
+Execute the SQL statements in this section using the ACCOUNTADMIN role.
+Step 1. Disable replication for a replication enabled database
+¶
+Execute the
+SYSTEM$DISABLE_DATABASE_REPLICATION
+function to disable replication for a primary database,
+along with any secondary databases linked to it, in order to add it to a replication or failover group.
+Execute the following SQL statement from the source account with the primary database:
+SELECT
+SYSTEM$DISABLE_DATABASE_REPLICATION
+(
+'mydb'
+);
+Copy
+Step 2. Add the database to a primary failover group and create a secondary failover group
+¶
+Once you have successfully disabled replication for a database, you can add the primary database to a failover group in the source account.
+Then create a secondary failover group in the target account. When the secondary failover
+group is refreshed in the target account, the previously secondary database will automatically be added as a member of the secondary
+failover group and refreshed with the changes from the primary database.
+For more details on creating primary and secondary failover groups, see
+Workflow
+.
+Note
+When you add a previously replicated database to a replication or failover group, Snowflake does
+not
+re-replicate the data

@@ -1,0 +1,137 @@
+ you use
+to establish the session.
+# Properties file (a text file) for establishing a Connector for Spark session
+URL
+=
+https://<organization_name>-<connection_name>.snowflakecomputing.com
+Copy
+For example:
+URL
+=
+https://myorg-myconnection.snowflakecomputing.com
+Copy
+For more information about using the Snowflake Connector for Spark, see
+Snowflake Connector for Spark
+.
+For configuration options, see
+Setting Configuration Options for the Connector
+.
+Depending upon which language you use with the connector, also see
+Using the Connector in Scala
+or
+Using the Connector with Python
+.
+JDBC Driver
+¶
+Specify the host name for the connection URL in the connection string. For more information, see
+Configuring the JDBC Driver
+.
+jdbc:snowflake://<organization_name>-<connection_name>.snowflakecomputing.com/?user
+=
+<username>
+&
+password
+=
+<password>
+Copy
+For example:
+jdbc:snowflake://myorg-myconnection.snowflakecomputing.com/?user
+=
+jsmith
+&
+password
+=
+mySecurePassword
+Copy
+ODBC Driver
+¶
+Specify the host name for the connection URL in the Server connection parameter. For more information about the connection parameters, see
+ODBC configuration and connection parameters
+.
+[
+ODBC
+Data
+Sources
+]
+<account_name>
+=
+SnowflakeDSIIDriver
+[
+<dsn_name>
+]
+Description
+=
+SnowflakeDB
+Driver
+=
+SnowflakeDSIIDriver
+Locale
+=
+en-US
+SERVER
+=
+<organization_name>-<connection_name>.snowflakecomputing.com
+Copy
+For example:
+[
+ODBC
+Data
+Sources
+]
+myaccount
+=
+SnowflakeDSIIDriver
+[
+client_redirect
+]
+Description
+=
+SnowflakeDB
+Driver
+=
+SnowflakeDSIIDriver
+Locale
+=
+en-US
+SERVER
+=
+myorg-myconnection.snowflakecomputing.com
+Copy
+Node.js Driver
+¶
+Specify the host name for the connection URL in the
+account
+connection option. For more information about the connection parameters,
+see
+Node.js options reference
+.
+var
+configuration
+=
+{
+username:
+'<username>'
+,
+password:
+'<password>'
+,
+account:
+<organization_name>-<connection_name>.
+}
+var
+connection
+=
+snowflake.createConnection
+(
+configuration
+)
+Copy
+For example:
+var
+configuration
+=
+{
+username:
+'jsmith'
+,
+password

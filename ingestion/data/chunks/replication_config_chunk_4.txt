@@ -1,0 +1,59 @@
+,
+'ENABLE_ACCOUNT_DATABASE_REPLICATION'
+,
+'true'
+);
+Copy
+Though the SYSTEM$GLOBAL_ACCOUNT_SET_PARAMETER function supports the legacy
+account locator
+identifier,
+it causes unexpected results when an organization has multiple accounts that share the same locator (in different regions).
+Step 1: Create a role with the CREATE FAILOVER GROUP privilege in the source account —
+Optional
+¶
+Create a role and grant it the CREATE FAILOVER GROUP privilege. This step is optional. If you have already created this role, skip to
+Step 3: Create a primary failover group in a source account
+.
+USE
+ROLE
+ACCOUNTADMIN
+;
+CREATE
+ROLE
+myrole
+;
+GRANT
+CREATE
+FAILOVER
+GROUP
+ON
+ACCOUNT
+TO
+ROLE
+myrole
+;
+Copy
+Step 2: Identify accounts enabled for replication and group membership
+¶
+Before creating a primary failover group, identify the accounts enabled for replication and the existing
+failover and replication groups.
+View all accounts enabled for replication
+¶
+To retrieve the list of accounts in your organization that are enabled for replication, use
+SHOW REPLICATION ACCOUNTS
+.
+Execute the following SQL statement using the ACCOUNTADMIN role:
+SHOW
+REPLICATION
+ACCOUNTS
+;
+Copy
+Returns:
++------------------+-------------------------------+--------------+-----------------+-----------------+-------------------+--------------+
+| snowflake_region | created_on                    | account_name | account_locator | comment         | organization_name | is_org_admin |
++------------------+-------------------------------+--------------+-----------------+-----------------+-------------------+--------------+
+| AWS_US_WEST_2    | 2020-07-15 21:59:25.455 -0800 | myaccount1   | myacctlocator1  |                 | myorg             | true         |
++------------------+-------------------------------+--------------+-----------------+-----------------+-------------------+--------------+
+| AWS_US_EAST_1    | 2020-07-23 14:12:23.573 -0800 | myaccount2   | myacctlocator2  |                 | myorg             | false        |
++------------------+-------------------------------+--------------+-----------------+-----------------+-------------------+--------------+
+| AWS_US_EAST_2    | 2020-07-25 19:25:04.412 -0800 | myaccount3   | myacctlocator3 

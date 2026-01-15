@@ -1,0 +1,62 @@
+CREATE
+REPLICATION
+GROUP
+my_iceberg_rg
+AS
+REPLICA
+OF
+myorg
+.
+my_source_account
+.
+my_iceberg_rg
+;
+Copy
+Skip this step if you already have a secondary group that replicates the group in the source account.
+In the target account, run a refresh command.
+ALTER
+REPLICATION
+GROUP
+my_iceberg_rg
+REFRESH
+;
+Copy
+As long as you replicate the database that contains your Snowflake-managed Iceberg table and you’ve
+configured access to your cloud storage for the target account, Snowflake replicates the table in the target account.
+Note
+The refresh operation fails if Snowflake can’t access the storage location configured for the target account.
+If this happens, double-check your access control settings, or try
+Verifying storage access
+.
+Considerations and limitations
+¶
+Consider the following points when you use replication for Iceberg tables:
+Snowflake currently supports replication of Snowflake-managed tables only.
+Replicating converted Iceberg tables isn’t supported. Snowflake skips converted tables during refresh operations.
+For replicated tables, you must configure access to a storage location in the
+same region
+as the target account.
+If you drop or alter a storage location that is used for replication on the primary external volume, refresh operations might fail.
+Secondary tables in the target account are read-only until you promote the target account to serve as the source account.
+Snowflake maintains the
+directory hierarchy
+of the primary Iceberg table for the secondary table.
+Replication costs apply for this feature. For more information, see
+Understanding replication cost
+.
+For considerations about the account objects for replication and failover groups, see
+Account objects
+.
+On this page
+Opt in to the public preview for replication for Snowflake-managed Iceberg tables
+Enable replication
+Replicate an external volume by using a failover group
+Replicate an external volume by using a replication group
+Considerations and limitations
+Related content
+Introduction to replication and failover across multiple accounts
+SYSTEM$DESC_ICEBERG_ACCESS_IDENTITY
+CREATE FAILOVER GROUP
+ALTER FAILOVER GROUP
+CREATE REPLICATION GROUP
+ALTER REPLICATION GROUP

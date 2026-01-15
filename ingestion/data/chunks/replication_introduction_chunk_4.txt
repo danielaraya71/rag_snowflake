@@ -1,0 +1,108 @@
+lication and tasks
+.
+Data metric functions (DMFs)
+Data Quality
+✔
+For more information, see
+Replication of data metric functions (DMFs)
+.
+UDFs
+✔
+For more information, see
+Replication of stored procedures and user-defined functions (UDFs)
+.
+Policies
+Aggregation policies
+✔
+Authentication policies
+✔
+Column-level Security (masking)
+✔
+For masking, row access, and tag-based masking policies, see
+policy replication considerations
+.
+Join policies
+✔
+Password policies
+✔
+Privacy policies
+✔
+For more information, see
+Privacy policies
+.
+Projection policies
+✔
+Row access policies
+✔
+Session policies
+✔
+For session, password, and authentication policies, see
+replication and security policies
+.
+Tag-based masking policies
+✔
+Backup policies
+✔
+Backups
+are available for all Snowflake editions.
+Backups with retention lock and backups with legal holds are available for Business Critical Edition (or higher).
+To inquire about upgrading, please contact
+Snowflake Support
+.
+Storage lifecycle policies
+✔
+For information about replication of policies and archived data, see
+Replication and storage lifecycle policies
+.
+Tags
+Object Tagging
+✔
+For tags, see
+Replication and tags
+.
+Alerts
+✔
+Secrets
+Secrets for External API Authentication
+✔
+You can replicate secrets by using a replication group and failover group. For additional details, see
+Replication and secrets
+.
+Network rules
+✔
+For replication of network policies that use network rules, see
+Replicating network policies
+.
+Backups
+Backup sets
+✔
+Backups
+are available for all Snowflake editions.
+Backups with retention lock and backups with legal holds are available for Business Critical Edition (or higher).
+To inquire about upgrading, please contact
+Snowflake Support
+.
+Class instances
+CUSTOM_CLASSIFIER
+✔
+Replication is supported for instances of the
+CUSTOM_CLASSIFIER
+class. Instances
+of all other Snowflake
+classes
+are
+not
+replicated. For the full list of Snowflake
+classes, see
+Available classes
+.
+Packages policies
+Python UDF, UDTF, stored procedures
+✔
+If there is a
+packages policy
+set on the source account, in order
+to successfully replicate account objects, the database containing the packages policy
+must
+be replicated to the target account
+in the same or different replication or fail

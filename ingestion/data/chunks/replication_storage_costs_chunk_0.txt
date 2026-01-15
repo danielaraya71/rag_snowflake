@@ -1,0 +1,45 @@
+Storage costs for Time Travel and Fail-safe
+¶
+Storage fees are incurred for maintaining historical data during both the Time Travel and Fail-safe periods.
+Storage usage and fees
+¶
+The fees are calculated for each 24-hour period (that is, 1 day) from the time that the data changed. The number of days that Snowflake maintains
+historical data is based on the table type and the Time Travel retention period for the table.
+Also, Snowflake minimizes the amount of storage required for historical data by maintaining only the information required to restore the individual table rows that were updated or deleted. As a result,
+storage usage is calculated as a percentage of the table that changed. Snowflake only maintains full copies of tables when tables are dropped or truncated.
+Temporary and transient tables
+¶
+To help manage the storage costs associated with Time Travel and Fail-safe, Snowflake provides two table types, temporary and transient, which do not incur the same fees as standard (that is, permanent) tables:
+Transient tables can have a Time Travel retention period of either 0 or 1 day.
+Temporary tables can also have a Time Travel retention period of 0 or 1 day; however, this retention period ends as soon as the table is dropped or the session in which the table was created ends.
+Transient and temporary tables have no Fail-safe period.
+As a result, the maximum additional fees incurred for Time Travel and Fail-safe by these types of tables is limited to 1 day. The following table illustrates the different scenarios, based on
+table type:
+Table Type
+Time Travel Retention Period (Days)
+Fail-safe Period (Days)
+Min , Max Historical Data Maintained (Days)
+Permanent
+0 or 1 (for Snowflake Standard Edition)
+7
+7 , 8
+0 to 90 (for Snowflake Enterprise Edition)
+7
+7 , 97
+Transient
+0 or 1
+0
+0 , 1
+Temporary
+0 or 1
+0
+0 , 1
+Considerations for using temporary and transient tables to manage storage costs
+¶
+When you choose whether to store data in permanent, temporary, or transient tables, consider the following details:
+Temporary tables are dropped when the session in which they were created ends. Data stored in temporary tables is
+not
+recoverable after the table is dropped.
+Historical data in transient tables
+can’t
+be recovered by Snowflake after the Time Travel retention period ends. Use transient tables

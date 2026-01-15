@@ -1,0 +1,90 @@
+ each target account for which you
+enabled replication in
+Step 3: Create a primary failover group in a source account
+(in this topic).
+Executed from each target account:
+USE
+ROLE
+myrole
+;
+CREATE
+FAILOVER
+GROUP
+myfg
+AS
+REPLICA
+OF
+myorg
+.
+myaccount1
+.
+myfg
+;
+Copy
+Step 6. Refresh a secondary failover group in the target account manually —
+Optional
+¶
+To manually refresh the objects in a target account, execute the
+ALTER FAILOVER GROUP … REFRESH
+command.
+As a best practice, we recommend scheduling your secondary refreshes by setting the REPLICATION_SCHEDULE parameter using
+CREATE FAILOVER GROUP
+or
+ALTER FAILOVER GROUP
+.
+Note
+If the user who calls the function in the target account was dropped in the source account, the refresh operation fails.
+Grant the REPLICATE privilege on failover group to role —
+Optional
+¶
+To execute the command to refresh a secondary replication or failover group in the target account, you must use a role with the
+REPLICATE privilege on the failover group. The REPLICATE privilege is currently
+not
+replicated and must be granted on a
+failover (or replication) group in both the source and target accounts.
+Execute this statement from the source account using a role with the OWNERSHIP privilege on the group:
+GRANT
+REPLICATE
+ON
+FAILOVER
+GROUP
+myfg
+TO
+ROLE
+my_replication_role
+;
+Copy
+Execute this statement from the target account using a role with the OWNERSHIP privilege on the group:
+GRANT
+REPLICATE
+ON
+FAILOVER
+GROUP
+myfg
+TO
+ROLE
+my_replication_role
+;
+Copy
+Manually refresh a secondary failover group
+¶
+For example, to refresh the objects in the failover group
+myfg
+, execute the following statement from the target account:
+USE
+ROLE
+my_replication_role
+;
+ALTER
+FAILOVER
+GROUP
+myfg
+REFRESH
+;
+Copy
+Step 7. Grant the FAILOVER privilege on failover group to role —
+Optional
+¶
+To execute the command to fail over a secondary failover group in a target account, you must use a role with the
+FAILOVER privilege
+on the failover group. The

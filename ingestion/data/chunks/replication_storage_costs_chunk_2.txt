@@ -1,0 +1,36 @@
+ backups
+¶
+The following table describes charges for backups.
+For information about credit consumption, see the
+Snowflake Service Consumption Table
+.
+Cost component
+Description
+Billed
+Backup compute
+Snowflake-managed compute service generates scheduled backup creation and expiration.
+Yes
+Restore compute
+Snowflake-managed warehouses are used to restore objects from backups.
+Yes
+Backup storage
+Snowflake-managed cloud object storage to store backup data.
+Billed for bytes retained for backups, similar to bytes retained for clones.
+You can monitor costs for backup storage in the
+TABLE_STORAGE_METRICS
+view using the
+RETAINED_FOR_CLONE_BYTES
+column, and in the
+BACKUP_STORAGE_USAGE
+view.
+On this page
+Storage usage and fees
+Temporary and transient tables
+Considerations for using temporary and transient tables to manage storage costs
+Migrating data from permanent tables to transient tables
+Cost for backups
+Related content
+Understanding & using Time Travel
+Understanding and viewing Fail-safe
+Working with Temporary and Transient Tables
+Data storage considerations

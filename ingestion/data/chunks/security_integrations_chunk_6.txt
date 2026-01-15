@@ -1,0 +1,63 @@
+ this point, you can optionally refresh the secondary failover group as shown in the
+target account steps for SCIM
+to ensure the new user in the source account is in the target
+account.
+Choosing to refresh the secondary failover group now allows for an easy check to make sure that the change to the source account, adding
+a new user in this sequence, is visible in the target account.
+However, if you need or prefer to do additional work in the identity provider, such as modifying other users or updating role
+assignments, you can continue doing that work now and then refresh the secondary failover group in one operation later.
+Target account steps:
+Prior to replication, verify the number of users and security integrations that are present in the target
+account by executing the
+SHOW USERS
+and
+SHOW INTEGRATIONS
+commands, respectively.
+Refresh the secondary failover group to update the target account to include the new user
+(and any other changes that were made in Okta and the source account).
+ALTER
+FAILOVER
+GROUP
+fg
+REFRESH
+;
+Copy
+Verify that the new user is added to the target account by executing a
+SHOW USERS
+command.
+Optionally, promote the secondary failover group and the secondary connection in the target account to primary. This will promote the
+target account to serve as the new source account.
+Failover group:
+ALTER
+FAILOVER
+GROUP
+fg
+PRIMARY
+;
+Copy
+Connection:
+ALTER
+CONNECTION
+global
+PRIMARY
+;
+Copy
+Replicating OAuth security integrations
+¶
+Replicating OAuth security integrations includes both Snowflake OAuth security integrations and External OAuth security integrations.
+Note the following:
+Snowflake OAuth
+:
+After replication and configuring failover/failback, a user connecting to either the source account or target account via an OAuth client
+does not need to re-authenticate to the target account.
+External OAuth
+:
+After replication and configuring failover/failback, a user connecting to either the source account or target account via an OAuth client
+might
+need to re-authenticate to the target account.
+Re-authentication is likely to be necessary if the OAuth authorization server is not configured to issue a refresh token. Therefore,
+ensure that the OAuth authorization server issues refresh tokens so that the OAuth client can connect to the source and target Snowflake
+accounts.
+For this procedure, assume the following:
+Source account:
+https://example-northamericawest

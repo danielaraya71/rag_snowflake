@@ -1,0 +1,65 @@
+-------------------+
+Copy
+Grant the FAILOVER Privilege to a Role —
+Optional
+¶
+An account administrator can grant the FAILOVER privilege on a connection object to an account role.
+This enables a user other than the account administrator to promote a secondary connection to serve as the primary connection.
+For example, to grant the role
+my_failover_role
+the ability to fail over the connection
+myconnection
+, execute
+the following statement on the
+target
+account:
+GRANT
+FAILOVER
+ON
+CONNECTION
+myconnection
+TO
+ROLE
+my_failover_role
+;
+Copy
+A user with the role
+my_failover_role
+can now promote the secondary connection
+myconnection
+to serve as
+primary connection in the case of failover:
+USE
+ROLE
+my_failover_role
+;
+ALTER
+CONNECTION
+myconnection
+PRIMARY
+;
+Copy
+For more information on redirecting client connections, see
+Redirecting client connections
+.
+Configuring the DNS settings for private connectivity to the Snowflake service
+¶
+If private connectivity to the Snowflake service is enabled for your Snowflake account, then your network administrator must create and
+manage a DNS record for your connection URL. Your network administrator can use a CNAME record, alias record, or an alias based on the
+configuration of the network architecture. For consistency, the following example uses a CNAME record.
+These steps use AWS PrivateLink as an example, and the steps are the same if your Snowflake account uses Azure Private Link or Google Cloud
+Private Service Connect:
+Execute SHOW CONNECTIONS in one of your accounts in which client redirect is enabled. For example, suppose AWS PrivateLink is enabled
+for
+myaccount1
+and
+myaccount2
+.
+SHOW
+CONNECTIONS
+;
++
+--------------------+-------------------------------+---------------------+-------------------+-----------------+---------------+-------------------------------+-------------------------------------+-------------------------------------------+-------------------+-------------------+
+| snowflake_region   | created_on                    | account_name        | name              | comment         | is_primary    | primary                       | failover_allowed_to_accounts        | connection_url                            | organization_name | account_locator   |
+|--------------------+-------------------------------+---------------------+-------------------+-----------------+---------------+-------------------------------+-------------------------------------+-------------------------------------------+-------------------+-------------------|
+| AWS_US_WEST_2      | 2020-07-19 14:49:11.

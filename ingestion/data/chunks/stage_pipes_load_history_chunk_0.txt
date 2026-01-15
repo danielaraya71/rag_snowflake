@@ -1,0 +1,74 @@
+Stage, pipe, and load history replication
+¶
+Standard & Business Critical Feature
+Database and share replication are available to all accounts.
+Replication of other account objects & failover/failback require Business Critical Edition (or higher).
+To inquire about upgrading, please contact
+Snowflake Support
+.
+This topic provides information about replication support for data pipeline objects and related metadata,
+including stages, storage integrations, pipes, and load history. You can replicate these objects to configure failover for ingest and ETL
+pipelines across
+regions
+and across
+cloud platforms
+.
+Before you get started, we recommend that you have familiarity with Snowflake support for replication and failover/failback.
+For more information, see
+Introduction to replication and failover across multiple accounts
+.
+Requirements
+¶
+Important
+If a database in a target account that you plan to use
+already
+contains stages and pipes, we recommend that you contact support
+before enabling replication. When a replication or failover group in your source account includes that database, any pre-existing stages
+and pipes are dropped from the database.
+To replicate any external stages that use a storage integration, you must configure your replication or failover group to replicate
+STORAGE
+INTEGRATIONS
+. Otherwise, external stages are replicated without the associated storage integration.
+You can use an
+ALTER REPLICATION GROUP
+or
+ALTER FAILOVER GROUP
+statement to modify these properties for an existing group.
+If you add
+INTEGRATIONS
+to the
+OBJECT_TYPES
+list in your ALTER statement,
+include any other existing objects in the list to avoid dropping those objects in the target account.
+The same applies if you add
+STORAGE
+INTEGRATIONS
+to the
+ALLOWED_INTEGRATION_TYPES
+list.
+For example:
+ALTER
+FAILOVER
+GROUP
+my_failover_group
+SET
+OBJECT_TYPES
+=
+ROLES
+,
+INTEGRATIONS
+ALLOWED_INTEGRATION_TYPES
+=
+API INTEGRATIONS
+,
+STORAGE INTEGRATIONS
+;
+Copy
+Note
+Your cloud storage provider might limit replication of data pipeline objects between commercial and government cloud regions. To avoid
+government cloud data replication limitations, configure your failover resources in any region accessible to your government cloud region.
+For more information about government cloud limitations, review your cloud storage provider’s documentation.
+Replication and stages
+¶
+This section describes the current level of replication functionality that Snowflake supports for different types of stages.
+Replication

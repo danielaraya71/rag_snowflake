@@ -1,0 +1,70 @@
+ privilege to view. You can use the tiles to filter the view.
+For example, if the
+Status
+tile indicates there are failed refresh operations, you can select the tile to investigate the group(s)
+with failures.
+The lag time in the
+Longest Replication lag
+tile refers to the duration of time since the last refresh operation. This is the
+length of time that the secondary replication or failover group
+lags
+behind the primary group. The longest lag time is the
+length of time since the oldest secondary replication group was last refreshed.
+For example, if you have three failover groups,
+fg_1
+,
+fg_2
+,
+fg_3
+, with independent replication schedules of
+10 minutes, 2 hours, and 12 hours respectively, the longest lag time could be as long as 12 hours. If
+fg_3
+, however, was
+recently refreshed in the target account, its lag time resets to 0 and a different failover group could have a longer lag time.
+You can select an individual bar in the
+Group Lag Distribution
+tile to filter the results to an individual group.
+You can also filter groups by using the search field or the dropdown menus:
+You can search by replication or failover group name using the
+(search) box.
+Choose
+Type
+to filter the results by replication or failover group.
+Choose
+Replicating
+to filter by primary (select
+To
+) or secondary groups (select
+From
+).
+Choose the
+(accounts) menu to filter the results by account name.
+Choose
+Status
+to filter results by refresh operation status:
+Refresh Cancelled
+Refresh Failed
+Refresh In Progress
+Refresh Successful
+You can see the following details about your replication and failover groups:
+Column
+Description
+Name
+Name of the replication or failover group.
+Is Replicating
+Indicates if the group is being replicated
+to
+a target account or
+from
+a source account.
+If this column contains
+destinations available
+, there are no secondary replication or failover groups.
+The number of destinations available indicates the number of target accounts the primary group can be replicated to.
+Status
+Displays the status of the latest refresh operation.
+You must be signed in to the source or target account in order to access replication details.
+If you are not signed in, select
+Sign in
+to view refresh operation status for the secondary group.
+Both the source account and the target account must

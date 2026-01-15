@@ -1,0 +1,97 @@
+ connections. This
+includes creating a primary connection and linked secondary connection(s).
+Update Snowflake clients to connect using the connection URL.
+Using a connection URL
+(in this topic) contains a list of
+supported clients and connection details.
+In the event of a service outage in the region where the primary connection is located, complete the steps in
+Redirecting client connections
+(in this topic) to update the connection URL to redirect to a secondary connection.
+When the outage is resolved, complete the steps in
+Redirecting client connections
+to redirect client connections back to the
+original primary connection.
+The following diagrams illustrate the Client Redirect flow for two accounts in the same organization but different regions (
+Region
+A
+and
+Region
+B
+) on either the same or different cloud platforms.
+The primary connection is in
+Account
+1
+in
+Region
+A
+. Snowflake clients using the connection URL connect to
+Account
+1
+.
+A service outage in
+Region
+A
+results in failed client connections:
+The connection in
+Account
+2
+in
+Region
+B
+is promoted to act as the primary connection. Snowflake clients using the connection URL
+now connect to
+Account
+2
+.
+Example
+¶
+The following SQL statements go through the client redirect workflow. Each step is explained in detail in the sections that follow in this
+topic.
+Normal client connections: Configure Client Redirect
+¶
+Create a primary connection in the source account
+¶
+Create a new primary connection and enable failover to other accounts in your organization. Each account that is enabled for failover
+must be in a different region than the account with the primary connection.
+Note the
+account_name
+column in the output of
+SHOW REPLICATION ACCOUNTS
+for each account to be
+enabled for failover.
+Execute the following statements in the
+source
+account:
+-- Create a new primary connection
+CREATE
+CONNECTION
+myconnection
+;
+-- View accounts in your organization that are enabled for replication
+SHOW
+REPLICATION
+ACCOUNTS
+;
+-- Configure failover accounts for the primary connection
+ALTER
+CONNECTION
+myconnection
+ENABLE
+FAILOVER
+TO
+ACCOUNTS
+myorg
+.
+myaccount2
+,
+myorg
+.
+myaccount3
+;
+-- View the details for the connection
+SHOW
+CONNECTIONS
+;
+Copy
+If private connectivity to the Snowflake service is enabled for your Snowflake account, you must create
+and manage a DNS

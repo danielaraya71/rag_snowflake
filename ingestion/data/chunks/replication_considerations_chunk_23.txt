@@ -1,0 +1,36 @@
+ the task is not replicated to a secondary database unless it’s resumed again.
+Root task in a task graph was created and resumed or executed, but was subsequently suspended and dropped.
+❌
+The entire task graph is not replicated to a secondary database.
+Child task in a task graph is created and resumed or executed, but is subsequently suspended and dropped.
+✔
+The latest version of the task graph (before the task was suspended and dropped) is replicated to a secondary database.
+Resumed or Suspended State of Replicated Tasks
+¶
+If all of the following conditions are met, a task is replicated to a secondary database in a resumed state:
+A standalone or root task is in a resumed state in the primary database when the replication or refresh operation begins until the operation is completed. If a task is in a resumed state during only part of this period, it might still be replicated in a resumed state.
+A child task is in a resumed state in the latest version of the task.
+The parent database was replicated to the target account along with role objects in the same, or different,
+replication or failover group
+.
+After the roles and database are replicated, you must refresh the objects in the target account by executing either
+ALTER REPLICATION GROUP … REFRESH
+or
+ALTER FAILOVER GROUP … REFRESH
+, respectively. If you refresh the database by executing
+ALTER DATABASE … REFRESH
+, the state of the tasks in the database is changed to suspended.
+A replication or refresh operation includes the privilege grants for a task that were current when the latest table version was committed. For more information, see
+Replicated Tasks and Privilege Grants
+(in this topic).
+If these conditions are not met, the task is replicated to a secondary database in a suspended state.
+Note
+Secondary tasks aren’t scheduled until after a failover, regardless of their
+state
+. For more details, refer to
+Task Runs After a Failover
+Replicated Tasks and Privilege Grants
+¶
+If the parent database is replicated to a target account along with role objects in the same, or different, replication or failover group, the privileges granted on the tasks in the database are replicated as well.
+The following logic determines which task privileges are replicated in a replication or refresh operation:
+If the current task owner (that is, the role that has the OWNERSHIP privilege on a task) is the same role as when the task was resumed last, then all current grants on the

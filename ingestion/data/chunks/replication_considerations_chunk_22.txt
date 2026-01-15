@@ -1,0 +1,50 @@
+ across multiple accounts
+or
+Account Replication and Failover/Failback
+.
+Note
+Database replication does not work for task graphs if the graph is owned by a different role than the role that performs replication.
+Replication Scenarios
+¶
+The following table describes different task scenarios and specifies whether the tasks are replicated or not. Except where noted, the scenarios pertain to both standalone tasks and tasks in a
+task graph
+:
+Scenario
+Replicated
+Notes
+Task was created and either resumed or executed manually (using
+EXECUTE TASK
+). Resuming or executing a task creates an initial task version.
+✔
+Task was created but never resumed or executed.
+❌
+Task was recreated (using
+CREATE OR REPLACE TASK
+but never resumed or executed).
+✔
+The latest version
+before
+the task was recreated is replicated.
+Resuming or manually executing the task commits a new version. When the database is replicated again, the new, or latest, version is replicated to the secondary database.
+Task was created and resumed or executed, but subsequently dropped.
+❌
+Task graph was created and resumed or executed. Subsequently, a task in the task graph was modified, but the task graph’s root task wasn’t resumed or executed again. Examples of modifications include the following:
+Using
+ALTER TASK … SET/UNSET/MODIFY
+on a root task, child task, or finalizer task.
+Using
+ALTER TASK … SUSPEND
+on a child task or finalizer task.
+✔
+The latest version of the task graph
+before
+the task was modified is replicated.
+Resuming or manually executing a task commits a new version that includes any changes to the parameters of the tasks within the task graph. Because the new changes were never committed, only the previous version of the task graph is replicated.
+Note that if the modified task graph is not resumed within a retention period (currently 30 days), the latest version of the task is dropped. After this period, the task is not replicated to a secondary database unless it’s resumed again.
+Root task in a task graph was created and resumed or executed, but was subsequently suspended and dropped.
+❌
+The entire task graph is not replicated to a secondary database.
+Child task in a task graph is created and resumed or executed, but is subsequently suspended and dropped.
+✔
+The latest version of the task graph (before the task was suspended and dropped) is replicated to a secondary database.
+Resumed or Suspended

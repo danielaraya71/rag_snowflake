@@ -1,0 +1,75 @@
+ replication or failover group using Snowsight
+Create a failover group using SQL
+Note
+If you have databases to add to a replication or failover group that have been previously enabled for database replication
+using
+ALTER DATABASE
+, follow the
+Transitioning from database replication to group-based replication
+instructions (in this
+topic) before adding them to a group.
+Create a replication or failover group using Snowsight
+¶
+Note
+Only account administrators can create a replication or failover group using Snowsight (refer to
+Limitations of using Snowsight for replication configuration
+).
+You must be signed in to the target account as a user with the ACCOUNTADMIN role. If you are not, you will be
+prompted to sign in.
+Both the source account and the target account must use the same connection type (public internet). Otherwise, signing
+in to the target account fails.
+Complete the following steps to create a new replication or failover group:
+Sign in to
+Snowsight
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Replication
+, then complete one of these actions on the
+Groups
+tab:
+For Business Critical Edition (or higher) accounts, complete one of these actions:
+If there are no replication groups or connections, select
+Get started
+to configure a replication group and
+a connection. The
+Setup business continuity
+wizard appears.
+Select
++ Group
+to configure a replication group without configuring a connection. The
+Create a group
+wizard appears.
+For Standard Edition and Enterprise Edition accounts, complete one of these actions:
+If there are no replication groups or connections, select
+Get started
+to configure a replication group.
+The
+Setup replication
+wizard appears.
+If one or more replication groups exist, select
++ Group
+to configure a replication group. The
+Create a group
+wizard appears.
+On the
+Select a target account
+page, select a target account and sign into it, then select
+Next
+.
+On the
+Create a group
+page, in the
+Group name
+box, enter a name for the group that meets the
+following requirements:
+Must start with an alphabetic character and cannot contain spaces or special characters unless the identifier string is
+enclosed in double quotes (for example, “My object”). Identifiers enclosed in double quotes are also case-sensitive.
+For more information, see
+Identifier requirements
+.
+Must be unique across failover and replication

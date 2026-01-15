@@ -1,0 +1,66 @@
+ update your OCSP settings to point to the private endpoint IP
+address or private endpoint ID value.
+For example:
+myaccount1.us-west-2.privatelink.snowflakecomputing.com.
+ocsp.myaccount1.us-west-2.privatelink.snowflakecomputing.com.
+Copy
+Alternatively, use the organization and account name URL.
+For example:
+myorg-myaccount1.privatelink.snowflakecomputing.com.
+ocsp.myorg-myaccount1.privatelink.snowflakecomputing.com.
+Copy
+Note the trailing period, which must be included.
+Users connect to Snowflake using the following connection URL format:
+organization_name
+-
+connection_name
+.privatelink.snowflakecomputing.com
+Where:
+organization_name
+Name of your Snowflake organization. The Snowflake accounts that your users connect to are contained in this organization.
+connection_name
+Name of the connection object.
+For more information, see:
+Using a connection URL
+(in this topic).
+Modifying the DNS settings for private connectivity to the Snowflake service
+(in this topic).
+Configuring Client Redirect and reader accounts
+¶
+If you are a data provider with
+reader accounts
+, you can use Client Redirect
+to provide continued access to shared data in the event of a service outage. The configuration steps for creating connections are
+the same as those described in the
+Configuring Client Redirect
+section for source and target reader accounts:
+Create two reader accounts. Each reader account must be in a different region.
+Create a primary connection
+in the source reader account. Enable failover to the other reader account.
+Create a secondary connection in each target account
+in the reader account that you enabled for failover from the source account.
+Share the connection URL with your data consumers.
+If a service outage occurs,
+redirect client connections
+. Data consumers using the
+connection URL to connect to your reader account now connect to the newly promoted source reader account.
+Using a connection URL
+¶
+This section provides instructions for referencing a connection URL in the configuration for various Snowflake clients.
+Supported Snowflake clients
+¶
+Client Redirect is supported by
+Snowsight
+and
+Classic Console
+.
+In addition, the following Snowflake client versions (and higher) support Client Redirect:
+Snowflake Client
+Minimum Supported Version
+Snowflake CLI
+3.0.0
+SnowSQL
+1.1.82
+Snowflake Connector for Python
+1.8.3
+Snowflake Connector for Spark

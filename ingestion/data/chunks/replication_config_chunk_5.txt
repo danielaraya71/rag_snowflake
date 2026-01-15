@@ -1,0 +1,63 @@
+_1    | 2020-07-23 14:12:23.573 -0800 | myaccount2   | myacctlocator2  |                 | myorg             | false        |
++------------------+-------------------------------+--------------+-----------------+-----------------+-------------------+--------------+
+| AWS_US_EAST_2    | 2020-07-25 19:25:04.412 -0800 | myaccount3   | myacctlocator3  |                 | myorg             | false        |
++------------------+-------------------------------+--------------+-----------------+-----------------+-------------------+--------------+
+See the complete list of
+Region IDs
+.
+View failover and replication group membership
+¶
+Account, database, and share objects have
+constraints on group membership
+. Before creating new
+groups or adding objects to existing groups, you can review the list of existing failover groups and the objects in each group.
+Note
+Only an account administrator (user with the ACCOUNTADMIN role) or the group owner (role with the OWNERSHIP privilege on the group) can
+execute the SQL statements in this section.
+View all failover groups linked to the current account, and the object types in each group:
+SHOW FAILOVER GROUPS
+;
+Copy
+View all the databases in failover group
+myfg
+:
+SHOW DATABASES
+IN
+FAILOVER
+GROUP
+myfg
+;
+Copy
+View all the shares in failover group
+myfg
+:
+SHOW SHARES
+IN
+FAILOVER
+GROUP
+myfg
+;
+Copy
+Step 3: Create a primary failover group in a source account
+¶
+Create a primary failover group and enable the replication and failover of specific objects from the current (source) account to one or more
+target accounts in the same organization.
+You can create a replication or failover group using
+Snowsight
+or
+SQL
+.
+Create a replication or failover group using Snowsight
+Create a failover group using SQL
+Note
+If you have databases to add to a replication or failover group that have been previously enabled for database replication
+using
+ALTER DATABASE
+, follow the
+Transitioning from database replication to group-based replication
+instructions (in this
+topic) before adding them to a group.
+Create a replication or failover group using Snowsight
+¶
+Note
+Only account administrators can create a replication or fail

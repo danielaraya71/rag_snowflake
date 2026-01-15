@@ -1,0 +1,110 @@
+
+ALTER CONNECTION
+command to promote the connection in the source
+account to serve as the primary connection.
+If an Okta SCIM security integration is already configured in the source account, skip to the next step.
+Otherwise, configure an
+Okta SCIM
+security integration in the source account.
+CREATE
+ROLE
+IF
+NOT
+EXISTS
+okta_provisioner
+;
+GRANT
+CREATE
+USER
+ON
+ACCOUNT
+TO
+ROLE
+okta_provisioner
+;
+GRANT
+CREATE
+ROLE
+ON
+ACCOUNT
+TO
+ROLE
+okta_provisioner
+;
+GRANT
+ROLE
+okta_provisioner
+TO
+ROLE
+ACCOUNTADMIN
+;
+CREATE
+OR
+REPLACE
+SECURITY INTEGRATION
+okta_provisioning
+TYPE
+=
+scim
+SCIM_CLIENT
+=
+'okta'
+RUN_AS_ROLE
+=
+'OKTA_PROVISIONER'
+;
+select
+system$generate_scim_access_token
+(
+'OKTA_PROVISIONING'
+);
+Copy
+Be sure to update the Okta SCIM application for Snowflake. For details, see
+Okta configuration
+.
+In Okta,
+create a new user
+in the Okta application for Snowflake.
+Verify the user is pushed to Snowflake by executing a
+SHOW USERS
+command in Snowflake.
+If the failover group already specifies
+security
+integrations
+, skip to the next step. This would be true if you have already
+configured the failover group for the purposes of
+SAML SSO in the target account
+(in this topic).
+Otherwise, modify the existing failover group using an ALTER FAILOVER GROUP command to specify
+security
+integrations
+.
+ALTER
+FAILOVER
+GROUP
+fg
+SET
+OBJECT_TYPES
+=
+users
+,
+roles
+,
+warehouses
+,
+resource monitors
+,
+integrations
+ALLOWED_INTEGRATION_TYPES
+=
+security
+integrations
+;
+Copy
+At this point, you can optionally refresh the secondary failover group as shown in the
+target account steps for SCIM
+to ensure the new user in the source account is in the target
+account.
+Choosing to refresh the secondary failover group now allows for an easy check to make sure that the change to the source account, adding
+a new user in this sequence, is visible in the target account.
+However, if you need or prefer to do additional work in the identity provider, such as modifying

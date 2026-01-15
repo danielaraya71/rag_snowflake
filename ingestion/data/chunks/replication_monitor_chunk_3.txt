@@ -1,0 +1,93 @@
+ monitor the progress of refresh operations
+¶
+To monitor the progress of a replication or failover group refresh, query the
+REPLICATION_GROUP_REFRESH_PROGRESS, REPLICATION_GROUP_REFRESH_PROGRESS_BY_JOB, REPLICATION_GROUP_REFRESH_PROGRESS_ALL
+table function (in the
+Snowflake Information Schema
+).
+Example
+¶
+View the progress of the most recent refresh operation for the failover group
+myfg
+:
+SELECT
+phase_name
+,
+start_time
+,
+end_time
+,
+progress
+,
+details
+FROM
+TABLE
+(
+INFORMATION_SCHEMA
+.
+REPLICATION_GROUP_REFRESH_PROGRESS
+(
+'myfg'
+));
+Copy
+View replication history
+¶
+You can view replication history using Snowsight or using
+SQL
+.
+Note
+You can view the replication history for the replication and failover groups for which your role has the MONITOR, OWNERSHIP, or
+REPLICATE privilege on.
+Use Snowsight to view replication history
+¶
+You can view the replication history and details for each refresh operation for a specific replication or failover group in the details
+page for the group.
+Sign in to
+Snowsight
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Replication
+, select
+Groups
+.
+Select the name of a replication or failover group.
+You can review the following information about the group:
+Group type (replication group or failover group).
+Replication schedule (for example, every 10 minutes).
+Duration of each refresh operation.
+Replica lag time (length of time since last refresh operation).
+Date and time of the next scheduled refresh operation.
+Tip
+If your account uses private connectivity, you can still use Snowsight to monitor groups.
+Although creating or modifying groups or connection objects through Snowsight isn’t currently available
+with private connectivity, Snowsight can monitor the groups that you create using SQL.
+You can filter the data on the page by status and time period:
+Choose
+Status
+to filter results by refresh operation status:
+Refresh Cancelled
+Refresh Failed
+Refresh In Progress
+Refresh Successful
+Choose
+Duration
+to show refresh operation details for:
+Last hour
+Last 24 hours
+Last 7 days
+All
+Selecting
+All
+displays the last 14 days of refresh operations.
+The details for each refresh operation include the following columns:
+Column
+Description
+Query ID
+Query ID of the refresh operation.
+Status
+Displays the status of the refresh operation. Valid values

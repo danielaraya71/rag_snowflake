@@ -1,0 +1,69 @@
+sight
+¶
+Note
+Only account administrators can edit a replication or failover group using Snowsight (refer to
+Limitations of using Snowsight for replication configuration
+).
+To pause or resume a replication schedule, you must be signed in to the target account.
+Sign in to
+Snowsight
+.
+In the navigation menu, select
+Admin
+»
+Accounts
+.
+Select
+Replication
+, then select
+Groups
+.
+Locate the replication or failover group you want to edit, and select the
+More
+menu (
+…
+) in the last column of the row.
+Select
+Pause
+or
+Resume
+.
+Pause or resume a replication schedule in a target account using SQL
+¶
+You can pause or resume a replication schedule in a target account using the
+ALTER REPLICATION GROUP
+or
+ALTER FAILOVER GROUP
+command. To pause, specify the
+SUSPEND
+parameter. To resume, specify the
+RESUME
+parameter.
+Dropping a secondary replication or failover group
+¶
+You can drop a secondary replication or failover using the
+DROP REPLICATION GROUP
+or the
+DROP FAILOVER GROUP
+command. Only the replication or failover group owner (that is, the role with the OWNERSHIP
+privilege on the group) can drop the group.
+To drop a secondary replication or failover group using Snowsight, you must drop the group in the source account. See
+Drop a replication or failover group using Snowsight
+.
+Dropping a primary replication or failover group
+¶
+You can drop a primary replication or failover group using Snowsight or SQL. If you are deleting a primary group using SQL,
+you must first drop all secondary groups. See
+Dropping a secondary replication or failover group
+.
+Drop a primary replication or failover group using SQL
+¶
+A primary replication or failover group can only be dropped after all the replicas of the group (that is, secondary replication or failover
+groups) have been dropped. Alternatively, you can promote a secondary failover group to serve as the primary failover group,
+then drop the former primary failover group.
+Note that only the group owner can drop the group.
+Drop a replication or failover group using Snowsight
+¶
+Note
+Only account administrators can delete a replication or failover group using Snowsight (refer to
+Limitations of using Snowsight for

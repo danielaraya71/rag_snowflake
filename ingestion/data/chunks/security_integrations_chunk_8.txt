@@ -1,0 +1,70 @@
+ each Snowflake account using the OAuth client of your choice.
+Optionally, promote the secondary failover group and the secondary connection in the target account to primary. This will promote the
+target account to serve as the new source account.
+Failover group:
+ALTER
+FAILOVER
+GROUP
+fg
+PRIMARY
+;
+Copy
+Connection:
+ALTER
+CONNECTION
+global
+PRIMARY
+;
+Copy
+If you completed the previous step, reverify that you can connect to each Snowflake account using the OAuth client of your choice.
+Replicating network policies
+¶
+Replicating a network policy from the source account to the target account allows administrators to restrict access to the target account
+based on the network identifier of the origin of an incoming request.
+Replicating network policy references and assignments
+¶
+Replicating a network policy replicates the network policy object
+and
+any network policy references/assignments. For example, if a
+network policy references a network rule in the source account, and both objects exist in the target account, then the network policy uses
+the same network rule in the target account. Similarly, if a network policy is assigned to a user and the user exists in both the source and
+target accounts, replicating the network policy assigns the network policy to the user in the target account.
+Replicating network policy references and assignments assumes referenced objects and objects to which the network policy is assigned are
+also replicated. If you do not replicate the supporting object types properly, Snowflake fails the refresh operation in the target account.
+If a referenced object or object to which the network policy is assigned does not already exist in the target account, include its object
+type in the same replication or failover group as the network policy. The following examples demonstrate the required settings if the
+supporting objects do not already exist in the target account.
+Network policies that use network rules
+The replication or failover group must include
+network
+policies
+and
+databases
+. Network rules are schema-level objects
+and are replicated with the database in which they are contained. For example:
+CREATE
+FAILOVER
+GROUP
+fg
+OBJECT_TYPES
+=
+network policies
+,
+databases
+ALLOWED_DATABASES
+=
+testdb2
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+myaccount2
+;
+Copy
+Network policies assigned to an account
+The replication or failover group must include
+network
+policies
+and
+account
+parameters

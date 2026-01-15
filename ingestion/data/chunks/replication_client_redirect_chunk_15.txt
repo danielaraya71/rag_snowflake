@@ -1,0 +1,169 @@
+Node.js Driver
+¶
+Specify the host name for the connection URL in the
+account
+connection option. For more information about the connection parameters,
+see
+Node.js options reference
+.
+var
+configuration
+=
+{
+username:
+'<username>'
+,
+password:
+'<password>'
+,
+account:
+<organization_name>-<connection_name>.
+}
+var
+connection
+=
+snowflake.createConnection
+(
+configuration
+)
+Copy
+For example:
+var
+configuration
+=
+{
+username:
+'jsmith'
+,
+password:
+'mySecurePassword'
+,
+account:
+myorg-myconnection.
+}
+var
+connection
+=
+snowflake.createConnection
+(
+configuration
+)
+Copy
+Go Snowflake Driver
+¶
+Specify the host name for the connection URL in the
+Account
+parameter. For more information, see
+Go Snowflake Driver
+.
+cfg
+:
+=
+&
+Config
+{
+Account:
+"<organization_name>-<connection_name>"
+,
+User:
+"<username>"
+,
+Password:
+"<password>"
+}
+dsn,
+err
+:
+=
+DSN
+(
+cfg
+)
+Copy
+For example:
+cfg
+:
+=
+&
+Config
+{
+Account:
+"myorg-myconnection"
+,
+User:
+"jsmith"
+,
+Password:
+"mySecurePassword"
+}
+dsn,
+err
+:
+=
+DSN
+(
+cfg
+)
+Copy
+Snowpark
+¶
+Snowpark Python
+¶
+Specify the host name for the connection URL in the
+account
+connection parameter in the Python dictionary (
+dict
+) used to
+establish a session. For more information about creating a session, see
+Creating a Session for Snowpark Python
+.
+connection_parameters
+=
+{
+"account"
+:
+"<organization_name>-<connection_name>"
+,
+"user"
+:
+"<snowflake_user>"
+,
+"password"
+:
+"<snowflake_password>"
+}
+Copy
+For example:
+connection_parameters
+=
+{
+"account"
+:
+"myorg-myconnection"
+,
+"user"
+:
+"jsmith"
+,
+"password"
+:
+"mySecurePassword"
+}
+Copy
+Snowpark Java
+¶
+Specify the connection URL in the
+URL
+property in the properties file or
+Map
+that you use to establish the session. For more
+information about creating a session, see
+Creating a Session for Snowpark Java
+.
+# Properties file (a text file) for establishing a Snowpark session
+URL
+=
+https://<organization_name>-<connection_name>.snowflakecomputing.com
+Copy
+For example:
+# Properties file (a text file) for establishing

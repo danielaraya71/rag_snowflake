@@ -1,0 +1,32 @@
+ schema, and two table backup
+sets for a specific table. An object might still appear in more than two backup sets. For example,
+a table might have one or two associated table backup sets. The same table might also be included
+in one or two schema backup sets, and one or two database backup sets.
+Comparison of backups with other disaster recovery and business continuity features
+¶
+Backups provide the following advantages that are different from other Snowflake business continuity and disaster recovery
+features, such as replication and Time Travel:
+You can enable long-term retention for backups. Long-term retention helps with recovery, regulatory compliance,
+and cyber resilience against threats such as ransomware or insider attacks.
+Retention lock ensures that backups can’t be deleted by any user, including account administrators.
+You can schedule backups on a different timeframe than you use for other data transfer operations, such as
+replication refreshes.
+You can backup and restore individual table objects, or container objects such as entire schemas or databases.
+You can prevent the retention time for backups from being reduced after the backup is taken, by using a backup
+policy that includes a retention lock. That’s different from the Time Travel feature, where you can reduce the
+retention interval to zero.
+Unlike Time Travel and Fail-safe, backups preserve data from more types of objects than just tables and table data.
+The speed and storage efficiency of taking backups is similar to the zero-copy mechanism used for cloning.
+The way all backups for the same object are grouped into backup sets makes management simpler than if
+you used clones to implement your own backup mechanism. For example, you don’t have to manage large numbers of
+objects, devise a naming scheme to keep track of the cloned objects, or implement a scheduling mechanism to delete
+old clones. Also, unlike with cloned objects, backups can’t be modified after you create them.
+Each backup represents a single table, schema, or a database as of the specified point in time.
+backups don’t include account-level objects such as users or roles.
+Some kinds of tables and other database-level objects aren’t included in schema and database backups.
+For more information, see
+backup objects
+.
+Backup-related objects are stored in the same cloud service provider (CSP) region as the associated database, schema, or
+table. For business continuity and disaster recovery scenarios, you typically combine backups with Snowflake account
+replication. That way, all the backup sets and backup policies can be replicated to a different region

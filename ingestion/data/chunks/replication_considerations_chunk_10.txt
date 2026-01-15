@@ -1,0 +1,48 @@
+.
+If a secondary database contains clustered tables and the database is promoted to become the primary database, Snowflake begins Automatic
+Clustering of the tables in this database while simultaneously suspending the monitoring of clustered tables in the previous primary
+database.
+See
+Replication and Materialized Views
+(in this topic) for information about Automatic Clustering for materialized views.
+Replication and large, high-churn tables
+¶
+When one or more rows of a table are updated or deleted, all of the impacted micro-partitions that store this data in a primary database
+are re-created and must be synchronized to secondary databases. For large, high-churn dimension tables, the replication costs can be
+significant.
+For large, high-churn dimension tables that incur significant replication costs, the following mitigations are available:
+Replicate any primary databases that store such tables at a lower frequency.
+Change your data model to reduce churn.
+For more information, see
+Managing costs for large, high-churn tables
+.
+Replication and Time Travel
+¶
+Time Travel
+and
+Fail-safe
+data is maintained independently for a
+secondary database and is not replicated from a primary database. Querying tables and views in a secondary database using Time Travel
+can produce different results than when executing the same query in the primary database.
+Historical Data
+:
+Historical data available to query in a primary database using Time Travel is not replicated to secondary databases.
+For example, suppose data is loaded continuously into a table every 10 minutes using Snowpipe, and a secondary database is refreshed
+every hour. The refresh operation only replicates the latest version of the table. While every hourly version of the table within the
+retention window is available for query using Time Travel, none of the iterative versions within each hour (the individual Snowpipe
+loads) are available.
+Data Retention Period
+:
+The data retention period for tables in a secondary database begins when the secondary database is refreshed with the DML operations
+(i.e. changing or deleting data) written to tables in the primary database.
+Note
+The data retention period parameter,
+DATA_RETENTION_TIME_IN_DAYS
+, is only replicated to database objects in the secondary
+database, not to the database itself. For more details about parameter replication, see
+Parameters
+.
+Replication and materialized views
+¶
+In a primary database, Snowflake performs automatic background maintenance of materialized views. When a base table changes, all
+materialized views defined on the

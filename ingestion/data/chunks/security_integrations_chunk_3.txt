@@ -1,0 +1,107 @@
+,
+alter
+the failover group to include integrations.
+CREATE
+FAILOVER
+GROUP
+FG
+OBJECT_TYPES
+=
+users
+,
+roles
+,
+warehouses
+,
+resource monitors
+,
+integrations
+ALLOWED_INTEGRATION_TYPES
+=
+security
+integrations
+ALLOWED_ACCOUNTS
+=
+example
+.
+northamericaeast
+REPLICATION_SCHEDULE
+=
+'10 MINUTE'
+;
+Copy
+Target Account Steps:
+Prior to replication, verify the number of users and security integrations that are present in the target
+account by executing the
+SHOW USERS
+and
+SHOW INTEGRATIONS
+commands, respectively.
+Create a secondary connection. For details, see
+CREATE CONNECTION
+.
+CREATE
+CONNECTION
+global
+AS
+REPLICA
+OF
+example
+.
+northamericawest
+.
+global
+;
+Copy
+Create a secondary failover group in the target account. For details, see
+CREATE FAILOVER GROUP
+.
+CREATE
+FAILOVER
+GROUP
+fg
+AS
+REPLICA
+OF
+example
+.
+northamericawest
+.
+fg
+;
+Copy
+When creating a secondary failover group, an initial refresh is automatically executed.
+To manually refresh a secondary failover group in the target account, execute the following statement. For details, see
+ALTER FAILOVER GROUP
+command.
+ALTER
+FAILOVER
+GROUP
+fg
+REFRESH
+;
+Copy
+If the refresh operation was successful, the target account should include new users that were added to the source account and not
+previously present in the target account. Similarly, the target account should include the SAML2 security integration that specifies
+the connection URL.
+Verify the refresh operation was successful by executing the following commands:
+SHOW INTEGRATIONS
+(should include 1 new integration)
+SHOW USERS
+(should include the number of new users added)
+DESCRIBE INTEGRATION
+(for the integration
+myidp
+)
+Promote the secondary connection in the target account to serve as the primary connection. After executing the following command, users
+can use SAML SSO to authenticate to the new target account.
+ALTER
+CONNECTION
+global
+PRIMARY
+;
+Copy
+Replicating SCIM security integrations
+¶
+Replicating a SCIM security integration allows the target account to incorporate SCIM updates that are made to the source account
+(e.g. adding new users, adding new roles) after refreshing the target

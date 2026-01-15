@@ -1,0 +1,60 @@
+ote the secondary connection in the target account to serve as the primary connection. After executing the following command, users
+can use SAML SSO to authenticate to the new target account.
+ALTER
+CONNECTION
+global
+PRIMARY
+;
+Copy
+Replicating SCIM security integrations
+¶
+Replicating a SCIM security integration allows the target account to incorporate SCIM updates that are made to the source account
+(e.g. adding new users, adding new roles) after refreshing the target account.
+After replicating the SCIM security integration, both Snowflake accounts have the ability to receive SCIM updates from the identity
+provider. However, Snowflake allows specifying only one account as the
+primary
+(i.e. source) account and it is the primary account that
+receives SCIM updates from the identity provider.
+You can optionally designate a different account as the primary account to receive SCIM updates after replicating the SCIM integration.
+Note that the target account can receive SCIM updates from the source account only after refreshing the target account.
+For this procedure, assume the following:
+Source account:
+https://example-northamericawest.snowflakecomputing.com/
+Target account:
+https://example-northamericaeast.snowflakecomputing.com/
+Connection URL:
+https://example-global.snowflakecomputing.com
+A secondary connection exists in the target account (i.e. only refresh operations are needed).
+This procedure is a representative example to do the following:
+Replicate a SCIM security integration from the source account to the target account.
+Add a new user in Okta, push the new user to the source account, and replicate the new user to the target account.
+Refresh the failover group.
+Promote the secondary connection in the target account to serve as the primary connection.
+Source account steps:
+Execute
+SHOW CONNECTIONS
+to verify that the connection in the source account is the primary connection. If it
+is not the primary connection, use the
+ALTER CONNECTION
+command to promote the connection in the source
+account to serve as the primary connection.
+If an Okta SCIM security integration is already configured in the source account, skip to the next step.
+Otherwise, configure an
+Okta SCIM
+security integration in the source account.
+CREATE
+ROLE
+IF
+NOT
+EXISTS
+okta_provisioner
+;
+GRANT
+CREATE
+USER
+ON
+ACCOUNT
+TO
+ROLE
+okta_provisioner
+;

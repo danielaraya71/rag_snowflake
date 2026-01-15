@@ -1,0 +1,86 @@
+
+ALLOWED_ACCOUNTS
+=
+myorg
+.
+myaccount2
+;
+Copy
+Example
+¶
+For this example, assume the following:
+Source account:
+https://example-northamericawest.snowflakecomputing.com/
+Target account:
+https://example-northamericaeast.snowflakecomputing.com/
+Connection URL:
+https://example-global.snowflakecomputing.com
+A secondary connection exists in the target account (i.e. only refresh operations are needed).
+Network policies exist in the source account.
+The Snowflake OAuth and/or SCIM security integration already exists in the source account and the integration specifies a network policy.
+This procedural example does the following:
+Replicates network policies along with the network rules that is uses to restrict network traffic.
+Replicates a security integration to which the network policy is assigned.
+Refreshes the failover group.
+Verifies the network policy activation.
+Promotes the secondary connection in the source account to serve as the primary connection.
+Source account steps:
+Verify that network policies exist in the source Snowflake account by executing a
+SHOW NETWORK POLICIES
+command.
+Verify the Snowflake OAuth and/or SCIM security integrations include a network policy by executing a
+SHOW INTEGRATIONS
+command to identify the security integration and then execute a
+DESCRIBE INTEGRATION
+command on the Snowflake OAuth security integration.
+Update the failover group to include
+network
+policies
+and
+account
+parameters
+using an ALTER FAILOVER GROUP command.
+ALTER
+FAILOVER
+GROUP
+fg
+SET
+OBJECT_TYPES
+=
+users
+,
+roles
+,
+warehouses
+,
+resource monitors
+,
+integrations
+,
+network policies
+,
+account
+parameters
+ALLOWED_INTEGRATION_TYPES
+=
+security
+integrations
+;
+Copy
+Target account steps:
+Refresh the secondary failover group to update the target account to include the network policy objects and the Snowflake OAuth
+security integration that specifies the network policy.
+ALTER
+FAILOVER
+GROUP
+fg
+REFRESH
+;
+Copy
+Verify the network policy object exists by executing a SHOW NETWORK POLICIES command, and verify the Snowflake OAuth security
+integration specifies the replicated network policy by executing a DESCRIBE SECURITY INTEGRATION command on the security integration.
+Verify the network policy activation as shown in
+Identify an activated network policy
+.
+Verify connecting to each Snowflake account using the Snowflake OAuth client of your choice.
+Option

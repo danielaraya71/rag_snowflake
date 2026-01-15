@@ -1,0 +1,78 @@
+ validate-JWT policy
+Comparing data sets in primary and secondary databases
+¶
+Snowflake performs automatic verification checks as part of each replication refresh operation.
+If a verification failure occurs, the refresh fails. Therefore, you don’t have to manually verify
+the replicated data. If you need additional verification for compliance reasons, you
+can perform manual verification steps after the refresh operation finishes.
+Automatic verification by Snowflake
+¶
+Snowflake currently performs the following checks between the primary and secondary account, after each refresh operation:
+Snowflake compares the hash values between the primary and secondary account, for all files that were replicated.
+For each table, Snowflake compares the following values between the primary and secondary account:
+File count.
+Row count.
+Byte count.
+Manual verification
+¶
+If database objects are replicated in a replication or failover group, you can use the
+HASH_AGG
+function to compare the rows in some or all tables in a
+primary and secondary database to verify data consistency. The HASH_AGG function returns an
+aggregate signed 64-bit hash value over the set of input rows. The hash value is the same regardless
+of the ordering of the input rows.
+Query this function on all tables, or a random subset of tables, in both the secondary account and
+the primary account. On the primary account, use an
+AT | BEFORE
+clause
+to specify the point in time of the latest refresh for the associated database. Compare the output
+between the queries on both accounts.
+Example of manually verifying data after a refresh
+¶
+In the following examples, the database
+mydb
+is included in the failover group
+myfg
+. The
+database
+mydb
+contains the table
+myschema.mytable
+.
+Commands to run on target account
+¶
+Query the
+REPLICATION_GROUP_REFRESH_PROGRESS
+table function
+(in the
+Snowflake Information Schema
+). Note the
+primarySnapshotTimestamp
+in the
+DETAILS
+column for the
+PRIMARY_UPLOADING_METADATA
+phase. This is the timestamp for the latest refresh of that database on the primary account.
+SELECT
+PARSE_JSON
+(
+details
+)[
+'primarySnapshotTimestamp'
+]
+FROM
+TABLE
+(
+information_schema
+.
+replication_group_refresh_progress
+(
+'myfg'
+))
+WHERE
+PHASE_NAME
+=
+'PRIMARY_UPLOADING_METADATA'
+;
+Copy
+Query the HASH_AGG function for a specified table in the secondary account. The following query returns a hash value for all

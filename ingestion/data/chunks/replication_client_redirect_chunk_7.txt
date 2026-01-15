@@ -1,0 +1,43 @@
+PLICA
+OF
+, paste in the fully qualified name of the primary connection (the name that you copied from the
+SHOW CONNECTIONS output in the previous step).
+CREATE
+CONNECTION
+myconnection
+AS
+REPLICA
+OF
+MYORG
+.
+MYACCOUNT1
+.
+MYCONNECTION
+;
+Copy
+Execute the SHOW CONNECTIONS command to verify the secondary connection was created.
+SHOW
+CONNECTIONS
+;
++
+--------------------+-------------------------------+---------------------+-------------------+-----------------+---------------+-------------------------------+-------------------------------------+-------------------------------------------+-------------------+-------------------+
+| snowflake_region   | created_on                    | account_name        | name              | comment         | is_primary    | primary                       | failover_allowed_to_accounts        | connection_url                            | organization_name | account_locator   |
+|--------------------+-------------------------------+---------------------+-------------------+-----------------+---------------+-------------------------------+-------------------------------------+-------------------------------------------+-------------------+-------------------|
+| AWS_US_WEST_2      | 2020-07-19 14:49:11.183 -0700 | MYORG.MYACCOUNT1    | MYCONNECTION      | NULL            | true          | MYORG.MYACCOUNT1.MYCONNECTION | MYORG.MYACCOUNT2, MYORG.MYACCOUNT3  | myorg-myconnection.snowflakecomputing.com | MYORG             | MYACCOUNTLOCATOR1 |
+| AWS_US_EAST_1      | 2020-07-22 13:52:04.925 -0700 | MYORG.MYACCOUNT2    | MYCONNECTION      | NULL            | false         | MYORG.MYACCOUNT1.MYCONNECTION |                                     | myorg-myconnection.snowflakecomputing.com | MYORG             | MYACCOUNTLOCATOR2 |
++
+--------------------+-------------------------------+---------------------+-------------------+-----------------+---------------+-------------------------------+-------------------------------------+-------------------------------------------+-------------------+-------------------+
+Copy
+Grant the FAILOVER Privilege to a Role —
+Optional
+¶
+An account administrator can grant the FAILOVER privilege on a connection object to an account role.
+This enables a user other than the account administrator to promote a secondary connection to serve as the primary connection.
+For example, to grant the role
+my_failover_role
+the ability to fail over the connection
+myconnection
+, execute
+the following statement on the
+target
+account:

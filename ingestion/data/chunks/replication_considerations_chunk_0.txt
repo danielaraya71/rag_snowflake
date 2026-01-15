@@ -1,0 +1,71 @@
+Replication considerations
+¶
+Standard & Business Critical Feature
+Database and share replication are available to all accounts.
+Replication of other account objects & failover/failback require Business Critical Edition (or higher).
+To inquire about upgrading, please contact
+Snowflake Support
+.
+This topic describes the behavior of certain Snowflake features in secondary databases and objects when replicated with
+replication or failover groups
+or
+database replication
+, and provides general guidance for working with replicated
+objects and data.
+If you have previously enabled database replication for individual databases using the ALTER DATABASE … ENABLE REPLICATION TO ACCOUNTS
+command, see
+Database replication considerations
+for additional considerations specific to database replication.
+Replication group and failover group constraints
+¶
+The following sections explain the constraints around adding account objects, databases, and shares to replication and failover groups.
+Database and share objects
+¶
+The following constraints apply to database and share objects:
+An object can only be in one failover group.
+An object can be in multiple replication groups as long as each group is replicated to a
+different
+target account.
+An object cannot be in both a failover group and a replication group.
+Secondary (replica) objects cannot be added to a primary replication or failover group.
+You can only replicate outbound shares. Replication of
+inbound shares
+(shares from providers)
+is
+not
+supported.
+Account objects
+¶
+An account can only have one replication or failover group that contains objects
+other than
+databases or shares.
+Replication privileges
+¶
+This section describes the replication privileges that are available to be granted to roles to specify the operations users can perform on
+replication and failover group objects in the system. For the syntax of the GRANT command, see
+GRANT <privileges> … TO ROLE
+.
+Note
+For
+database replication
+, only a user with the ACCOUNTADMIN role can enable
+and manage database replication and failover. For additional information on required privileges for database replication,
+see the
+required privileges table
+in
+Step 6. Refreshing a secondary database on a schedule
+.
+Privilege
+Object
+Usage
+Notes
+OWNERSHIP
+Replication Group
+Failover Group
+Grants the ability to delete, alter, and grant or revoke access to an object.
+Can be granted by:
+The ACCOUNTADMIN role
+or
+A role that has the MANAGE GRANTS privilege
+or
+A role that has the

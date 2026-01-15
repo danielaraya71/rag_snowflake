@@ -1,0 +1,39 @@
+ to perform a refresh immediately after placing a legal hold on a backup
+in that backup set. If you perform a failover before you replicate the backup set that contains the legal hold, the original
+backup set can be overwritten when you fail back to the original primary account, potentially erasing the legal hold.
+Overview of the backup lifecycle
+¶
+The following diagram shows how the Snowflake objects, backups, backup sets, and backup policies relate to each other.
+The diagram involves the simplest kind of backup: one for a single table.
+Each backup operation produces a new backup. All the backups for that particular object are grouped together
+in a backup set. The automatic addition and removal of backups in the backup set is governed by the backup policy.
+To recover the information from a backup, you use a CREATE command to create a new object from a specific backup.
+How backups work
+¶
+Backups are
+zero-copy
+duplicates of a Snowflake object similar to
+clones
+. Backups don’t make
+copies of table data when they are created. The backup mechanism backs up table data without incurring the additional cost
+or time of copying the data.
+Snowflake stores data in files that are immutable, and maintains pointers from backups to the data files that underlie the table. As the
+table evolves and is modified, Snowflake ensures that each data file is protected from deletion as long as there is an unexpired
+backup that references that file.
+Restrictions for backups
+¶
+Snowflake enforces the following restrictions for backups:
+You can’t modify the retention lock for a backup policy.
+When a policy has a retention lock, you can increase the expiration period, but you can’t decrease it.
+The minimum schedule interval for scheduled backups is one hour (60 minutes).
+Limitations of backups
+¶
+Currently, you can create a maximum of two database backup sets for a specific database. Likewise,
+you can create a maximum of two schema backup sets for a specific schema, and two table backup
+sets for a specific table. An object might still appear in more than two backup sets. For example,
+a table might have one or two associated table backup sets. The same table might also be included
+in one or two schema backup sets, and one or two database backup sets.
+Comparison of backups with other disaster recovery and business continuity features
+¶
+Backups provide the following advantages that are different from other Snowflake business continuity and disaster recovery
+features, such
