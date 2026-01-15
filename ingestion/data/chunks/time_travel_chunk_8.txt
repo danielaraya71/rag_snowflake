@@ -1,0 +1,92 @@
+ querying data either exactly at or immediately preceding a specified point in the table’s history within the
+retention period. The specified point can be time-based (for example, a timestamp or time offset from the present) or it can be the ID for a
+completed statement (for example, SELECT or INSERT).
+For example:
+The following query selects historical data from a table as of the date and time represented by the specified
+timestamp
+:
+SELECT
+*
+FROM
+my_table
+AT
+(
+TIMESTAMP
+=>
+'Wed, 26 Jun 2024 09:20:00 -0700'
+::timestamp_tz
+);
+Copy
+The following query selects historical data from a table as of 5 minutes ago:
+SELECT
+*
+FROM
+my_table
+AT
+(
+OFFSET
+=>
+-
+60
+*
+5
+);
+Copy
+The following query selects historical data from a table up to, but not including any changes made by the specified statement:
+SELECT
+*
+FROM
+my_table
+BEFORE
+(
+STATEMENT
+=>
+'8e5d0ca9-005e-44e6-b858-a8f5b37c5726'
+);
+Copy
+Note
+If the TIMESTAMP, OFFSET, or STATEMENT specified in the
+AT | BEFORE
+clause falls outside the data
+retention period for the table, the query fails and returns an error.
+Cloning historical objects
+¶
+In addition to queries, the
+AT | BEFORE
+clause can be used with the CLONE keyword in the CREATE command
+for a table, schema, or database to create a logical duplicate of the object at a specified point in the object’s history. If you don’t
+specify a point in time, the clone defaults to the state of the object as of now
+(the
+CURRENT_TIMESTAMP
+value).
+For example:
+The following
+CREATE TABLE
+statement creates a clone of a table as of the date and time represented by the
+specified timestamp:
+CREATE
+TABLE
+restored_table
+CLONE
+my_table
+AT
+(
+TIMESTAMP
+=>
+'Wed, 26 Jun 2024 01:01:00 +0300'
+::timestamp_tz
+);
+Copy
+The following
+CREATE SCHEMA
+statement creates a clone of a schema and all its objects as they existed 1 hour
+before the current time:
+CREATE
+SCHEMA
+restored_schema
+CLONE
+my_schema
+AT
+(
+OFFSET
+=

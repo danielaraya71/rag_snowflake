@@ -1,0 +1,65 @@
+_TIME_IN_DAYS
+account parameter can be set by users with the ACCOUNTADMIN role to set a minimum
+retention period for the account. This parameter does not alter or replace the DATA_RETENTION_TIME_IN_DAYS parameter value. However it
+may change the effective data retention time. When this parameter is set at the account level, the effective minimum data retention
+period for an object is determined by MAX(DATA_RETENTION_TIME_IN_DAYS, MIN_DATA_RETENTION_TIME_IN_DAYS).
+Limitations
+¶
+When using Time Travel, the following object types are
+not
+cloned:
+External tables
+Internal (Snowflake) stages
+Hybrid tables can be cloned for databases but not for schemas.
+User tasks in a database or schema are
+not
+cloned when using CREATE SCHEMA … TIMESTAMP. In the following example, tasks in the source schema (S1) are not cloned to the schema with a timestamp (S2) but are cloned to the schema without a timestamp (S3).
+CREATE
+SCHEMA
+S1
+;
+USE
+SCHEMA
+S1
+;
+CREATE
+TASK
+T1
+AS
+SELECT
+1
+;
+CREATE
+SCHEMA
+S2
+CLONE
+S1
+AT
+(
+TIMESTAMP
+=>
+'2025-04-01 12:00:00'
+);
+-- T1 is not cloned into S2
+CREATE
+SCHEMA
+S3
+CLONE
+S1
+;
+-- T1 is cloned into S3
+Copy
+Enabling and deactivating Time Travel
+¶
+No tasks are required to enable Time Travel. It is automatically enabled with the standard, 1-day retention period.
+However, you may want to upgrade to Snowflake Enterprise Edition to enable configuring longer data retention periods of up to 90 days
+for databases, schemas, and tables. Note that extended data retention requires additional storage which will be reflected in your monthly
+storage charges. For more information about storage charges, see
+Storage costs for Time Travel and Fail-safe
+.
+Time Travel cannot be deactivated for an account. A user with the ACCOUNTADMIN role can set
+DATA_RETENTION_TIME_IN_DAYS
+to 0 at
+the account level, which means that all databases (and subsequently all schemas and tables) created in the account have no retention period
+by default; however, this default can be overridden at any time for any database, schema, or table.
+A user with the ACCOUNTADMIN role can also set

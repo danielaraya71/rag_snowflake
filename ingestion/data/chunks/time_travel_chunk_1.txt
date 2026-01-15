@@ -1,0 +1,37 @@
+.
+Data retention period
+¶
+A key component of Snowflake Time Travel is the data retention period.
+When data in a table is modified, including deletion of data or dropping an object containing data, Snowflake preserves the state of the data
+before the update. The data retention period specifies the number of days for which this historical data is preserved and, therefore,
+Time Travel operations (SELECT, CREATE … CLONE, UNDROP) can be performed on the data.
+The standard retention period is 1 day (24 hours) and is automatically enabled for all Snowflake accounts:
+For Snowflake Standard Edition, the retention period can be set to 0 (or unset back to the default of 1 day) at the account and object
+level (that is, databases, schemas, and tables).
+For Snowflake Enterprise Edition (and higher):
+For transient databases, schemas, and tables, the retention period can be set to 0 (or unset back to the default of 1 day). The same
+is also true for temporary tables.
+For permanent databases, schemas, and tables, the retention period can be set to any value from 0 up to 90 days.
+Note
+A retention period of 0 days for an object effectively deactivates Time Travel for the object.
+When the retention period ends for an object, the historical data is moved into
+Snowflake Fail-safe
+:
+Historical data is no longer available for querying.
+Past objects can no longer be cloned.
+Past objects that were dropped can no longer be restored.
+To specify the data retention period for Time Travel:
+The
+DATA_RETENTION_TIME_IN_DAYS
+object parameter can be used by users with the ACCOUNTADMIN role to set the default
+retention period for your account.
+The same parameter can be used to explicitly override the default when creating a database, schema, and individual table.
+The data retention period for a database, schema, or table can be changed at any time.
+The
+MIN_DATA_RETENTION_TIME_IN_DAYS
+account parameter can be set by users with the ACCOUNTADMIN role to set a minimum
+retention period for the account. This parameter does not alter or replace the DATA_RETENTION_TIME_IN_DAYS parameter value. However it
+may change the effective data retention time. When this parameter is set at the account level, the effective minimum data retention
+period for an object is determined by MAX(DATA_RETENTION_TIME_IN_DAYS, MIN_DATA_RETENTION_TIME_IN_DAYS).
+Limitations
+¶

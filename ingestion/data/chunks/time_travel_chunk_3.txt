@@ -1,0 +1,34 @@
+
+Storage costs for Time Travel and Fail-safe
+.
+Time Travel cannot be deactivated for an account. A user with the ACCOUNTADMIN role can set
+DATA_RETENTION_TIME_IN_DAYS
+to 0 at
+the account level, which means that all databases (and subsequently all schemas and tables) created in the account have no retention period
+by default; however, this default can be overridden at any time for any database, schema, or table.
+A user with the ACCOUNTADMIN role can also set the
+MIN_DATA_RETENTION_TIME_IN_DAYS
+at the account level. This parameter
+setting enforces a minimum data retention period for databases, schemas, and tables. Setting MIN_DATA_RETENTION_TIME_IN_DAYS does not
+alter or replace the DATA_RETENTION_TIME_IN_DAYS parameter value. It may, however, change the effective data retention period for objects.
+When MIN_DATA_RETENTION_TIME_IN_DAYS is set at the account level, the data retention period for an object is determined by
+MAX(DATA_RETENTION_TIME_IN_DAYS, MIN_DATA_RETENTION_TIME_IN_DAYS).
+Time Travel can be deactivated for individual databases, schemas, and tables by specifying
+DATA_RETENTION_TIME_IN_DAYS
+with a
+value of 0 for the object. However, if DATA_RETENTION_TIME_IN_DAYS is set to a value of 0, and MIN_DATA_RETENTION_TIME_IN_DAYS is set
+at the account level and is greater than 0, the higher value setting takes precedence.
+Attention
+Before setting
+DATA_RETENTION_TIME_IN_DAYS
+to 0 for any object, consider whether you want to deactivate Time Travel for the object,
+particularly as it pertains to recovering the object if it is dropped. When an object with no retention period is dropped, you will not
+be able to restore the object.
+As a general rule, we recommend maintaining a value of (at least) 1 day for any given object.
+If the Time Travel retention period is set to 0, any modified or deleted data is moved into Fail-safe (for permanent tables)
+or deleted (for transient tables) by a background process. This may take a short time to complete. During that time, the
+TIME_TRAVEL_BYTES in table storage metrics might contain a non-zero value even when the Time Travel retention period is 0 days.
+Specifying the data retention period for an object
+¶
+Enterprise Edition Feature
+Specifying a retention period greater than 1 day requires Enterprise Edition (or higher). To inquire about

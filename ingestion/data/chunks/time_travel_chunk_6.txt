@@ -1,0 +1,64 @@
+ is reduced, the new shorter period applies.
+For data that is currently in Time Travel:
+If the data is still within the new shorter period, it remains in Time Travel.
+If the data is outside the new period, it moves into Fail-safe.
+For example, if you have a table with a 10-day retention period and you decrease the period to 1-day, data from days 2 to 10 will be moved
+into Fail-safe, leaving only the data from day 1 accessible through Time Travel.
+However, the process of moving the data from Time Travel into Fail-safe is performed by a background process, so the change is not immediately
+visible. Snowflake guarantees that the data will be moved, but does not specify when the process will complete; until the background process
+completes, the data is still accessible through Time Travel.
+Note
+If you change the data retention period for a database or schema, the change only affects active objects contained within
+the database or schema. Any objects that have been dropped (for example, tables) remain unaffected.
+For example, if you have a schema
+s1
+with a 90-day retention period and table
+t1
+is in schema
+s1
+,
+table
+t1
+inherits the 90-day retention period. If you drop table
+s1.t1
+,
+t1
+is retained in Time Travel
+for 90 days. Later, if you change the schema’s data retention period to 1 day, the retention
+period for the dropped table
+t1
+is unchanged. Table
+t1
+will still be retained in Time Travel for 90 days.
+To alter the retention period of a dropped object, you must undrop the object, then alter its retention period.
+To change the retention period for an object, use the appropriate
+ALTER <object>
+command. For example, to change the
+retention period for a table:
+CREATE
+TABLE
+mytable
+(
+col1
+NUMBER
+,
+col2
+DATE
+)
+DATA_RETENTION_TIME_IN_DAYS
+=
+90
+;
+ALTER
+TABLE
+mytable
+SET
+DATA_RETENTION_TIME_IN_DAYS
+=
+30
+;
+Copy
+Attention
+Changing the retention period for your account or individual objects changes the value for all lower-level objects that do not have a
+retention period explicitly set. For example:
+If you change the retention period at the account level, all databases, schemas, and tables that do not

@@ -1,0 +1,22 @@
+NULL]                          |
+| Fri, 13 May 2016 19:06:01 -0700 | LOADDATA3 | MYTESTDB      | PUBLIC      | TABLE |         |            | 0    | 0     | PUBLIC | 1              | [NULL]                          |
+| Tue, 17 Mar 2016 17:51:30 -0700 | PRODDATA1 | MYTESTDB      | PUBLIC      | TABLE |         |            | 12   | 4096  | PUBLIC | 1              | [NULL]                          |
++
+---------------------------------+-----------+---------------+-------------+-------+---------+------------+------+-------+--------+----------------+---------------------------------+
+Copy
+On this page
+Introduction to Time Travel
+Enabling and deactivating Time Travel
+Specifying the data retention period for an object
+Checking the data retention period for an object
+Changing the data retention period for an object
+Querying historical data
+Cloning historical objects
+Dropping and restoring objects
+Related content
+Overview of the Data Lifecycle
+Data storage considerations
+Related info
+For a tutorial on using Time Travel, see the following page:
+Getting Started with Time Travel
+(Snowflake Quickstarts)

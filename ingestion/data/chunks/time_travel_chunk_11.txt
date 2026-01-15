@@ -1,0 +1,72 @@
+ object is displayed in the SHOW
+<object_type>
+HISTORY output) can be
+restored using the following commands:
+UNDROP NOTEBOOK
+UNDROP TABLE
+UNDROP SCHEMA
+UNDROP DATABASE
+UNDROP ICEBERG TABLE
+UNDROP DYNAMIC TABLE
+UNDROP EXTERNAL VOLUME
+UNDROP TAG
+UNDROP ACCOUNT
+Calling UNDROP restores the object to its most recent state before the DROP command was issued.
+For example:
+UNDROP
+TABLE
+mytable
+;
+UNDROP
+SCHEMA
+myschema
+;
+UNDROP
+DATABASE
+mydatabase
+;
+UNDROP
+NOTEBOOK
+mynotebook
+;
+Copy
+Note
+If an object with the same name already exists, UNDROP fails. You must rename the existing object, which then enables you to restore
+the previous version of the object.
+Access control requirements and name resolution
+¶
+Similar to dropping an object, a user must have OWNERSHIP privileges for an object to restore it. In addition, the user must have CREATE
+privileges on the object type for the database or schema where the dropped object will be restored.
+Restoring tables and schemas is only supported in the current schema or current database, even if a fully-qualified object name is specified.
+Example: Dropping and restoring a table multiple times
+¶
+In the following example, the
+mytestdb.public
+schema contains two tables:
+loaddata1
+and
+proddata1
+. The
+loaddata1
+table is
+dropped and recreated twice, creating three versions of the table:
+Current version
+Second (most recent) dropped version
+First dropped version
+The example then illustrates how to restore the two dropped versions of the table:
+First, the current table with the same name is renamed to
+loaddata3
+. This enables restoring the most recent version of the dropped
+table, based on the timestamp.
+Then, the most recent dropped version of the table is restored.
+The restored table is renamed to
+loaddata2
+to enable restoring the first version of the dropped table.
+Lastly, the first version of the dropped table is restored.
+SHOW
+TABLES
+HISTORY
+;
++
+---------------------------------+-----------+---------------+-------------+-------+---------+------------+------+-------+--------+----------------+---------------------------------+
+| created_on                      | name      | database_name | schema_name | kind  | comment | cluster_by | rows | bytes | owner  | retention_time | dropped

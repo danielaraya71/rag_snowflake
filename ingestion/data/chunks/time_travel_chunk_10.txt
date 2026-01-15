@@ -1,0 +1,76 @@
+;
+Copy
+Dropping and restoring objects
+¶
+The following sections explain the Time Travel considerations for the DROP, SHOW, and UNDROP commands.
+Dropping objects
+¶
+When a table, schema, or database is dropped, it is not immediately overwritten or removed from the system. Instead, it is retained for the
+data retention period for the object, during which time the object can be restored. Once dropped objects are moved to
+Fail-safe
+, you cannot restore them.
+To drop a notebook, table, schema, or database, use the following commands:
+DROP NOTEBOOK
+DROP TABLE
+DROP SCHEMA
+DROP DATABASE
+Note
+After dropping an object, creating an object with the same name does not restore the object. Instead, it creates a new version of the
+object. The original, dropped version is still available and can be restored.
+Restoring a dropped object restores the object in place (that is, it does not create a new object).
+Listing dropped objects
+¶
+Dropped objects can be listed using the following commands with the HISTORY keyword specified:
+SHOW TABLES
+SHOW SCHEMAS
+SHOW DATABASES
+SHOW ACCOUNTS
+For example:
+SHOW
+TABLES
+HISTORY
+LIKE
+'load%'
+IN
+mytestdb
+.
+myschema
+;
+SHOW
+SCHEMAS
+HISTORY
+IN
+mytestdb
+;
+SHOW DATABASES
+HISTORY
+;
+Copy
+The output includes all dropped objects and an additional DROPPED_ON column, which displays the date and time when the object was dropped.
+If an object has been dropped more than once, each version of the object is included as a separate row in the output.
+Note
+After the retention period for an object has passed and the object has been purged, it is no longer displayed in the
+SHOW
+<object_type>
+HISTORY output.
+Restoring objects
+¶
+A dropped object that has not been purged from the system (that is, the object is displayed in the SHOW
+<object_type>
+HISTORY output) can be
+restored using the following commands:
+UNDROP NOTEBOOK
+UNDROP TABLE
+UNDROP SCHEMA
+UNDROP DATABASE
+UNDROP ICEBERG TABLE
+UNDROP DYNAMIC TABLE
+UNDROP EXTERNAL VOLUME
+UNDROP TAG
+UNDROP ACCOUNT
+Calling UNDROP restores the object to its most recent state before the DROP command was issued.
+For example:
+UNDROP
+TABLE
+mytable
+;

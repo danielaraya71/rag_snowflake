@@ -1,0 +1,14 @@
+ of outlier queries
+(i.e. queries which use more resources then typical queries).
+Monitoring warehouse load
+Warehouse query load measures the average number of queries that were running or queued within a specific interval.
+Overview of warehouses
+Snowpark-optimized warehouses
+Warehouse considerations
+Multi-cluster warehouses
+Working with warehouses
+Using the Query Acceleration Service (QAS)
+Monitoring warehouse load
+Related content
+Understanding compute cost
+Working with resource monitors
