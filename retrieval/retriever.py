@@ -1,51 +1,51 @@
-from dotenv import load_dotenv
-load_dotenv()
-
-from pathlib import Path
-from openai import OpenAI
+import faiss
 import numpy as np
 import json
+from pathlib import Path
+from openai import OpenAI
 
 client = OpenAI()
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data"
 
-CHUNKS_PATH = DATA_DIR / "chunks"
+FAISS_PATH = DATA_DIR / "faiss"
 EMBEDDINGS_PATH = DATA_DIR / "embeddings"
-EMBEDDINGS_PATH.mkdir(exist_ok=True)
-
-print("Chunks path:", CHUNKS_PATH.resolve())
 
 MODEL = "text-embedding-3-small"
 
-def embed_texts(texts: list[str]) -> list[list[float]]:
+def load_store():
+    index = faiss.read_index(str(FAISS_PATH / "index.faiss"))
+    texts = json.loads((EMBEDDINGS_PATH / "texts.json").read_text())
+    metadata = json.loads((EMBEDDINGS_PATH / "metadata.json").read_text())
+    return index, texts, metadata
+
+def embed_query(query: str) -> np.ndarray:
     response = client.embeddings.create(
         model=MODEL,
-        input=texts
+        input=query
     )
-    return [item.embedding for item in response.data]
+    vector = np.array(response.data[0].embedding)
+    faiss.normalize_L2(vector.reshape(1, -1))
+    return vector
 
-def run():
-    texts = []
-    metadatas = []
+def retrieve(query: str, top_k=5):
+    index, texts, metadata = load_store()
+    query_vector = embed_query(query)
 
-    for chunk_file in CHUNKS_PATH.glob("*.txt"):
-        text = chunk_file.read_text(encoding="utf-8")
-        texts.append(text)
-        metadatas.append({
-            "source": chunk_file.name,
-            "doc": chunk_file.stem.split("_chunk_")[0]
+    scores, indices = index.search(query_vector.reshape(1, -1), top_k)
+
+    results = []
+    for idx, score in zip(indices[0], scores[0]):
+        results.append({
+            "text": texts[idx],
+            "metadata": metadata[idx],
+            "score": float(score)
         })
 
-    print(f"Embedding {len(texts)} chunks...")
-    embeddings = embed_texts(texts)
-
-    np.save(EMBEDDINGS_PATH / "vectors.npy", np.array(embeddings))
-    (EMBEDDINGS_PATH / "texts.json").write_text(json.dumps(texts))
-    (EMBEDDINGS_PATH / "metadata.json").write_text(json.dumps(metadatas))
-
-    print("Embeddings saved")
+    return results
 
 if __name__ == "__main__":
-    run()
+    res = retrieve("How does Snowflake Time Travel work?")
+    for r in res:
+        print(r["score"], r["metadata"])
