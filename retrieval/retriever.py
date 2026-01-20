@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import faiss
 import numpy as np
 import json
@@ -25,8 +28,13 @@ def embed_query(query: str) -> np.ndarray:
         model=MODEL,
         input=query
     )
-    vector = np.array(response.data[0].embedding)
-    faiss.normalize_L2(vector.reshape(1, -1))
+    
+    vector = np.array(response.data[0].embedding, dtype="float32")
+    vector = np.ascontiguousarray(vector)
+    vector = vector.reshape(1, -1)
+    
+    faiss.normalize_L2(vector)
+
     return vector
 
 def retrieve(query: str, top_k=5):
