@@ -19,8 +19,11 @@ def query_rag(request: QueryRequest):
     return {
         "answer": result["answer"],
         "sources": result["sources"],
-        "latency_ms": latency
+        "latency_ms": result["latency_ms"],
+        "cost_usd": result["cost_usd"],
+        "tokens": result["tokens"]
     }
+
 
 @router.get("/health")
 def health():

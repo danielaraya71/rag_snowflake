@@ -7,5 +7,7 @@ class QueryRequest(BaseModel):
 
 class QueryResponse(BaseModel):
     answer: str
-    sources: List[Dict]
+    sources: list
     latency_ms: float
+    cost_usd: float
+    tokens: int
