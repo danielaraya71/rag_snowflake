@@ -1,0 +1,23 @@
+[
+  {
+    "id": "time_travel",
+    "question": "What is Snowflake Time Travel?",
+    "expected_keywords": [
+      "historical",
+      "data",
+      "restore",
+      "query",
+      "period"
+    ]
+  },
+  {
+    "id": "zero_copy",
+    "question": "What is zero-copy cloning in Snowflake?",
+    "expected_keywords": [
+      "metadata",
+      "copy",
+      "storage",
+      "no additional"
+    ]
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "avg_score": 0.5,
+  "avg_latency": 3.57,
+  "results": [
+    {
+      "id": "time_travel",
+      "question": "What is Snowflake Time Travel?",
+      "score": 1.0,
+      "latency_sec": 4.93
+    },
+    {
+      "id": "zero_copy",
+      "question": "What is zero-copy cloning in Snowflake?",
+      "score": 0.0,
+      "latency_sec": 2.21
+    }
+  ]
+}

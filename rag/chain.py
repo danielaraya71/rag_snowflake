@@ -70,5 +70,5 @@ def rag_answer(question: str, top_k: int = 5):
 
 
 if __name__ == "__main__":
-    result = rag_answer("How does time travel work in Snowflake?")
+    result = rag_answer("What is zero-copy cloning in Snowflake?")
     print(result["answer"])
